@@ -7,6 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+        /* GENERAL */
         * {
             margin: 0;
             padding: 0;
@@ -14,19 +15,30 @@
         }
 
         body {
-            font-family: -apple-system, system-ui, sans-serif;
+            font-family: 'Arial', sans-serif; /* Police plus professionnelle */
             background: #0a0a0a;
             color: #fff;
             overflow-x: hidden;
             line-height: 1.6;
         }
 
+        a {
+            color: #64ffda;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #fff;
+        }
+
+        /* HEADER */
         #canvas-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100vh;
+            height: 100%;
             z-index: -1;
         }
 
@@ -49,14 +61,7 @@
         }
 
         .nav a {
-            color: #fff;
-            text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav a:hover {
-            color: #64ffda;
         }
 
         .content {
@@ -89,9 +94,10 @@
             animation: fadeUp 1s ease forwards 0.2s;
         }
 
+        /* SECTIONS */
         .section {
             min-height: 100vh;
-            padding: 6rem 0;
+            padding: 6rem 2rem; /* Augmentation du padding pour les grands écrans */
             max-width: 1200px;
             margin: 0 auto;
             opacity: 0;
@@ -110,11 +116,12 @@
             text-align: center;
         }
 
+        /* COMPETENCES */
         .skills-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 2rem;
-            padding: 2rem;
+            padding: 2rem 0; /* Suppression du padding inutile */
         }
 
         .skills-box {
@@ -146,10 +153,81 @@
         .skill-progress {
             height: 100%;
             background: #64ffda;
-            width: 0;
-            transition: width 1s ease;
+            width: 0; /* Initialisation à 0 pour l'animation */
         }
 
+        /* PROJETS */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0; /* Suppression du padding inutile */
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-card i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #64ffda;
+        }
+
+        /* CV */
+        .cv-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cv-container h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cv-container ul {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cv-container li strong {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .cv-download {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .cv-download a {
+            background: #64ffda;
+            color: #0a0a0a;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            display: inline-block; /* Pour que le bouton prenne la largeur du texte */
+        }
+
+        .cv-download a:hover {
+            transform: translateY(-2px);
+        }
+
+        /* CONTACT */
         .contact-form {
             max-width: 600px;
             margin: 0 auto;
@@ -182,7 +260,7 @@
             resize: vertical;
         }
 
-        button {
+        .contact-form button {
             background: #64ffda;
             color: #0a0a0a;
             padding: 0.8rem 2rem;
@@ -190,45 +268,14 @@
             border-radius: 5px;
             cursor: pointer;
             font-weight: 600;
-            transition: transform 0.3s;
+            transition: transform 0.3s ease;
         }
 
-        button:hover {
+        .contact-form button:hover {
             transform: translateY(-2px);
         }
 
-        .cv-container {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .cv-download {
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 2rem;
-        }
-
-        .project-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 1.5rem;
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
-
-        .project-card:hover {
-            transform: translateY(-5px);
-        }
-
-
+        /* ANIMATIONS */
         @keyframes fadeUp {
             to {
                 opacity: 1;
@@ -236,50 +283,53 @@
             }
         }
 
+        /* RESPONSIVE */
         @media (max-width: 768px) {
             .skills-container {
                 grid-template-columns: 1fr;
             }
-            
+
             .nav ul {
                 gap: 1rem;
                 font-size: 0.9rem;
             }
+
+            .section {
+                padding: 4rem 1rem; /* Réduction du padding pour les petits écrans */
+            }
         }
 
+        @media (min-width: 1024px) {
+            .section {
+                padding: 6rem 2rem; /* Augmentation du padding pour les grands écrans */
+            }
+            .project-grid{
+                grid-template-columns: repeat(3, 1fr);
+            }
+             .skills-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
 
+        /* BARRE DE PROGRESSION */
         .progress-bar-container {
             width: 100%;
             height: 8px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 4px;
             overflow: hidden;
-            position: fixed; /* Barre de progression fixe en haut */
+            position: fixed;
             top: 0;
             left: 0;
-            z-index: 101; /* Au-dessus de la navbar */
+            z-index: 101;
         }
 
         .progress-bar {
             height: 100%;
             background: #64ffda;
-            width: 0%; /* Initialement à 0% */
-            transition: width 0.3s ease; /* Transition fluide */
+            width: 0%;
+            transition: width 0.3s ease;
         }
-
-         /* Styles pour les icônes Font Awesome */
-        .project-card i {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: #64ffda;
-        }
-
-        .cv-container i {
-            font-size: 1.5rem;
-            margin-right: 0.5rem;
-        }
-      
-
     </style>
 </head>
 <body>
@@ -299,104 +349,117 @@
         </ul>
     </nav>
 
-    <div class="content">
+    <main class="content">
         <header class="header" id="about">
             <h1 class="title">Altay CEVIK</h1>
-            <p class="subtitle">Etudiant en 3ème année de BUT Réseaux et télécommunications spécialité IoT</p>
+            <p class="subtitle">Étudiant en 3ème année de BUT Réseaux et Télécommunications spécialité IoT</p>
         </header>
 
         <section class="section" id="skills">
             <h2>Compétences</h2>
             <div class="skills-container">
-                 <div class="skills-box">
+                <div class="skills-box">
                     <h3>Hard Skills</h3>
                     <div class="skill-item">
-                        <span>JavaScript (ES6+)</span>
+                        <span>Langages : JavaScript (ES6+), Python, HTML, CSS, C#, C++, PHP</span>
                         <div class="skill-bar">
-                            <div class="skill-progress" style="width: 90%"></div>
+                            <div class="skill-progress" data-width="90"></div>
                         </div>
                     </div>
                     <div class="skill-item">
-                        <span>React</span>
+                        <span>Framework : React</span>
                         <div class="skill-bar">
-                            <div class="skill-progress" style="width: 85%"></div>
+                            <div class="skill-progress" data-width="85"></div>
                         </div>
                     </div>
                     <div class="skill-item">
                         <span>Node.js</span>
                         <div class="skill-bar">
-                            <div class="skill-progress" style="width: 80%"></div>
+                            <div class="skill-progress" data-width="80"></div>
                         </div>
                     </div>
                     <div class="skill-item">
-                        <span>Python</span>
+                        <span>Bases de données : MySQL, PostgreSQL, MongoDB</span>
                         <div class="skill-bar">
-                            <div class="skill-progress" style="width: 75%"></div>
+                            <div class="skill-progress" data-width="75"></div>
                         </div>
                     </div>
-                      <div class="skill-item">
-                        <span>HTML/CSS</span>
+                    <div class="skill-item">
+                        <span>Administration systèmes : Linux, Windows</span>
                         <div class="skill-bar">
-                            <div class="skill-progress" style="width: 90%"></div>
+                            <div class="skill-progress" data-width="70"></div>
                         </div>
                     </div>
-                    <!-- Ajoutez d'autres compétences Hard Skills ici -->
+                    <div class="skill-item">
+                        <span>IA & Machine Learning : TensorFlow, PyTorch, scikit-learn</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-width="60"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="skills-box">
+                <aside class="skills-box">
                     <h3>Soft Skills</h3>
                     <div class="skill-item">
                         <span>Communication</span>
                         <div class="skill-bar">
-                            <div class="skill-progress" style="width: 95%"></div>
+                            <div class="skill-progress" data-width="95"></div>
                         </div>
                     </div>
                     <div class="skill-item">
                         <span>Travail d'équipe</span>
                         <div class="skill-bar">
-                            <div class="skill-progress" style="width: 90%"></div>
+                            <div class="skill-progress" data-width="90"></div>
                         </div>
                     </div>
                     <div class="skill-item">
                         <span>Résolution de problèmes</span>
                         <div class="skill-bar">
-                            <div class="skill-progress" style="width: 85%"></div>
+                            <div class="skill-progress" data-width="85"></div>
                         </div>
                     </div>
                     <div class="skill-item">
                         <span>Créativité</span>
                         <div class="skill-bar">
-                            <div class="skill-progress" style="width: 80%"></div>
+                            <div class="skill-progress" data-width="80"></div>
                         </div>
                     </div>
-
-                    <!-- Ajoutez d'autres compétences Soft Skills ici -->
-                </div>
+                    <div class="skill-item">
+                        <span>Gestion de projet (Jira, Trello, Asana)</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-width="75"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span>Adaptabilité</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-width="85"></div>
+                        </div>
+                    </div>
+                </aside>
             </div>
         </section>
 
         <section class="section" id="projects">
             <h2>Mes Projets</h2>
             <div class="project-grid">
-                <div class="project-card">
-                    <i class="fas fa-code"></i> <!- - Icône Font Awesome -->
-                    <h3>Projet 1 :  Gestionnaire de tâches</h3>
+                <article class="project-card">
+                    <i class="fas fa-code"></i>
+                    <h3>Projet 1 : Gestionnaire de tâches</h3>
                     <p>Développement d'une application web permettant de gérer ses tâches, avec des fonctionnalités de création, modification, suppression et catégorisation des tâches.</p>
-                    <p>Technologies: React, Node.js, MongoDB</p>
-
-                </div>
-                <div class="project-card">
-                     <i class="fas fa-globe"></i> <!- - Icône Font Awesome -->
+                    <p>Technologies : React, Node.js, MongoDB</p>
+                </article>
+                <article class="project-card">
+                    <i class="fas fa-globe"></i>
                     <h3>Projet 2 : Site web portfolio</h3>
-                    <p>Création d'un site web portfolio personnel pour présenter mes compétences et mes projets.  Le site est responsive et utilise des animations pour une expérience utilisateur agréable.</p>
-                   <p>Technologies: HTML, CSS, Javascript</p>
-                </div>
-                <div class="project-card">
-                     <i class="fas fa-mobile-alt"></i> <!- - Icône Font Awesome -->
+                    <p>Création d'un site web portfolio personnel pour présenter mes compétences et mes projets. Le site est responsive et utilise des animations pour une expérience utilisateur agréable.</p>
+                    <p>Technologies : HTML, CSS, JavaScript</p>
+                </article>
+                <article class="project-card">
+                    <i class="fas fa-mobile-alt"></i>
                     <h3>Projet 3 : Application mobile de recettes</h3>
                     <p>Conception et développement d'une application mobile permettant aux utilisateurs de rechercher et d'enregistrer des recettes de cuisine. L'application propose également des recommandations personnalisées en fonction des préférences alimentaires de l'utilisateur.</p>
-                   <p>Technologies:  React Native, Firebase</p>
-                </div>
-                <!-- Ajoutez d'autres projets ici -->
+                    <p>Technologies : React Native, Firebase</p>
+                </article>
             </div>
         </section>
 
@@ -405,36 +468,50 @@
             <div class="cv-container">
                 <h3><i class="fas fa-briefcase"></i> Expérience Professionnelle</h3>
                 <ul>
-                    <li><strong>Stage Développeur Web - Société X (juin 2024 - août 2024)</strong>
+                    <li>
+                        <strong>Stagiaire IT - Forvia (Avril 2024 - Juin 2024)</strong>
+                        <p>Forvia, 7ème fournisseur mondial de technologies automobiles.</p>
                         <ul>
-                            <li>Développement de nouvelles fonctionnalités pour l'application web existante.</li>
-                            <li>Maintenance et correction de bugs.</li>
-                            <li>Collaboration avec l'équipe de développement.</li>
+                            <li>Développement et implémentation d'une solution innovante pour le suivi d'inventaire des consommables IT (téléphones, accessoires, équipements).</li>
+                            <li>Configuration et optimisation d'équipements informatiques (switches, PCs, imprimantes, rfgun).</li>
+                            <li>Gestion et mise à jour de l'outil de suivi d'inventaire IT pour une efficacité opérationnelle accrue.</li>
                         </ul>
                     </li>
-                    </ul>
+                </ul>
 
                 <h3><i class="fas fa-graduation-cap"></i> Formation</h3>
                 <ul>
-                    <li><strong>BUT Réseaux et Télécommunications, option Internet des Objets - IUT de Montbéliard (2022 - 2025)</strong></li>
-                    <li><strong>Baccalauréat Scientifique - Lycée Armand Peugeot (2019-2022)</strong></li>
-
+                    <li>
+                        <strong>BUT Réseaux et Télécommunications, option Internet des Objets - IUT de Montbéliard (2022 - 2025)</strong>
+                        <p>En cours de 3ème année.</p>
+                    </li>
+                    <li>
+                        <strong>Baccalauréat Scientifique - Lycée Armand Peugeot (2019-2022)</strong>
+                        <p>Spécialités Mathématiques et Sciences de la Vie et de la Terre.</p>
+                    </li>
                 </ul>
 
-                 <h3><i class="fas fa-certificate"></i> Certifications</h3>
+                <h3><i class="fas fa-certificate"></i> Certifications</h3>
                 <ul>
-                    <li>Certification Javascript</li>
-                    </ul>
-                
+                    <li>Certification JavaScript (En cours d'obtention)</li>
+                </ul>
+
+                <h3><i class="fas fa-language"></i> Langues</h3>
+                <ul>
+                    <li>Français (Langue maternelle)</li>
+                    <li>Anglais (Intermédiaire)</li>
+                    <li>Allemand (Débutant)</li>
+                </ul>
+
                 <div class="cv-download">
-                    <button onclick="alert('Téléchargement du CV')">Télécharger mon CV</button>
+                    <a href="chemin/vers/votre/cv.pdf" download>Télécharger mon CV</a>
                 </div>
             </div>
         </section>
 
         <section class="section" id="contact">
             <h2>Contact</h2>
-            <form class="contact-form">
+            <form class="contact-form" action="URL_DE_VOTRE_SCRIPT_DE_TRAITEMENT" method="POST">
                 <div class="form-group">
                     <label for="name">Nom</label>
                     <input type="text" id="name" name="name" required>
@@ -450,14 +527,14 @@
                 <button type="submit">Envoyer</button>
             </form>
         </section>
-    </div>
+    </main>
 
     <script>
         // Configuration Three.js
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        
+
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
@@ -521,11 +598,11 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    
+
                     // Animer les barres de compétences
                     if (entry.target.id === 'skills') {
                         entry.target.querySelectorAll('.skill-progress').forEach(progress => {
-                            const width = progress.style.width;
+                            const width = progress.dataset.width + '%';
                             progress.style.width = '0';
                             setTimeout(() => {
                                 progress.style.width = width;
@@ -550,8 +627,7 @@
             });
         });
 
-
-           // Barre de progression
+        // Barre de progression
         const progressBar = document.querySelector('.progress-bar');
         window.addEventListener('scroll', () => {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -559,8 +635,6 @@
             const scrollPercent = (scrollTop / scrollHeight) * 100;
             progressBar.style.width = scrollPercent + '%';
         });
-
-
     </script>
 </body>
 </html>
