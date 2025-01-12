@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio - Altay CEVIK</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         * {
             margin: 0;
@@ -227,6 +228,7 @@
             transform: translateY(-5px);
         }
 
+
         @keyframes fadeUp {
             to {
                 opacity: 1;
@@ -244,11 +246,49 @@
                 font-size: 0.9rem;
             }
         }
+
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: fixed; /* Barre de progression fixe en haut */
+            top: 0;
+            left: 0;
+            z-index: 101; /* Au-dessus de la navbar */
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #64ffda;
+            width: 0%; /* Initialement à 0% */
+            transition: width 0.3s ease; /* Transition fluide */
+        }
+
+         /* Styles pour les icônes Font Awesome */
+        .project-card i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #64ffda;
+        }
+
+        .cv-container i {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+      
+
     </style>
 </head>
 <body>
+    <div class="progress-bar-container">
+        <div class="progress-bar"></div>
+    </div>
+
     <div id="canvas-container"></div>
-    
+
     <nav class="nav">
         <ul>
             <li><a href="#about">À propos</a></li>
@@ -262,16 +302,16 @@
     <div class="content">
         <header class="header" id="about">
             <h1 class="title">Altay CEVIK</h1>
-            <p class="subtitle">Etudiant en 3 ème année de BUT Réseaux et télécommunications spécialité IoT</p>
+            <p class="subtitle">Etudiant en 3ème année de BUT Réseaux et télécommunications spécialité IoT</p>
         </header>
 
         <section class="section" id="skills">
             <h2>Compétences</h2>
             <div class="skills-container">
-                <div class="skills-box">
+                 <div class="skills-box">
                     <h3>Hard Skills</h3>
                     <div class="skill-item">
-                        <span>JavaScript</span>
+                        <span>JavaScript (ES6+)</span>
                         <div class="skill-bar">
                             <div class="skill-progress" style="width: 90%"></div>
                         </div>
@@ -288,6 +328,19 @@
                             <div class="skill-progress" style="width: 80%"></div>
                         </div>
                     </div>
+                    <div class="skill-item">
+                        <span>Python</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 75%"></div>
+                        </div>
+                    </div>
+                      <div class="skill-item">
+                        <span>HTML/CSS</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <!-- Ajoutez d'autres compétences Hard Skills ici -->
                 </div>
                 <div class="skills-box">
                     <h3>Soft Skills</h3>
@@ -309,6 +362,14 @@
                             <div class="skill-progress" style="width: 85%"></div>
                         </div>
                     </div>
+                    <div class="skill-item">
+                        <span>Créativité</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 80%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Ajoutez d'autres compétences Soft Skills ici -->
                 </div>
             </div>
         </section>
@@ -317,31 +378,53 @@
             <h2>Mes Projets</h2>
             <div class="project-grid">
                 <div class="project-card">
-                    <h3>Projet 1</h3>
-                    <p>Description du projet...</p>
+                    <i class="fas fa-code"></i> <!- - Icône Font Awesome -->
+                    <h3>Projet 1 :  Gestionnaire de tâches</h3>
+                    <p>Développement d'une application web permettant de gérer ses tâches, avec des fonctionnalités de création, modification, suppression et catégorisation des tâches.</p>
+                    <p>Technologies: React, Node.js, MongoDB</p>
+
                 </div>
                 <div class="project-card">
-                    <h3>Projet 2</h3>
-                    <p>Description du projet...</p>
+                     <i class="fas fa-globe"></i> <!- - Icône Font Awesome -->
+                    <h3>Projet 2 : Site web portfolio</h3>
+                    <p>Création d'un site web portfolio personnel pour présenter mes compétences et mes projets.  Le site est responsive et utilise des animations pour une expérience utilisateur agréable.</p>
+                   <p>Technologies: HTML, CSS, Javascript</p>
                 </div>
                 <div class="project-card">
-                    <h3>Projet 3</h3>
-                    <p>Description du projet...</p>
+                     <i class="fas fa-mobile-alt"></i> <!- - Icône Font Awesome -->
+                    <h3>Projet 3 : Application mobile de recettes</h3>
+                    <p>Conception et développement d'une application mobile permettant aux utilisateurs de rechercher et d'enregistrer des recettes de cuisine. L'application propose également des recommandations personnalisées en fonction des préférences alimentaires de l'utilisateur.</p>
+                   <p>Technologies:  React Native, Firebase</p>
                 </div>
+                <!-- Ajoutez d'autres projets ici -->
             </div>
         </section>
 
         <section class="section" id="cv">
             <h2>Mon CV</h2>
             <div class="cv-container">
-                <h3>Expérience Professionnelle</h3>
-                <!-- Ajoutez votre expérience ici -->
-                
-                <h3>Formation</h3>
-                <!-- Ajoutez votre formation ici -->
-                
-                <h3>Certifications</h3>
-                <!-- Ajoutez vos certifications ici -->
+                <h3><i class="fas fa-briefcase"></i> Expérience Professionnelle</h3>
+                <ul>
+                    <li><strong>Stage Développeur Web - Société X (juin 2024 - août 2024)</strong>
+                        <ul>
+                            <li>Développement de nouvelles fonctionnalités pour l'application web existante.</li>
+                            <li>Maintenance et correction de bugs.</li>
+                            <li>Collaboration avec l'équipe de développement.</li>
+                        </ul>
+                    </li>
+                    </ul>
+
+                <h3><i class="fas fa-graduation-cap"></i> Formation</h3>
+                <ul>
+                    <li><strong>BUT Réseaux et Télécommunications, option Internet des Objets - IUT de Montbéliard (2022 - 2025)</strong></li>
+                    <li><strong>Baccalauréat Scientifique - Lycée Armand Peugeot (2019-2022)</strong></li>
+
+                </ul>
+
+                 <h3><i class="fas fa-certificate"></i> Certifications</h3>
+                <ul>
+                    <li>Certification Javascript</li>
+                    </ul>
                 
                 <div class="cv-download">
                     <button onclick="alert('Téléchargement du CV')">Télécharger mon CV</button>
@@ -466,6 +549,18 @@
                 });
             });
         });
+
+
+           // Barre de progression
+        const progressBar = document.querySelector('.progress-bar');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = (scrollTop / scrollHeight) * 100;
+            progressBar.style.width = scrollPercent + '%';
+        });
+
+
     </script>
 </body>
 </html>
