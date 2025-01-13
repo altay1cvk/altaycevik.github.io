@@ -15,7 +15,7 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif; /* Police plus professionnelle */
+            font-family: 'Arial', sans-serif;
             background: #0a0a0a;
             color: #fff;
             overflow-x: hidden;
@@ -97,12 +97,13 @@
         /* SECTIONS */
         .section {
             min-height: 100vh;
-            padding: 6rem 2rem; /* Augmentation du padding pour les grands écrans */
+            padding: 6rem 2rem;
             max-width: 1200px;
             margin: 0 auto;
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 1s ease, transform 1s ease;
+            position: relative; /* Pour positionner le séparateur */
         }
 
         .section.visible {
@@ -116,12 +117,25 @@
             text-align: center;
         }
 
+        /* Séparateur 3D */
+        .section + .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            transform: skewY(-2deg);
+            z-index: -1;
+        }
+
         /* COMPETENCES */
         .skills-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 2rem;
-            padding: 2rem 0; /* Suppression du padding inutile */
+            padding: 2rem 0;
         }
 
         .skills-box {
@@ -153,7 +167,7 @@
         .skill-progress {
             height: 100%;
             background: #64ffda;
-            width: 0; /* Initialisation à 0 pour l'animation */
+            width: 0;
         }
 
         /* PROJETS */
@@ -161,7 +175,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            padding: 2rem 0; /* Suppression du padding inutile */
+            padding: 2rem 0;
         }
 
         .project-card {
@@ -180,6 +194,18 @@
             font-size: 2rem;
             margin-bottom: 1rem;
             color: #64ffda;
+        }
+
+         .project-link {
+            display: block;
+            margin-top: 1rem;
+            color: #64ffda;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .project-link:hover {
+            text-decoration: underline;
         }
 
         /* CV */
@@ -220,7 +246,7 @@
             border-radius: 5px;
             font-weight: 600;
             transition: transform 0.3s ease;
-            display: inline-block; /* Pour que le bouton prenne la largeur du texte */
+            display: inline-block;
         }
 
         .cv-download a:hover {
@@ -295,18 +321,20 @@
             }
 
             .section {
-                padding: 4rem 1rem; /* Réduction du padding pour les petits écrans */
+                padding: 4rem 1rem;
             }
         }
 
         @media (min-width: 1024px) {
             .section {
-                padding: 6rem 2rem; /* Augmentation du padding pour les grands écrans */
+                padding: 6rem 2rem;
             }
-            .project-grid{
+
+            .project-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
-             .skills-container {
+
+            .skills-container {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
@@ -330,9 +358,52 @@
             width: 0%;
             transition: width 0.3s ease;
         }
+
+        /* Loader */
+        #loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #loader-container.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .progress-bar-loader {
+            width: 300px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: #64ffda;
+            width: 0%;
+            transition: width 1s ease-in-out;
+        }
     </style>
 </head>
 <body>
+    <!-- Loader -->
+    <div id="loader-container">
+        <div class="progress-bar-loader">
+            <div class="progress-bar-fill"></div>
+        </div>
+    </div>
+
     <div class="progress-bar-container">
         <div class="progress-bar"></div>
     </div>
@@ -344,7 +415,7 @@
             <li><a href="#about">À propos</a></li>
             <li><a href="#skills">Compétences</a></li>
             <li><a href="#projects">Projets</a></li>
-            <li><a href="#cv">CV</a></li>
+            <li><a href="https://drive.google.com/file/d/1YH2oquvzdwwkkxM-0YhJvBHcCCYRbPHs/view?usp=sharing" target="_blank">CV</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
@@ -443,22 +514,25 @@
             <h2>Mes Projets</h2>
             <div class="project-grid">
                 <article class="project-card">
-                    <i class="fas fa-code"></i>
-                    <h3>Projet 1 : Gestionnaire de tâches</h3>
-                    <p>Développement d'une application web permettant de gérer ses tâches, avec des fonctionnalités de création, modification, suppression et catégorisation des tâches.</p>
-                    <p>Technologies : React, Node.js, MongoDB</p>
+                    <i class="fas fa-tasks"></i>
+                    <h3>Projet 1 : Application de Suivi d'Inventaire</h3>
+                    <p>Développement d'une application web complète et évolutive pour la gestion des stocks en entreprise. Le projet inclut une interface utilisateur intuitive pour le suivi en temps réel des entrées et sorties d'inventaire, ainsi qu'un système d'alerte pour les niveaux de stock bas. L'application est conçue pour être adaptable à divers environnements d'entreprise.</p>
+                    <p>Technologies : HTML, CSS, JavaScript, Node.js, Express.js, EJS, MySQL, Docker, Git.</p>
+                   <a href="https://github.com/altay1cvk/Application-de-suivie-inventaire" class="project-link" target="_blank">Voir sur GitHub</a>
                 </article>
                 <article class="project-card">
-                    <i class="fas fa-globe"></i>
-                    <h3>Projet 2 : Site web portfolio</h3>
-                    <p>Création d'un site web portfolio personnel pour présenter mes compétences et mes projets. Le site est responsive et utilise des animations pour une expérience utilisateur agréable.</p>
-                    <p>Technologies : HTML, CSS, JavaScript</p>
+                    <i class="fas fa-hospital"></i>
+                    <h3>Projet 2 : Sécurisation d'Hôpital</h3>
+                    <p>Dans le cadre de ce projet, nous avons mis en place une solution de sécurité physique pour un établissement hospitalier. Le projet comprend l'installation de caméras de surveillance dans les zones sensibles, la mise en place d'un système de contrôle d'accès par badge pour le personnel et les visiteurs, ainsi que la configuration d'un poste de surveillance centralisé pour la gestion des alertes et la visualisation en temps réel.</p>
+                    <p>Technologies : Python, Bash, solutions de sécurité (Axis, Milestone), protocoles de sécurité, RFID.</p>
+                    <a href="https://github.com/altay1cvk/S-curisation-h-pital" class="project-link" target="_blank">Voir sur GitHub</a>
                 </article>
                 <article class="project-card">
-                    <i class="fas fa-mobile-alt"></i>
-                    <h3>Projet 3 : Application mobile de recettes</h3>
-                    <p>Conception et développement d'une application mobile permettant aux utilisateurs de rechercher et d'enregistrer des recettes de cuisine. L'application propose également des recommandations personnalisées en fonction des préférences alimentaires de l'utilisateur.</p>
-                    <p>Technologies : React Native, Firebase</p>
+                    <i class="fas fa-server"></i>
+                    <h3>Projet 3 : Création d'un Data Center</h3>
+                    <p>Ce projet consistait à concevoir et mettre en œuvre un data center à petite échelle pour une entreprise en pleine croissance. Il comprend la planification de l'espace, la mise en place de serveurs physiques, la configuration du réseau, la gestion de l'alimentation électrique et le refroidissement, ainsi que la mise en place de solutions de sauvegarde et de reprise après sinistre.</p>
+                    <p>Technologies : Virtualisation (VMware, Hyper-V), équipements réseau (routeurs, switches, pare-feu), systèmes de stockage (SAN, NAS), protocoles de redondance et de haute disponibilité.</p>
+                    <a href="https://github.com/altay1cvk/Creation-Data-Center" class="project-link" target="_blank">Voir sur GitHub</a>
                 </article>
             </div>
         </section>
@@ -504,7 +578,7 @@
                 </ul>
 
                 <div class="cv-download">
-                    <a href="chemin/vers/votre/cv.pdf" download>Télécharger mon CV</a>
+                    <a href="https://drive.google.com/file/d/1YH2oquvzdwwkkxM-0YhJvBHcCCYRbPHs/view?usp=sharing" target="_blank">Télécharger mon CV</a>
                 </div>
             </div>
         </section>
@@ -634,6 +708,25 @@
             const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrollPercent = (scrollTop / scrollHeight) * 100;
             progressBar.style.width = scrollPercent + '%';
+        });
+
+        // Gestion du loader et de la barre de progression au chargement
+        window.addEventListener('load', () => {
+            const loaderContainer = document.getElementById('loader-container');
+            const progressBarFill = document.querySelector('.progress-bar-fill');
+
+            // Animation de la barre de progression
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    // Masquer le loader après l'animation
+                    loaderContainer.classList.add('hidden');
+                } else {
+                    width++;
+                    progressBarFill.style.width = width + '%';
+                }
+            }, 30); // 30ms * 100 = 3000ms (3 secondes)
         });
     </script>
 </body>
