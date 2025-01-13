@@ -15,7 +15,7 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Courier New', Courier, monospace; /* Police style code */
             background: #0a0a0a;
             color: #fff;
             overflow-x: hidden;
@@ -62,6 +62,24 @@
 
         .nav a {
             font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Effet de soulignement animé pour les liens de la navbar */
+        .nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #64ffda;
+            transition: width 0.3s ease;
+        }
+
+        .nav a:hover::before {
+            width: 100%;
         }
 
         .content {
@@ -91,7 +109,10 @@
             margin-bottom: 2rem;
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeUp 1s ease forwards 0.2s;
+            animation: fadeUp 1s ease forwards 0.2s, typing 4s steps(40, end) 0.2s forwards;
+            white-space: nowrap; /* Empêche le texte de se diviser sur plusieurs lignes */
+            overflow: hidden; /* Cache le texte qui dépasse */
+            border-right: .15em solid #64ffda; /* Curseur de frappe */
         }
 
         /* SECTIONS */
@@ -103,7 +124,13 @@
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 1s ease, transform 1s ease;
-            position: relative; /* Pour positionner le séparateur */
+            position: relative;
+            border: 2px solid #64ffda; /* Bordure */
+            border-radius: 10px; /* Bords arrondis */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0 0 10px #64ffda; /* Ombre 3D et lueur */
+            margin-bottom: 3rem; /* Espace entre les sections */
+            background-color: rgba(10, 10, 10, 0.5); /* Fond légèrement transparent */
+            overflow: hidden; /* Pour l'effet d'encadrement */
         }
 
         .section.visible {
@@ -115,20 +142,43 @@
             font-size: 2.5rem;
             margin-bottom: 2rem;
             text-align: center;
+            position: relative;
+            color: #64ffda;
         }
 
-        /* Séparateur 3D */
-        .section + .section::before {
-            content: '';
+        /* Effet d'animation pour les titres h2 */
+        .section h2::before {
+            content: '>'; /* Symbole de code */
+            color: #64ffda;
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 20px;
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
-            transform: skewY(-2deg);
-            z-index: -1;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            animation: slideIn 1s ease forwards;
         }
+
+        .section.visible h2::before {
+            opacity: 1;
+        }
+
+        /* Animation pour les éléments de la section */
+        .section > *:not(h2) {
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .section.visible > *:not(h2) {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Délai d'animation pour chaque élément de la section */
+        .section.visible > *:nth-child(2) { transition-delay: 0.2s; }
+        .section.visible > *:nth-child(3) { transition-delay: 0.4s; }
+        .section.visible > *:nth-child(4) { transition-delay: 0.6s; }
+        /* ... ajoutez plus de délais si nécessaire ... */
 
         /* COMPETENCES */
         .skills-container {
@@ -142,11 +192,28 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             padding: 2rem;
+            border: 1px solid #64ffda; /* Bordure */
         }
 
         .skills-box h3 {
             margin-bottom: 1.5rem;
             color: #64ffda;
+            position: relative;
+        }
+
+        /* Animation pour les titres h3 */
+        .skills-box h3::before {
+            content: '=>'; /* Symbole de code */
+            color: #64ffda;
+            position: absolute;
+            left: -40px;
+            top: 0;
+            opacity: 0;
+            animation: slideIn 1s ease forwards;
+        }
+
+        .section.visible .skills-box h3::before {
+            opacity: 1;
         }
 
         .skill-item {
@@ -173,7 +240,7 @@
         /* PROJETS */
         .project-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
             padding: 2rem 0;
         }
@@ -182,30 +249,56 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             padding: 1.5rem;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
+            border: 1px solid #64ffda; /* Bordure */
+            position: relative;
+            overflow: hidden;
         }
 
+        /* Effet de lueur au survol */
         .project-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0 0 20px #64ffda;
         }
 
         .project-card i {
             font-size: 2rem;
             margin-bottom: 1rem;
             color: #64ffda;
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
         }
 
-         .project-link {
+        .project-card h3 {
+            margin-bottom: 1rem;
+        }
+
+        .project-link {
             display: block;
             margin-top: 1rem;
             color: #64ffda;
             text-decoration: none;
             font-weight: bold;
+            position: relative;
+            overflow: hidden;
         }
 
-        .project-link:hover {
-            text-decoration: underline;
+        /* Effet de soulignement animé pour les liens des projets */
+        .project-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #64ffda;
+            transition: width 0.3s ease;
+        }
+
+        .project-link:hover::before {
+            width: 100%;
         }
 
         /* CV */
@@ -214,6 +307,7 @@
             border-radius: 10px;
             padding: 2rem;
             margin-bottom: 2rem;
+            border: 1px solid #64ffda; /* Bordure */
         }
 
         .cv-container h3 {
@@ -221,6 +315,7 @@
             align-items: center;
             gap: 0.5rem;
             margin-bottom: 1rem;
+            color: #64ffda;
         }
 
         .cv-container ul {
@@ -245,12 +340,13 @@
             border: none;
             border-radius: 5px;
             font-weight: 600;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: inline-block;
         }
 
         .cv-download a:hover {
             transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px #64ffda;
         }
 
         /* CONTACT */
@@ -260,6 +356,7 @@
             background: rgba(255, 255, 255, 0.1);
             padding: 2rem;
             border-radius: 10px;
+            border: 1px solid #64ffda; /* Bordure */
         }
 
         .form-group {
@@ -294,11 +391,12 @@
             border-radius: 5px;
             cursor: pointer;
             font-weight: 600;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .contact-form button:hover {
             transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px #64ffda;
         }
 
         /* ANIMATIONS */
@@ -307,6 +405,27 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #64ffda; }
         }
 
         /* RESPONSIVE */
@@ -322,6 +441,21 @@
 
             .section {
                 padding: 4rem 1rem;
+                margin-bottom: 2rem; /* Réduction de l'espace entre les sections */
+            }
+
+            .project-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Colonnes plus petites */
+            }
+
+            .project-card {
+                padding: 1rem;
+            }
+
+            .project-card i {
+                font-size: 1.5rem;
+                top: 1rem;
+                right: 1rem;
             }
         }
 
@@ -394,11 +528,21 @@
             width: 0%;
             transition: width 1s ease-in-out;
         }
+
+        /* Style pour le message du loader */
+        #loader-message {
+            font-size: 1.5rem;
+            color: #64ffda;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-family: 'Courier New', Courier, monospace;
+        }
     </style>
 </head>
 <body>
-    <!-- Loader -->
+    <!-- Loader avec message -->
     <div id="loader-container">
+        <p id="loader-message">Bonjour, bienvenue dans mon Portfolio 👋</p>
         <div class="progress-bar-loader">
             <div class="progress-bar-fill"></div>
         </div>
@@ -427,42 +571,42 @@
         </header>
 
         <section class="section" id="skills">
-            <h2>Compétences</h2>
+            <h2><span class="emoji">🛠️</span> Compétences</h2>
             <div class="skills-container">
                 <div class="skills-box">
                     <h3>Hard Skills</h3>
                     <div class="skill-item">
-                        <span>Langages : JavaScript (ES6+), Python, HTML, CSS, C#, C++, PHP</span>
+                        <span><span class="emoji">👨‍💻</span> Langages : JavaScript (ES6+), Python, HTML, CSS, C#, C++, PHP</span>
                         <div class="skill-bar">
                             <div class="skill-progress" data-width="90"></div>
                         </div>
                     </div>
                     <div class="skill-item">
-                        <span>Framework : React</span>
+                        <span><span class="emoji">💻</span> Framework : React</span>
                         <div class="skill-bar">
                             <div class="skill-progress" data-width="85"></div>
                         </div>
                     </div>
                     <div class="skill-item">
-                        <span>Node.js</span>
+                        <span><span class="emoji">🌐</span> Node.js</span>
                         <div class="skill-bar">
                             <div class="skill-progress" data-width="80"></div>
                         </div>
                     </div>
                     <div class="skill-item">
-                        <span>Bases de données : MySQL, PostgreSQL, MongoDB</span>
+                        <span><span class="emoji">💾</span> Bases de données : MySQL, PostgreSQL, MongoDB</span>
                         <div class="skill-bar">
                             <div class="skill-progress" data-width="75"></div>
                         </div>
                     </div>
                     <div class="skill-item">
-                        <span>Administration systèmes : Linux, Windows</span>
+                        <span><span class="emoji">🖥️</span> Administration systèmes : Linux, Windows</span>
                         <div class="skill-bar">
                             <div class="skill-progress" data-width="70"></div>
                         </div>
                     </div>
                     <div class="skill-item">
-                        <span>IA & Machine Learning : TensorFlow, PyTorch, scikit-learn</span>
+                        <span><span class="emoji">🤖</span> IA & Machine Learning : TensorFlow, PyTorch, scikit-learn</span>
                         <div class="skill-bar">
                             <div class="skill-progress" data-width="60"></div>
                         </div>
@@ -471,37 +615,37 @@
                 <aside class="skills-box">
                     <h3>Soft Skills</h3>
                     <div class="skill-item">
-                        <span>Communication</span>
+                        <span><span class="emoji">🗣️</span> Communication</span>
                         <div class="skill-bar">
                             <div class="skill-progress" data-width="95"></div>
                         </div>
                     </div>
                     <div class="skill-item">
-                        <span>Travail d'équipe</span>
+                        <span><span class="emoji">🤝</span> Travail d'équipe</span>
                         <div class="skill-bar">
                             <div class="skill-progress" data-width="90"></div>
                         </div>
                     </div>
                     <div class="skill-item">
-                        <span>Résolution de problèmes</span>
+                        <span><span class="emoji">🎯</span> Résolution de problèmes</span>
                         <div class="skill-bar">
                             <div class="skill-progress" data-width="85"></div>
                         </div>
                     </div>
                     <div class="skill-item">
-                        <span>Créativité</span>
+                        <span><span class="emoji">💡</span> Créativité</span>
                         <div class="skill-bar">
                             <div class="skill-progress" data-width="80"></div>
                         </div>
                     </div>
                     <div class="skill-item">
-                        <span>Gestion de projet (Jira, Trello, Asana)</span>
+                        <span><span class="emoji">📅</span> Gestion de projet (Jira, Trello, Asana)</span>
                         <div class="skill-bar">
                             <div class="skill-progress" data-width="75"></div>
                         </div>
                     </div>
                     <div class="skill-item">
-                        <span>Adaptabilité</span>
+                        <span><span class="emoji">🔄</span> Adaptabilité</span>
                         <div class="skill-bar">
                             <div class="skill-progress" data-width="85"></div>
                         </div>
@@ -511,34 +655,34 @@
         </section>
 
         <section class="section" id="projects">
-            <h2>Mes Projets</h2>
+            <h2><span class="emoji">📁</span> Mes Projets</h2>
             <div class="project-grid">
                 <article class="project-card">
                     <i class="fas fa-tasks"></i>
                     <h3>Projet 1 : Application de Suivi d'Inventaire</h3>
                     <p>Développement d'une application web complète et évolutive pour la gestion des stocks en entreprise. Le projet inclut une interface utilisateur intuitive pour le suivi en temps réel des entrées et sorties d'inventaire, ainsi qu'un système d'alerte pour les niveaux de stock bas. L'application est conçue pour être adaptable à divers environnements d'entreprise.</p>
                     <p>Technologies : HTML, CSS, JavaScript, Node.js, Express.js, EJS, MySQL, Docker, Git.</p>
-                   <a href="https://github.com/altay1cvk/Application-de-suivie-inventaire" class="project-link" target="_blank">Voir sur GitHub</a>
+                   <a href="https://github.com/altay1cvk/Application-de-suivie-inventaire" class="project-link" target="_blank">Voir sur GitHub <span class="emoji">🔗</span></a>
                 </article>
                 <article class="project-card">
                     <i class="fas fa-hospital"></i>
                     <h3>Projet 2 : Sécurisation d'Hôpital</h3>
                     <p>Dans le cadre de ce projet, nous avons mis en place une solution de sécurité physique pour un établissement hospitalier. Le projet comprend l'installation de caméras de surveillance dans les zones sensibles, la mise en place d'un système de contrôle d'accès par badge pour le personnel et les visiteurs, ainsi que la configuration d'un poste de surveillance centralisé pour la gestion des alertes et la visualisation en temps réel.</p>
                     <p>Technologies : Python, Bash, solutions de sécurité (Axis, Milestone), protocoles de sécurité, RFID.</p>
-                    <a href="https://github.com/altay1cvk/S-curisation-h-pital" class="project-link" target="_blank">Voir sur GitHub</a>
+                    <a href="https://github.com/altay1cvk/S-curisation-h-pital" class="project-link" target="_blank">Voir sur GitHub <span class="emoji">🔗</span></a>
                 </article>
                 <article class="project-card">
                     <i class="fas fa-server"></i>
                     <h3>Projet 3 : Création d'un Data Center</h3>
                     <p>Ce projet consistait à concevoir et mettre en œuvre un data center à petite échelle pour une entreprise en pleine croissance. Il comprend la planification de l'espace, la mise en place de serveurs physiques, la configuration du réseau, la gestion de l'alimentation électrique et le refroidissement, ainsi que la mise en place de solutions de sauvegarde et de reprise après sinistre.</p>
                     <p>Technologies : Virtualisation (VMware, Hyper-V), équipements réseau (routeurs, switches, pare-feu), systèmes de stockage (SAN, NAS), protocoles de redondance et de haute disponibilité.</p>
-                    <a href="https://github.com/altay1cvk/Creation-Data-Center" class="project-link" target="_blank">Voir sur GitHub</a>
+                    <a href="https://github.com/altay1cvk/Creation-Data-Center" class="project-link" target="_blank">Voir sur GitHub <span class="emoji">🔗</span></a>
                 </article>
             </div>
         </section>
 
         <section class="section" id="cv">
-            <h2>Mon CV</h2>
+            <h2><span class="emoji">📄</span> Mon CV</h2>
             <div class="cv-container">
                 <h3><i class="fas fa-briefcase"></i> Expérience Professionnelle</h3>
                 <ul>
@@ -578,13 +722,13 @@
                 </ul>
 
                 <div class="cv-download">
-                    <a href="https://drive.google.com/file/d/1YH2oquvzdwwkkxM-0YhJvBHcCCYRbPHs/view?usp=sharing" target="_blank">Télécharger mon CV</a>
+                    <a href="https://drive.google.com/file/d/1YH2oquvzdwwkkxM-0YhJvBHcCCYRbPHs/view?usp=sharing" target="_blank">Télécharger mon CV <span class="emoji">⬇️</span></a>
                 </div>
             </div>
         </section>
 
         <section class="section" id="contact">
-            <h2>Contact</h2>
+            <h2><span class="emoji">✉️</span> Contact</h2>
             <form class="contact-form" action="URL_DE_VOTRE_SCRIPT_DE_TRAITEMENT" method="POST">
                 <div class="form-group">
                     <label for="name">Nom</label>
@@ -714,14 +858,16 @@
         window.addEventListener('load', () => {
             const loaderContainer = document.getElementById('loader-container');
             const progressBarFill = document.querySelector('.progress-bar-fill');
+            const loaderMessage = document.getElementById('loader-message'); // Récupérer l'élément du message
 
             // Animation de la barre de progression
             let width = 0;
             const interval = setInterval(() => {
                 if (width >= 100) {
                     clearInterval(interval);
-                    // Masquer le loader après l'animation
+                    // Masquer le loader et le message après l'animation
                     loaderContainer.classList.add('hidden');
+                    loaderMessage.style.display = 'none'; // Masquer le message
                 } else {
                     width++;
                     progressBarFill.style.width = width + '%';
