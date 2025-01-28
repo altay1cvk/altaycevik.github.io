@@ -344,6 +344,7 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 5px;
             overflow: hidden;
+            width: 300px; /* Largeur fixe pour toutes les barres */
         }
 
         .skill-progress {
@@ -360,6 +361,7 @@
             margin: 40px auto;
             perspective: 1000px;
             overflow: hidden;
+            position: relative; /* Ajout pour le positionnement absolu des boutons */
         }
 
         .carousel {
@@ -367,9 +369,9 @@
             transition: transform 0.5s ease-in-out;
         }
 
-               /* PROJETS (suite) */
-               .carousel-item {
-            min-width: 33.33%; /* Affiche 3 projets par vue */
+        /* PROJETS (suite) */
+        .carousel-item {
+            min-width: calc(33.33% - 40px); /* Ajustement pour 3 éléments par vue avec marges */
             height: 400px; /* Hauteur fixe pour les cartes */
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid #64ffda;
@@ -379,7 +381,7 @@
             display: flex;
             flex-direction: column;
             transition: transform 0.5s ease-in-out;
-            margin-right: 20px; /* Espace entre les cartes */
+            margin: 0 20px; /* Espace entre les cartes */
         }
 
         .carousel-item:hover {
@@ -676,8 +678,7 @@
 
         @media (min-width: 769px) and (max-width: 1024px) {
             .carousel-item {
-                min-width: 50%; /* Affiche 2 projets par vue */
-                margin-right: 20px;
+                min-width: calc(50% - 40px); /* Ajustement pour 2 éléments par vue avec marges */
             }
         }
 
@@ -980,13 +981,13 @@
         const items = document.querySelectorAll('.carousel-item');
         const navPrev = document.querySelector('.prev-button');
         const navNext = document.querySelector('.next-button');
-        let itemWidth = items[0].offsetWidth; // Largeur initiale
+        let itemWidth = items[0].offsetWidth + 40; // Largeur initiale + marge
         const threshold = itemWidth / 3; // Défilement d'un tiers de la largeur de l'élément
         let touchStartX = 0;
         let touchEndX = 0;
 
         function updateCarousel() {
-            const newTransformValue = -currentIndex * (itemWidth + 20); // +20 pour l'espace entre les éléments
+            const newTransformValue = -currentIndex * itemWidth;
             carousel.style.transform = `translateX(${newTransformValue}px)`;
         }
 
@@ -1083,7 +1084,8 @@
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
             // Mettre à jour la largeur de l'élément pour le calcul du défilement
-            itemWidth = items[0].offsetWidth;
+            itemWidth = items[0].offsetWidth + 40; // Largeur + marge
+            updateCarousel(); // Mettre à jour le carrousel après redimensionnement
         });
 
         // Animation au scroll
