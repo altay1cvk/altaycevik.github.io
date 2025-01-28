@@ -696,8 +696,8 @@
             }
         }
 
-        /* BARRE DE PROGRESSION */
-        .progress-bar-container {
+                /* BARRE DE PROGRESSION */
+                .progress-bar-container {
             width: 100%;
             height: 8px;
             background: rgba(255, 255, 255, 0.1);
@@ -765,6 +765,35 @@
         .fade-out {
             opacity: 0;
             transition: opacity 1s ease-out;
+        }
+
+        /* Styles pour les dossiers de projets */
+        .project-folders {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .folder {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #64ffda;
+            border-radius: 10px;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            text-align: center;
+        }
+
+        .folder:hover {
+            background: rgba(100, 255, 218, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .folder i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #64ffda;
         }
     </style>
 </head>
@@ -890,16 +919,24 @@
 
         <section class="section" id="projects">
             <h2><span class="emoji">📁</span> Mes Projets</h2>
-            <div class="carousel-container">
+            <div class="project-folders">
+                <div class="folder" id="academic-folder">
+                    <i class="fas fa-folder"></i> Académique
+                </div>
+                <div class="folder" id="personal-folder">
+                    <i class="fas fa-folder"></i> Personnel
+                </div>
+            </div>
+            <div class="carousel-container" id="academic-projects">
                 <button class="nav-button prev-button" aria-label="Projet précédent"><i class="fas fa-chevron-left"></i></button>
                 <div class="carousel">
                     <!-- Projet 1 -->
                     <article class="carousel-item">
-                        <img src="stage.jpg" alt="Image du projet 1" class="project-image">
+                        <img src="stage.jpg" alt="Capture d'écran de l'application de suivi d'inventaire" class="project-image">
                         <div class="project-content">
                             <h3 class="project-title">Application de Suivi d'Inventaire</h3>
-                            <p class="project-description">Développement d'une application complète et évolutive pour la gestion des stocks en entreprise.</p>
-                            <p class="project-tech">Technologies : Python, Bash, solutions de sécurité, protocoles de sécurité, RFID.</p>
+                            <p class="project-description">Développement d'une application complète et évolutive pour la gestion et suivie des stocks en entreprise.</p>
+                            <p class="project-tech">Technologies : VBA</p>
                             <a href="https://github.com/altay1cvk/S-curisation-h-pital" class="project-link" target="_blank">Voir sur GitHub <span class="emoji">🔗</span></a>
                         </div>
                     </article>
@@ -909,13 +946,26 @@
                         <img src="p1.jpg" alt="Image du projet 2" class="project-image">
                         <div class="project-content">
                             <h3 class="project-title">Création d'un Data Center</h3>
-                            <p class="project-description">Conception et mise en œuvre d'un data center virtuel à petite échelle.</p>
-                            <p class="project-tech">Technologies : Equipements réseau (routeurs, switches, pare-feu), protocoles de redondance et de haute disponibilité.</p>
+                            <p class="project-description">Le projet de sécurisation d'un datacenter met en place des mesures de sécurité avancées et une supervision 24/7 avec des capteurs intelligents pour protéger les zones critiques.</p>
+                            <p class="project-tech">Technologies : MQTT, Node-RED, InfluxDB, et Grafana pour la gestion, la supervision et la visualisation des données.</p>
                             <a href="https://github.com/altay1cvk/Creation-Data-Center" class="project-link" target="_blank">Voir sur GitHub <span class="emoji">🔗</span></a>
+                        </div>
+                    </article>
+                     <!-- Projet 3 -->
+                    <article class="carousel-item">
+                        <img src="p2.jpg" alt="Schéma de l'architecture réseau de sécurisation d'un hôpital" class="project-image">
+                        <div class="project-content">
+                            <h3 class="project-title">Sécurisation du Système Informatique d'un Hôpital</h3>
+                            <p class="project-description">Le projet SAE 502 sécurise les systèmes informatiques d'un hôpital avec une architecture réseau cloisonnée, l'authentification 802.1X, un VPN pour l'échange de données, et la gestion des ressources pour assurer la continuité des services.</p>
+                            <p class="project-tech">Technologies : Cisco, 802.1X, GitHub, GNS3, et des serveurs dédiés pour assurer la sécurité et la disponibilité des données médicales et administratives.</p>
+                            <a href="https://github.com/altay1cvk/S-curisation-h-pital" class="project-link" target="_blank">Voir sur GitHub <span class="emoji">🔗</span></a>
                         </div>
                     </article>
                 </div>
                 <button class="nav-button next-button" aria-label="Projet suivant"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="carousel-container" id="personal-projects">
+                <!-- (Ajoutez vos projets personnels ici si vous en avez) -->
             </div>
         </section>
 
@@ -1221,6 +1271,25 @@
                     introVideo.style.display = 'none';
                 }, 1000); // Laisser le temps au fondu de se terminer
             });
+        });
+
+        // Gestion des clics sur les dossiers
+        const academicFolder = document.getElementById('academic-folder');
+        const personalFolder = document.getElementById('personal-folder');
+        const academicProjects = document.getElementById('academic-projects');
+        const personalProjects = document.getElementById('personal-projects');
+
+        academicFolder.addEventListener('click', () => {
+            academicProjects.style.display = 'block';
+            personalProjects.style.display = 'none';
+            currentIndex = 0; // Réinitialiser l'index du carrousel
+            updateCarousel(); // Mettre à jour le carrousel
+        });
+
+        personalFolder.addEventListener('click', () => {
+            academicProjects.style.display = 'none';
+            personalProjects.style.display = 'block';
+            // Si vous avez un carrousel pour les projets personnels, initialisez-le ici
         });
     </script>
 </body>
