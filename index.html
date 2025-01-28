@@ -740,6 +740,7 @@
             border-radius: 4px;
             overflow: hidden;
         }
+
         .progress-bar-fill {
             height: 100%;
             background: #64ffda;
@@ -755,6 +756,12 @@
             text-align: center;
             font-family: 'Courier New', Courier, monospace;
         }
+
+        /* Effet de fondu */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 1s ease-out;
+        }
     </style>
 </head>
 <body>
@@ -765,6 +772,11 @@
             <div class="progress-bar-fill"></div>
         </div>
     </div>
+
+    <video id="intro-video" autoplay muted style="display: none; width: 100%; height: 100%; object-fit: cover; position: fixed; top: 0; left: 0; z-index: 999;" disablePictureInPicture controlsList="nodownload noplaybackrate">
+        <source src="ecole.mp4" type="video/mp4">
+        Votre navigateur ne supporte pas la lecture de vidéos.
+    </video>
 
     <div class="progress-bar-container">
         <div class="progress-bar"></div>
@@ -882,16 +894,6 @@
                         <div class="project-content">
                             <h3 class="project-title">Application de Suivi d'Inventaire</h3>
                             <p class="project-description">Développement d'une application complète et évolutive pour la gestion des stocks en entreprise.</p>
-                            <p class="project-tech">Technologies : VBA</p>
-                            <a href="https://github.com/altay1cvk/Application-de-suivie-inventaire" class="project-link" target="_blank">Voir sur GitHub <span class="emoji">🔗</span></a>
-                        </div>
-                    </div>
-
-                    <!-- Projet 2 -->
-                    <div class="carousel-item">
-                        <div class="project-content">
-                            <h3 class="project-title">Sécurisation d'Hôpital</h3>
-                            <p class="project-description">Mise en place d'une solution de sécurité physique pour un établissement hospitalier.</p>
                             <p class="project-tech">Technologies : Python, Bash, solutions de sécurité, protocoles de sécurité, RFID.</p>
                             <a href="https://github.com/altay1cvk/S-curisation-h-pital" class="project-link" target="_blank">Voir sur GitHub <span class="emoji">🔗</span></a>
                         </div>
@@ -981,8 +983,8 @@
         const items = document.querySelectorAll('.carousel-item');
         const navPrev = document.querySelector('.prev-button');
         const navNext = document.querySelector('.next-button');
-        let itemWidth = items[0].offsetWidth + 40; // Largeur initiale + marge
-        const threshold = itemWidth / 3; // Défilement d'un tiers de la largeur de l'élément
+        let itemWidth = items[0].offsetWidth + 40; /* Largeur initiale + marge */
+        const threshold = itemWidth / 3; /* Défilement d'un tiers de la largeur de l'élément */
         let touchStartX = 0;
         let touchEndX = 0;
 
@@ -993,10 +995,10 @@
 
         function handleGesture() {
             if (touchEndX < touchStartX - threshold) {
-                currentIndex = Math.min(currentIndex + 1, items.length - 3); // Défilement vers la droite
+                currentIndex = Math.min(currentIndex + 1, items.length - 3); /* Défilement vers la droite */
             }
             if (touchEndX > touchStartX + threshold) {
-                currentIndex = Math.max(currentIndex - 1, 0); // Défilement vers la gauche
+                currentIndex = Math.max(currentIndex - 1, 0); /* Défilement vers la gauche */
             }
             updateCarousel();
         }
@@ -1135,25 +1137,50 @@
             progressBar.style.width = scrollPercent + '%';
         });
 
-        // Gestion du loader et de la barre de progression au chargement
+        // Gestion du loader, de la vidéo et de la barre de progression au chargement
         window.addEventListener('load', () => {
             const loaderContainer = document.getElementById('loader-container');
             const progressBarFill = document.querySelector('.progress-bar-fill');
             const loaderMessage = document.getElementById('loader-message');
+            const introVideo = document.getElementById('intro-video');
+            const progressBarContainer = document.querySelector('.progress-bar-container');
 
-            // Animation de la barre de progression
+            // Masquer la vidéo et la barre de progression au chargement initial
+            introVideo.style.display = 'none';
+            progressBarContainer.style.display = 'none';
+
+            // Animation de la barre de progression du loader
             let width = 0;
             const interval = setInterval(() => {
                 if (width >= 100) {
                     clearInterval(interval);
-                    // Masquer le loader et le message après l'animation
+                    // Masquer le loader et le message
                     loaderContainer.classList.add('hidden');
                     loaderMessage.style.display = 'none';
+
+                    // Afficher et jouer la vidéo
+                    introVideo.style.display = 'block';
+                    introVideo.play();
                 } else {
                     width++;
                     progressBarFill.style.width = width + '%';
                 }
             }, 15);
+
+            // Gérer la fin de la vidéo
+            introVideo.addEventListener('ended', () => {
+                // Appliquer l'effet de fondu à la vidéo
+                introVideo.classList.add('fade-out');
+
+                // Afficher la barre de progression et le contenu du site
+                progressBarContainer.style.display = 'block';
+                document.querySelector('.nav').style.display = 'block';
+                document.querySelector('.content').style.display = 'block';
+
+                setTimeout(() => {
+                    introVideo.style.display = 'none';
+                }, 1000); // Laisser le temps au fondu de se terminer
+            });
         });
     </script>
 </body>
