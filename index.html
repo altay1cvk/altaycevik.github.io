@@ -359,9 +359,8 @@
             width: 90%;
             max-width: 1100px;
             margin: 40px auto;
-            perspective: 1000px;
             overflow: hidden;
-            position: relative; /* Ajout pour le positionnement absolu des boutons */
+            position: relative;
         }
 
         .carousel {
@@ -369,10 +368,9 @@
             transition: transform 0.5s ease-in-out;
         }
 
-        /* PROJETS (suite) */
         .carousel-item {
-            min-width: calc(33.33% - 40px); /* Ajustement pour 3 éléments par vue avec marges */
-            height: 400px; /* Hauteur fixe pour les cartes */
+            /* La largeur sera calculée en JavaScript */
+            height: auto; /* Ajustement de la hauteur */
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid #64ffda;
             border-radius: 10px;
@@ -381,11 +379,17 @@
             display: flex;
             flex-direction: column;
             transition: transform 0.5s ease-in-out;
-            margin: 0 20px; /* Espace entre les cartes */
+            margin: 0; /* Ajustement de la marge */
         }
 
         .carousel-item:hover {
-            transform: translateY(-10px); /* Effet de soulèvement au survol */
+            transform: translateY(-10px);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px; /* Hauteur fixe pour les images */
+            object-fit: cover; /* Ajustement de l'image */
         }
 
         .project-content {
@@ -394,7 +398,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 100%; /* Occupe toute la hauteur disponible */
+            flex-grow: 1; /* Le contenu prend tout l'espace disponible */
         }
 
         .project-title {
@@ -678,7 +682,7 @@
 
         @media (min-width: 769px) and (max-width: 1024px) {
             .carousel-item {
-                min-width: calc(50% - 40px); /* Ajustement pour 2 éléments par vue avec marges */
+                /* La largeur sera calculée en JavaScript (2 projets par vue) */
             }
         }
 
@@ -887,29 +891,31 @@
         <section class="section" id="projects">
             <h2><span class="emoji">📁</span> Mes Projets</h2>
             <div class="carousel-container">
-                <button class="nav-button prev-button"><i class="fas fa-chevron-left"></i></button>
+                <button class="nav-button prev-button" aria-label="Projet précédent"><i class="fas fa-chevron-left"></i></button>
                 <div class="carousel">
                     <!-- Projet 1 -->
-                    <div class="carousel-item">
+                    <article class="carousel-item">
+                        <img src="stage.jpg" alt="Image du projet 1" class="project-image">
                         <div class="project-content">
                             <h3 class="project-title">Application de Suivi d'Inventaire</h3>
                             <p class="project-description">Développement d'une application complète et évolutive pour la gestion des stocks en entreprise.</p>
                             <p class="project-tech">Technologies : Python, Bash, solutions de sécurité, protocoles de sécurité, RFID.</p>
                             <a href="https://github.com/altay1cvk/S-curisation-h-pital" class="project-link" target="_blank">Voir sur GitHub <span class="emoji">🔗</span></a>
                         </div>
-                    </div>
+                    </article>
 
-                    <!-- Projet 3 -->
-                    <div class="carousel-item">
+                    <!-- Projet 2 -->
+                    <article class="carousel-item">
+                        <img src="p1.jpg" alt="Image du projet 2" class="project-image">
                         <div class="project-content">
                             <h3 class="project-title">Création d'un Data Center</h3>
                             <p class="project-description">Conception et mise en œuvre d'un data center virtuel à petite échelle.</p>
                             <p class="project-tech">Technologies : Equipements réseau (routeurs, switches, pare-feu), protocoles de redondance et de haute disponibilité.</p>
                             <a href="https://github.com/altay1cvk/Creation-Data-Center" class="project-link" target="_blank">Voir sur GitHub <span class="emoji">🔗</span></a>
                         </div>
-                    </div>
+                    </article>
                 </div>
-                <button class="nav-button next-button"><i class="fas fa-chevron-right"></i></button>
+                <button class="nav-button next-button" aria-label="Projet suivant"><i class="fas fa-chevron-right"></i></button>
             </div>
         </section>
 
@@ -983,36 +989,57 @@
         const items = document.querySelectorAll('.carousel-item');
         const navPrev = document.querySelector('.prev-button');
         const navNext = document.querySelector('.next-button');
-        let itemWidth = items[0].offsetWidth + 40; /* Largeur initiale + marge */
-        const threshold = itemWidth / 3; /* Défilement d'un tiers de la largeur de l'élément */
+        let itemsPerView = 3; // Nombre d'éléments à afficher par vue par défaut
+        let itemWidth = 0; // Largeur d'un item, calculée dynamiquement
+        const threshold = 50; // Seuil de défilement pour le tactile (en pixels)
         let touchStartX = 0;
         let touchEndX = 0;
 
+        function calculateItemWidth() {
+            const carouselWidth = carousel.offsetWidth;
+            itemWidth = carouselWidth / itemsPerView;
+
+            items.forEach(item => {
+                item.style.width = `${itemWidth}px`;
+                item.style.marginRight = `0px`; // Réinitialiser la marge
+            });
+
+            // Ajouter une marge à droite de chaque élément sauf le dernier
+            for (let i = 0; i < items.length; i++) {
+                if ((i + 1) % itemsPerView !== 0)
+                {
+                    items[i].style.marginRight = `25px`;
+                }
+            }
+        }
+
         function updateCarousel() {
-            const newTransformValue = -currentIndex * itemWidth;
+            const newTransformValue = -currentIndex * (itemWidth);
             carousel.style.transform = `translateX(${newTransformValue}px)`;
         }
 
         function handleGesture() {
             if (touchEndX < touchStartX - threshold) {
-                currentIndex = Math.min(currentIndex + 1, items.length - 3); /* Défilement vers la droite */
+                currentIndex = Math.min(currentIndex + 1, items.length - itemsPerView);
             }
             if (touchEndX > touchStartX + threshold) {
-                currentIndex = Math.max(currentIndex - 1, 0); /* Défilement vers la gauche */
+                currentIndex = Math.max(currentIndex - 1, 0);
             }
             updateCarousel();
         }
 
+        // Gestion des clics sur les boutons de navigation
         navPrev.addEventListener('click', () => {
             currentIndex = Math.max(currentIndex - 1, 0);
             updateCarousel();
         });
 
         navNext.addEventListener('click', () => {
-            currentIndex = Math.min(currentIndex + 1, items.length - 3);
+            currentIndex = Math.min(currentIndex + 1, items.length - itemsPerView);
             updateCarousel();
         });
 
+        // Gestion des événements tactiles
         carousel.addEventListener('touchstart', (event) => {
             touchStartX = event.changedTouches[0].screenX;
         });
@@ -1085,10 +1112,23 @@
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
-            // Mettre à jour la largeur de l'élément pour le calcul du défilement
-            itemWidth = items[0].offsetWidth + 40; // Largeur + marge
-            updateCarousel(); // Mettre à jour le carrousel après redimensionnement
+
+            // Mettre à jour le nombre d'éléments par vue en fonction de la largeur de l'écran
+            if (window.innerWidth < 769) {
+                itemsPerView = 1;
+            } else if (window.innerWidth >= 769 && window.innerWidth < 1025) {
+                itemsPerView = 2;
+            } else {
+                itemsPerView = 3;
+            }
+
+            // Recalculer la largeur des items et mettre à jour le carrousel
+            calculateItemWidth();
+            updateCarousel();
         });
+
+        // Calculer la largeur des items au chargement initial
+        calculateItemWidth();
 
         // Animation au scroll
         const observerOptions = {
