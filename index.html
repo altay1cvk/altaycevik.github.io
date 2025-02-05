@@ -1047,34 +1047,34 @@
         const progressBarContainer = document.querySelector('.progress-bar-container');
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-        // Masquer la barre de progression au chargement initial
-        progressBarContainer.style.display = 'none';
+// Masquer la barre de progression au chargement initial
+progressBarContainer.style.display = 'none';
 
-        if (!isMobile) {
-            // Sur ordinateur, afficher la vidéo et la lancer automatiquement
-            video.style.display = 'block';
-            video.load()
+if (!isMobile) {
+    // Sur ordinateur, afficher la vidéo et la lancer automatiquement
+    video.style.display = 'block';
+    video.load(); // Ligne importante pour charger la vidéo
 
-            // Gérer la fin de la vidéo
-            video.addEventListener('ended', () => {
-                video.classList.add('fade-out');
-                progressBarContainer.style.display = 'block';
-                document.querySelector('.nav').style.display = 'block';
-                document.querySelector('.content').style.display = 'block';
+    // Gérer la fin de la vidéo
+    video.addEventListener('ended', () => {
+        video.classList.add('fade-out');
+        progressBarContainer.style.display = 'block';
+        document.querySelector('.nav').style.display = 'block';
+        document.querySelector('.content').style.display = 'block';
 
-                setTimeout(() => {
-                    video.style.display = 'none';
-                }, 1000);
-            });
-        } else {
-            // Sur mobile, masquer la vidéo
+        setTimeout(() => {
             video.style.display = 'none';
+        }, 1000);
+    });
+} else {
+    // Sur mobile, masquer la vidéo
+    video.style.display = 'none';
 
-            // Afficher la barre de progression et le contenu du site directement
-            progressBarContainer.style.display = 'block';
-            document.querySelector('.nav').style.display = 'block';
-            document.querySelector('.content').style.display = 'block';
-        }
+    // Afficher la barre de progression et le contenu du site directement
+    progressBarContainer.style.display = 'block';
+    document.querySelector('.nav').style.display = 'block';
+    document.querySelector('.content').style.display = 'block';
+}
         let currentIndex = 0;
         const carousel = document.querySelector('.carousel');
         const items = document.querySelectorAll('.carousel-item');
