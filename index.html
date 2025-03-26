@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - Altay CEVIK</title>
+    <title>Portfolio - Altay CEVIK - Alternance Master IA</title> <!-- Titre plus spécifique -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
@@ -17,7 +17,7 @@
         html { scroll-behavior: smooth; }
         body { font-family: var(--font-mono); background: var(--bg-color); color: var(--text-color); overflow-x: hidden; line-height: 1.6; }
         a { color: var(--primary-color); text-decoration: none; transition: color var(--transition-speed) ease; }
-        a:hover { color: var(--text-color); }
+        a:hover, a:focus { color: var(--text-color); } /* Ajout focus */
 
         /* Loader */
         #loader-container { position: fixed; inset: 0; background-color: var(--bg-color); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; transition: opacity 0.5s ease, visibility 0.5s ease; }
@@ -25,6 +25,17 @@
         #loader-message { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 2rem; text-align: center; }
         .progress-bar-loader { width: clamp(250px, 80%, 300px); height: 8px; background: rgba(255, 255, 255, 0.3); border-radius: 4px; overflow: hidden; }
         .progress-bar-fill { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.05s linear; }
+
+        /* Bouton Passer Intro */
+        #skip-intro-btn {
+            display: none; position: fixed; bottom: 30px; left: 50%;
+            transform: translateX(-50%); padding: 10px 20px; background: var(--primary-color);
+            color: var(--bg-color); border: none; border-radius: 5px; cursor: pointer;
+            z-index: 1001; font-family: var(--font-mono); font-weight: bold;
+            opacity: 0.9; transition: opacity 0.3s ease; font-size: 0.9rem;
+        }
+        #skip-intro-btn:hover { opacity: 1; }
+        #skip-intro-btn i { margin-left: 8px; }
 
         /* Video & Progress Bar */
         #intro-video { width: 100%; height: 100%; object-fit: cover; position: fixed; inset: 0; z-index: 999; opacity: 1; transition: opacity 1s ease-out; }
@@ -43,54 +54,57 @@
         .nav li:nth-child(4) a { animation-delay: calc(0.8s + var(--anim-delay-step) * 4); }
         .nav li:nth-child(5) a { animation-delay: calc(0.8s + var(--anim-delay-step) * 5); }
         .nav a::before { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background-color: var(--primary-color); transition: width var(--transition-speed) ease; }
-        .nav a:hover::before { width: 100%; }
+        .nav a:hover::before, .nav a:focus::before { width: 100%; } /* Ajout focus */
 
         /* Content & Header */
         .content { position: relative; padding: 2rem clamp(1rem, 5vw, 2rem); max-width: 1300px; margin: 0 auto; display: none; }
         .header { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding-bottom: 4rem; }
         .title { font-size: clamp(2.8rem, 7vw, 4.2rem); margin-bottom: 1rem; letter-spacing: 0.1rem; opacity: 0; animation: fadeInUp 1s ease 0.2s forwards; }
-        .subtitle { font-size: clamp(1.2rem, 4vw, 1.6rem); margin-bottom: 2rem; letter-spacing: 0.05rem; opacity: 0; max-width: 600px; margin-inline: auto; animation: fadeInUp 1s ease 0.5s forwards, typing 3.5s steps(40, end) 0.5s forwards, blink-caret .75s step-end infinite; white-space: nowrap; overflow: hidden; border-right: .15em solid var(--primary-color); width: 0; }
+        .subtitle { font-size: clamp(1.2rem, 4vw, 1.6rem); margin-bottom: 1rem; letter-spacing: 0.05rem; opacity: 0; max-width: 700px; /* Largeur ajustée */ margin-inline: auto; animation: fadeInUp 1s ease 0.5s forwards, typing 4s steps(50, end) 0.5s forwards, blink-caret .75s step-end infinite; white-space: nowrap; overflow: hidden; border-right: .15em solid var(--primary-color); width: 0; }
+        .intro-pitch { opacity: 0; animation: fadeInUp 1s ease 1.8s forwards; /* Délai ajusté */ max-width: 700px; margin: 1rem auto 0; font-size: clamp(1rem, 3vw, 1.1rem); color: #ccc; }
 
         /* Sections */
-        .section { min-height: 50vh; padding: clamp(3rem, 8vh, 5rem) clamp(1rem, 5vw, 2rem); max-width: 1200px; margin: 0 auto 3rem auto; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; position: relative; border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), 0 0 8px rgba(100, 255, 218, 0.2); background-color: var(--card-bg-darker); overflow: hidden; }
+        .section { min-height: auto; /* Ajusté */ padding: clamp(3rem, 8vh, 5rem) clamp(1rem, 5vw, 2rem); max-width: 1200px; margin: 0 auto 3rem auto; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; position: relative; border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), 0 0 8px rgba(100, 255, 218, 0.2); background-color: var(--card-bg-darker); overflow: hidden; }
         .section.visible { opacity: 1; transform: translateY(0); }
         .section h2 { font-size: clamp(2rem, 6vw, 2.6rem); margin-bottom: 2rem; text-align: center; color: var(--primary-color); letter-spacing: 0.08rem; opacity: 0; transform: translateX(-20px); transition: opacity 0.6s ease-out 0.1s, transform 0.6s ease-out 0.1s; }
         .section.visible h2 { opacity: 1; transform: translateX(0); }
-        .section h2 .emoji { margin-right: 0.5em; display: inline-block; } /* Emojis dans les titres */
+        .section h2 .emoji { margin-right: 0.5em; display: inline-block; }
 
-        /* Animations éléments enfants section (gardé pour l'effet cascade) */
+        /* Animations éléments enfants section */
         .section > *:not(h2) { opacity: 0; transform: translateX(-20px); transition: opacity 0.5s ease, transform 0.5s ease; }
         .section.visible > *:not(h2) { opacity: 1; transform: translateX(0); }
         .section.visible > *:nth-child(2) { transition-delay: var(--anim-delay-step) * 1; }
         .section.visible > *:nth-child(3) { transition-delay: var(--anim-delay-step) * 2; }
         .section.visible > *:nth-child(4) { transition-delay: var(--anim-delay-step) * 3; }
-        /* ... ajuster les délais si plus d'éléments directs */
+        /* ... */
 
         /* Compétences */
         .skills-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; padding: 1rem 0; }
         .skills-box { background: var(--card-bg); border-radius: 8px; padding: clamp(1.5rem, 4vw, 2rem); border: 1px solid var(--border-color); }
         .skills-box h3 { font-size: clamp(1.4rem, 5vw, 1.7rem); margin-bottom: 1.5rem; color: var(--primary-color); letter-spacing: 0.05rem; }
         .skill-item { margin-bottom: 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; font-size: 0.9rem;}
-        .skill-item span:first-child { flex-basis: 100%; opacity: 0; animation: fadeIn 0.5s ease forwards; } /* Texte prend toute la largeur */
+        .skill-item span:first-child { flex-basis: 100%; opacity: 0; animation: fadeIn 0.5s ease forwards; }
         .skill-bar { flex-grow: 1; flex-basis: 100%; height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden; margin-top: 0.3rem; }
-        .skill-progress { height: 100%; background: var(--primary-color); width: 0; transition: width 1s ease-in-out 0.5s; } /* Ajout délai pour visibilité */
-        /* Délais animation items compétences */
+        .skill-progress { height: 100%; background: var(--primary-color); width: 100%; }
+        /* Délais animation items compétences (fadeIn du texte) */
         .section.visible .skills-box:nth-of-type(1) .skill-item:nth-child(1) span:first-child { animation-delay: calc(var(--anim-delay-step) * 2); }
         .section.visible .skills-box:nth-of-type(1) .skill-item:nth-child(2) span:first-child { animation-delay: calc(var(--anim-delay-step) * 3); }
-        /* ... continuer ou simplifier si l'effet est moins crucial */
+        /* ... */
+        .section.visible .skills-box:nth-of-type(2) .skill-item:nth-child(1) span:first-child { animation-delay: calc(var(--anim-delay-step) * 2); }
+         /* Ajuster les délais pour la 2ème colonne si nécessaire */
 
-        /* Projets - Carrousel */
+        /* Projets - Grille */
         .project-folders { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
         .folder { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.8rem 1.5rem; cursor: pointer; transition: background var(--transition-speed) ease, transform var(--transition-speed) ease; text-align: center; }
-        .folder:hover { background: rgba(100, 255, 218, 0.2); transform: translateY(-3px); }
+        .folder.active { background: rgba(100, 255, 218, 0.2); }
+        .folder:hover, .folder:focus { background: rgba(100, 255, 218, 0.2); transform: translateY(-3px); } /* Ajout focus */
         .folder i { font-size: 1.8rem; margin-bottom: 0.3rem; color: var(--primary-color); display: block; }
 
-        .carousel-container { width: 95%; max-width: 1100px; margin: 2rem auto; overflow: hidden; position: relative; display: none; /* Caché initialement */}
-        #academic-projects { display: block; /* Afficher le premier par défaut */}
-        .carousel { display: flex; transition: transform 0.5s ease-in-out; }
-        .carousel-item { flex-shrink: 0; /* Important */ height: auto; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.4s ease; margin-right: 20px; /* Espace entre items */ }
-        .carousel-item:last-child { margin-right: 0; }
-        .carousel-item:hover { transform: translateY(-5px); }
+        .projects-grid-container { width: 100%; margin: 2rem auto; display: none; }
+        #academic-projects-grid { display: block; }
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .project-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.4s ease; height: 100%; }
+        .project-card:hover, .project-card:focus-within { transform: translateY(-5px); } /* Ajout focus-within */
         .project-image { width: 100%; height: 180px; object-fit: cover; display: block; }
         .project-content { padding: 1rem; text-align: center; display: flex; flex-direction: column; flex-grow: 1; }
         .project-title { font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--primary-color); }
@@ -98,33 +112,54 @@
         .project-tech { font-size: 0.85rem; margin-bottom: 1rem; color: #ccc; }
         .project-link { display: inline-block; color: var(--primary-color); font-weight: bold; margin-top: auto; padding: 0.3rem 0; position: relative; }
         .project-link::before { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background-color: var(--primary-color); transition: width var(--transition-speed) ease; }
-        .project-link:hover::before { width: 80%; }
-        .nav-button { position: absolute; top: 50%; transform: translateY(-50%); width: 35px; height: 35px; background: rgba(10, 10, 10, 0.8); color: var(--primary-color); border: none; border-radius: 50%; font-size: 18px; cursor: pointer; z-index: 10; transition: background var(--transition-speed) ease, color var(--transition-speed) ease; display: flex; justify-content: center; align-items: center; }
-        .nav-button:hover { background: var(--primary-color); color: var(--bg-color); }
-        .prev-button { left: 10px; }
-        .next-button { right: 10px; }
+        .project-link:hover::before, .project-link:focus::before { width: 80%; } /* Ajout focus */
 
-        /* CV */
+        /* CV (Parcours) */
         .cv-container { background: var(--card-bg); border-radius: 8px; padding: clamp(1.5rem, 4vw, 2rem); margin-bottom: 2rem; border: 1px solid var(--border-color); }
         .cv-container h3 { font-size: 1.4rem; display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1rem; color: var(--primary-color); }
-        .cv-container h3 i { width: 20px; text-align: center; } /* Alignement icônes */
+        .cv-container h3 i { width: 20px; text-align: center; }
         .cv-container ul { list-style: none; margin-bottom: 1.5rem; padding-left: 0; }
         .cv-container ul ul { padding-left: 1.5rem; margin-top: 0.5rem; list-style: disc; color: #ccc; }
         .cv-container li { margin-bottom: 1rem; }
         .cv-container li strong { font-size: 1.05rem; display: block; margin-bottom: 0.3rem; color: var(--text-color); }
         .cv-container li p { font-size: 0.95rem; margin-bottom: 0.3rem; }
         .cv-download { text-align: center; margin-top: 2rem; }
-        .cv-download a { background: var(--primary-color); color: var(--bg-color); padding: 0.7rem 1.8rem; border: none; border-radius: 5px; font-weight: 600; transition: transform 0.3s ease, box-shadow 0.3s ease; display: inline-block; opacity: 0; animation: fadeInUp 0.7s ease forwards 1.5s; /* Délai animation */ }
-        .cv-download a:hover { transform: scale(1.05); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px var(--primary-color); }
+        .cv-download a { background: var(--primary-color); color: var(--bg-color); padding: 0.7rem 1.8rem; border: none; border-radius: 5px; font-weight: 600; transition: transform 0.3s ease, box-shadow 0.3s ease; display: inline-block; opacity: 0; animation: fadeInUp 0.7s ease forwards 1.5s; }
+        .cv-download a:hover, .cv-download a:focus { transform: scale(1.05); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px var(--primary-color); } /* Ajout focus */
 
         /* Contact */
         .contact-form { max-width: 600px; margin: 0 auto; background: var(--card-bg); padding: clamp(1.5rem, 4vw, 2rem); border-radius: 8px; border: 1px solid var(--border-color); }
         .form-group { margin-bottom: 1.5rem; }
-        .form-group label { font-size: 0.95rem; display: block; margin-bottom: 0.5rem; opacity: 0; /* Géré par section visible */}
-        .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 5px; color: var(--text-color); font-family: var(--font-mono); font-size: 0.95rem; opacity: 0; /* Géré par section visible */}
+        .form-group label { font-size: 0.95rem; display: block; margin-bottom: 0.5rem; opacity: 0; }
+        .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 5px; color: var(--text-color); font-family: var(--font-mono); font-size: 0.95rem; opacity: 0; }
         .form-group textarea { min-height: 120px; resize: vertical; }
-        .contact-form button { background: var(--primary-color); color: var(--bg-color); padding: 0.8rem 2rem; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: transform 0.3s ease, box-shadow 0.3s ease; display: block; margin: 1rem auto 0 auto; opacity: 0; animation: fadeInUp 0.7s ease forwards 1.5s; /* Délai animation */ }
-        .contact-form button:hover { transform: scale(1.05); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px var(--primary-color); }
+        .contact-form button { background: var(--primary-color); color: var(--bg-color); padding: 0.8rem 2rem; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease; display: block; margin: 1rem auto 0 auto; opacity: 0; animation: fadeInUp 0.7s ease forwards 1.5s; }
+        .contact-form button:hover:not(:disabled), .contact-form button:focus:not(:disabled) { transform: scale(1.05); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px var(--primary-color); } /* Ajout focus */
+        .contact-form button:disabled { background: #ccc; color: #666; cursor: not-allowed; transform: none; box-shadow: none; }
+        .form-status { margin-top: 1rem; text-align: center; font-size: 0.9rem; font-weight: bold; }
+        .contact-socials { text-align: center; margin-top: 2rem; opacity: 0; animation: fadeInUp 1s ease forwards 1.8s; }
+        .contact-socials p { margin-bottom: 0.5rem; font-size: 0.9rem; color: #ccc; }
+        .contact-socials a { font-size: 1.8rem; margin: 0 0.7rem; display: inline-block; }
+        .contact-socials a i { transition: color var(--transition-speed) ease; }
+        .contact-socials a:hover i, .contact-socials a:focus i { color: var(--text-color); } /* Ajout focus */
+
+        /* Focus Visible Styles */
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible,
+        .folder:focus-visible,
+        .project-card:focus-visible, /* Pour la carte elle-même si focusable */
+        .project-link:focus-visible, /* Pour le lien spécifique dans la carte */
+        .cv-download a:focus-visible,
+        .contact-socials a:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 3px;
+            box-shadow: 0 0 0 4px rgba(100, 255, 218, 0.4);
+            border-radius: 4px;
+        }
+        /* Supprimer l'outline par défaut */
+        a, button, input, textarea, .folder, .project-card { outline: none; }
 
         /* Animations Keyframes */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
@@ -138,30 +173,34 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .nav ul { gap: 1rem; justify-content: space-around; } /* Mieux répartir sur mobile */
+            .nav ul { gap: 1rem; justify-content: space-around; }
             .nav a { font-size: 0.85rem; }
             .section { padding: 3rem 1rem; margin-bottom: 2rem; }
             .section h2 { font-size: 1.8rem; }
             .skills-container { grid-template-columns: 1fr; }
             .skills-box h3 { font-size: 1.5rem; }
-            .carousel-container { width: 100%; } /* Prend toute la largeur */
-            .nav-button { width: 30px; height: 30px; font-size: 16px; }
-            .prev-button { left: 5px; }
-            .next-button { right: 5px; }
+            .projects-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
             .title { font-size: 2.5rem; }
-            .subtitle { font-size: 1.1rem; white-space: normal; border-right: none; width: auto; animation: fadeInUp 1s ease 0.5s forwards; } /* Simplifier animation sous-titre mobile */
+            .subtitle { font-size: 1.1rem; white-space: normal; border-right: none; width: auto; animation: fadeInUp 1s ease 0.5s forwards; }
+            .intro-pitch { font-size: 0.95rem; }
             .project-image { height: 150px; }
             .project-title { font-size: 1.2rem; }
             .project-description { font-size: 0.9rem; }
+            .contact-socials a { font-size: 1.6rem; margin: 0 0.5rem; }
         }
     </style>
 </head>
 <body>
     <!-- Loader -->
     <div id="loader-container">
-        <p id="loader-message">Bienvenue 👋</p> <!-- Message plus court -->
+        <p id="loader-message">Bienvenue 👋</p>
         <div class="progress-bar-loader"><div class="progress-bar-fill"></div></div>
     </div>
+
+    <!-- Bouton Passer Intro -->
+    <button id="skip-intro-btn">
+        Passer l'intro <i class="fas fa-forward"></i>
+    </button>
 
     <!-- Vidéo (cachée par JS sur mobile) -->
     <video id="intro-video" muted playsinline preload="auto" style="display: none;" disablePictureInPicture controlsList="nodownload noplaybackrate nofullscreen">
@@ -181,7 +220,8 @@
             <li><a href="#about">À propos</a></li>
             <li><a href="#skills">Compétences</a></li>
             <li><a href="#projects">Projets</a></li>
-            <li><a href="https://drive.google.com/file/d/1YH2oquvzdwwkkxM-0YhJvBHcCCYRbPHs/view?usp=sharing" target="_blank" rel="noopener noreferrer">CV</a></li>
+            <!-- Lien CV mis à jour -->
+            <li><a href="https://drive.google.com/file/d/1iYN5GO-OhEW0ut0aBoPFM6CSA6omyRYw/view?usp=sharing" target="_blank" rel="noopener noreferrer">CV</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
@@ -190,7 +230,12 @@
     <main class="content">
         <header class="header" id="about">
             <h1 class="title">Altay CEVIK</h1>
-            <p class="subtitle">Étudiant 3ème année BUT R&T - IoT</p> <!-- Texte plus court -->
+            <!-- Sous-titre aligné sur objectif CV -->
+            <p class="subtitle">Recherche Alternance - Master Intelligence Artificielle</p>
+            <!-- Accroche mise à jour -->
+            <p class="intro-pitch">
+                Animé par une forte curiosité pour l'IA et ses applications concrètes, je recherche une alternance stimulante pour mon Master. J'ai hâte d'appliquer mes compétences en Machine Learning & Deep Learning.
+            </p>
         </header>
 
         <section class="section" id="skills">
@@ -198,41 +243,36 @@
             <div class="skills-container">
                 <div class="skills-box">
                     <h3>Hard Skills</h3>
-                    <!-- Items compétences -->
                      <div class="skill-item">
-                        <span><span class="emoji" aria-hidden="true">👨‍💻</span> Langages: JS(ES6+), Python, HTML/CSS, C#, C++, PHP</span>
-                        <div class="skill-bar"><div class="skill-progress" data-width="90"></div></div>
+                        <span><span class="emoji" aria-hidden="true">👨‍💻</span> Langages: Python, JS(ES6+), Java, C#, C++, PHP, HTML/CSS</span>
+                        <div class="skill-bar"><div class="skill-progress"></div></div>
                     </div>
                      <div class="skill-item">
-                        <span><span class="emoji" aria-hidden="true">💻</span> Frameworks: React, Node.js</span>
-                        <div class="skill-bar"><div class="skill-progress" data-width="85"></div></div>
+                        <span><span class="emoji" aria-hidden="true">💻</span> Frameworks & Outils: React, Node.js, Docker, Git</span>
+                        <div class="skill-bar"><div class="skill-progress"></div></div>
                     </div>
-                    <div class="skill-item">
-                        <span><span class="emoji" aria-hidden="true">💾</span> BDD: MySQL, PostgreSQL, MongoDB</span>
-                        <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
+                     <div class="skill-item">
+                        <span><span class="emoji" aria-hidden="true">🤖</span> IA/ML: TensorFlow, YOLOv8, PyTorch (Bases)</span>
+                        <div class="skill-bar"><div class="skill-progress"></div></div>
+                    </div>
+                     <div class="skill-item">
+                        <span><span class="emoji" aria-hidden="true">💾</span> BDD: MySQL, PostgreSQL, MongoDB (NoSQL)</span>
+                        <div class="skill-bar"><div class="skill-progress"></div></div>
                     </div>
                     <div class="skill-item">
                         <span><span class="emoji" aria-hidden="true">🖥️</span> Admin Sys: Linux, Windows</span>
-                        <div class="skill-bar"><div class="skill-progress" data-width="70"></div></div>
+                        <div class="skill-bar"><div class="skill-progress"></div></div>
                     </div>
-                     <div class="skill-item">
-                        <span><span class="emoji" aria-hidden="true">☁️</span> Cloud/DevOps: Docker, Git</span>
-                         <div class="skill-bar"><div class="skill-progress" data-width="65"></div></div>
-                    </div>
-                    <div class="skill-item">
-                        <span><span class="emoji" aria-hidden="true">🤖</span> IA/ML: TensorFlow, PyTorch (Bases)</span>
-                        <div class="skill-bar"><div class="skill-progress" data-width="60"></div></div>
-                    </div>
+                    <!-- Note: Cloud/DevOps a été fusionné dans Frameworks & Outils -->
                 </div>
                 <aside class="skills-box">
                     <h3>Soft Skills</h3>
-                    <!-- Items compétences -->
-                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">🗣️</span> Communication</span><div class="skill-bar"><div class="skill-progress" data-width="95"></div></div></div>
-                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">🤝</span> Travail d'équipe</span><div class="skill-bar"><div class="skill-progress" data-width="90"></div></div></div>
-                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">🎯</span> Résolution de problèmes</span><div class="skill-bar"><div class="skill-progress" data-width="85"></div></div></div>
-                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">💡</span> Créativité & Curiosité</span><div class="skill-bar"><div class="skill-progress" data-width="80"></div></div></div>
-                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">📅</span> Gestion de projet (Agile)</span><div class="skill-bar"><div class="skill-progress" data-width="75"></div></div></div>
-                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">🔄</span> Adaptabilité</span><div class="skill-bar"><div class="skill-progress" data-width="85"></div></div></div>
+                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">🎯</span> Résolution de problèmes</span><div class="skill-bar"><div class="skill-progress"></div></div></div>
+                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">💡</span> Autonomie & Curiosité</span><div class="skill-bar"><div class="skill-progress"></div></div></div>
+                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">🤝</span> Travail d'équipe</span><div class="skill-bar"><div class="skill-progress"></div></div></div>
+                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">🗣️</span> Communication</span><div class="skill-bar"><div class="skill-progress"></div></div></div>
+                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">🔄</span> Adaptabilité</span><div class="skill-bar"><div class="skill-progress"></div></div></div>
+                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">📅</span> Gestion de projet (Agile)</span><div class="skill-bar"><div class="skill-progress"></div></div></div>
                 </aside>
             </div>
         </section>
@@ -240,87 +280,94 @@
         <section class="section" id="projects">
              <h2><span class="emoji" aria-hidden="true">📁</span> Mes Projets</h2>
              <div class="project-folders">
-                <div class="folder active" data-target="academic-projects"><i class="fas fa-graduation-cap"></i> Académique</div> <!-- Icône plus spécifique -->
-                <div class="folder" data-target="personal-projects"><i class="fas fa-user"></i> Personnel</div>
+                <div class="folder active" data-target="academic-projects-grid"><i class="fas fa-graduation-cap"></i> Académique</div>
+                <div class="folder" data-target="personal-projects-grid"><i class="fas fa-user"></i> Personnel</div>
             </div>
 
-            <!-- Carrousel Académique -->
-            <div class="carousel-container" id="academic-projects">
-                <button class="nav-button prev-button" aria-label="Précédent"><i class="fas fa-chevron-left"></i></button>
-                <div class="carousel">
-                     <article class="carousel-item">
+             <!-- Grille Académique -->
+            <div class="projects-grid-container" id="academic-projects-grid">
+                <div class="projects-grid">
+                     <article class="project-card">
                         <img src="stage.jpg" alt="App Suivi Inventaire" class="project-image" loading="lazy">
                         <div class="project-content">
-                            <h3 class="project-title">Suivi d'Inventaire IT</h3>
-                            <p class="project-description">App VBA pour suivi & gestion des stocks IT (consommables, matériel).</p>
+                            <h3 class="project-title">Suivi d'Inventaire IT (Stage)</h3>
+                            <p class="project-description">Développement & implémentation App VBA pour suivi/gestion stocks IT.</p>
                             <p class="project-tech">VBA, Excel</p>
                             <a href="https://github.com/altay1cvk/Application-de-suivie-inventaire" class="project-link" target="_blank" rel="noopener noreferrer">GitHub <i class="fab fa-github"></i></a>
                         </div>
                     </article>
-                    <article class="carousel-item">
+                    <article class="project-card">
                         <img src="p1.jpg" alt="Projet Data Center" class="project-image" loading="lazy">
                         <div class="project-content">
                             <h3 class="project-title">Supervision Data Center</h3>
-                            <p class="project-description">Mise en place supervision TIG stack (MQTT, Node-RED, InfluxDB, Grafana) pour capteurs.</p>
-                            <p class="project-tech">IoT, TIG Stack</p>
+                            <p class="project-description">Monitoring temps réel de capteurs (TIG Stack) pour prévenir pannes.</p>
+                            <p class="project-tech">IoT, TIG Stack (MQTT, Node-RED, InfluxDB, Grafana)</p>
                             <a href="https://github.com/altay1cvk/Creation-Data-Center" class="project-link" target="_blank" rel="noopener noreferrer">GitHub <i class="fab fa-github"></i></a>
                         </div>
                     </article>
-                     <article class="carousel-item">
+                     <article class="project-card">
                         <img src="p2.jpg" alt="Sécurisation Hôpital" class="project-image" loading="lazy">
                         <div class="project-content">
                             <h3 class="project-title">Sécurisation SI Hôpital</h3>
-                            <p class="project-description">Architecture réseau (802.1X, VPN), gestion ressources pour continuité services.</p>
+                            <p class="project-description">Conception architecture réseau sécurisée (802.1X, VPN) sur GNS3.</p>
                             <p class="project-tech">Cisco, 802.1X, VPN, GNS3</p>
                             <a href="https://github.com/altay1cvk/S-curisation-h-pital" class="project-link" target="_blank" rel="noopener noreferrer">GitHub <i class="fab fa-github"></i></a>
                         </div>
                     </article>
                 </div>
-                <button class="nav-button next-button" aria-label="Suivant"><i class="fas fa-chevron-right"></i></button>
             </div>
 
-            <!-- Carrousel Personnel (structure similaire si nécessaire) -->
-             <div class="carousel-container" id="personal-projects" style="display: none;">
-                 <!-- Boutons Nav si plusieurs projets -->
-                <div class="carousel">
-                    <article class="carousel-item">
+            <!-- Grille Personnel -->
+             <div class="projects-grid-container" id="personal-projects-grid" style="display: none;">
+                 <div class="projects-grid">
+                    <article class="project-card">
                         <img src="p3.jpg" alt="IA Trading Crypto" class="project-image" loading="lazy">
                         <div class="project-content">
-                            <h3 class="project-title">IA Trading Crypto</h3>
-                            <p class="project-description">Conception IA pour trading auto (achat/vente optimisés) de cryptomonnaies.</p>
+                            <h3 class="project-title">IA Trading Crypto (Concept)</h3>
+                            <p class="project-description">Exploration IA pour trading auto (achat/vente optimisés) de cryptos.</p>
                             <p class="project-tech">Python, IA/ML APIs</p>
                             <a href="#" class="project-link" target="_blank" rel="noopener noreferrer" style="color: #aaa; cursor: not-allowed;">Bientôt dispo <i class="fas fa-lock"></i></a>
                         </div>
                     </article>
-                    <!-- Autres projets perso -->
+                    <!-- Autres projets perso ici -->
                 </div>
-                 <!-- Boutons Nav si plusieurs projets -->
             </div>
         </section>
 
-        <section class="section" id="cv">
-             <h2><span class="emoji" aria-hidden="true">📄</span> Mon Parcours</h2> <!-- Titre plus engageant -->
+        <section class="section" id="cv"> <!-- Renommé ID en "parcours" pour éviter conflit avec lien CV direct -->
+             <h2 id="parcours"><span class="emoji" aria-hidden="true">📄</span> Mon Parcours</h2> <!-- Ajout ID ici pour ancre -->
             <div class="cv-container">
-                <h3><i class="fas fa-briefcase"></i> Expérience</h3>
+                <h3><i class="fas fa-briefcase"></i> Expérience Professionnelle</h3>
                 <ul>
                     <li>
-                        <strong>Stagiaire en Intelligence Artificielle (2025)</strong>
-                        <p> Développement d'un modèle de reconnaissance d'humains avec une caméra IMX500 pour un système autonome sur drone (Machine Learning & Deep Learning)</p>
+                        <!-- Date Stage AI mise à jour -->
+                        <strong>Stagiaire en Intelligence Artificielle (Fév. 2025 - Août 2025 prévu) - FEMTO-ST, Montbéliard</strong>
+                        <p>Développement modèle reconnaissance d'humains (IMX500), intégration GPS/4G, déploiement optimisé sur Raspberry Pi pour drone autonome (ML/DL).</p>
                     </li>
-                    <!-- Autres expériences -->
+                     <li>
+                        <!-- Date Stage Forvia mise à jour -->
+                        <strong>Stagiaire IT (Avril 2024 - Juin 2024) - Forvia, Allenjoie</strong>
+                        <p>Développement solution suivi inventaire IT, configuration/optimisation équipements (switches, PC), gestion outil de suivi.</p>
+                    </li>
                 </ul>
                 <h3><i class="fas fa-graduation-cap"></i> Formation</h3>
                 <ul>
-                    <li><strong>BUT R&T - IoT - IUT Montbéliard (2022 - 2025)</strong> <p>En cours (3A)</p></li>
-                    <li><strong>Bac Scientifique - Lycée A. Peugeot (2022)</strong> <p>Spé Math & SVT</p></li>
+                     <!-- Dates BUT mises à jour -->
+                    <li><strong>BUT Réseaux & Télécommunications - Spé. IoT (2022 - 2025)</strong>
+                        <p>IUT Nord Franche-Comté, Montbéliard (3ème année en cours)</p></li>
+                    <!-- Dates Bac mises à jour -->
+                    <li><strong>Baccalauréat Général (Sept. 2019 - Juil. 2022)</strong>
+                        <p>Lycée Armand Peugeot, Valentigney (Spécialités Mathématiques & SVT)</p></li>
                 </ul>
                  <h3><i class="fas fa-language"></i> Langues</h3>
                 <ul>
                     <li>Français (Natif)</li>
-                    <li>Anglais (B2 - Intermédiaire)</li>
+                    <!-- Niveaux CECRL ajoutés -->
+                    <li>Anglais (B2 - Intermédiaire Avancé)</li>
                     <li>Allemand (A1 - Débutant)</li>
                 </ul>
                 <div class="cv-download">
+                    <!-- Lien CV mis à jour -->
                     <a href="https://drive.google.com/file/d/1iYN5GO-OhEW0ut0aBoPFM6CSA6omyRYw/view?usp=sharing" target="_blank" rel="noopener noreferrer">Télécharger CV <i class="fas fa-download"></i></a>
                 </div>
             </div>
@@ -342,11 +389,23 @@
                     <textarea id="message" name="message" required></textarea>
                 </div>
                 <button type="submit">Envoyer <i class="fas fa-paper-plane"></i></button>
+                 <!-- Le message de statut sera ajouté ici par JS -->
             </form>
+
+            <!-- Liens Sociaux Ajoutés -->
+            <div class="contact-socials">
+                 <p>Retrouvez-moi aussi sur :</p>
+                 <a href="https://www.linkedin.com/in/altay-cevik/" target="_blank" rel="noopener noreferrer" aria-label="Profil LinkedIn"> <!-- REMPLACEZ PAR VOTRE URL LINKEDIN -->
+                     <i class="fab fa-linkedin"></i>
+                 </a>
+                 <a href="https://github.com/altay1cvk" target="_blank" rel="noopener noreferrer" aria-label="Profil GitHub">
+                     <i class="fab fa-github"></i>
+                 </a>
+             </div>
         </section>
     </main>
 
-    <script defer> // <-- Ajout de defer
+    <script defer>
         // --- Détection Mobile ---
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -354,154 +413,154 @@
         const loaderContainer = document.getElementById('loader-container');
         const progressBarFill = document.querySelector('.progress-bar-fill');
         const introVideo = document.getElementById('intro-video');
+        const skipIntroBtn = document.getElementById('skip-intro-btn');
         const siteProgressBarContainer = document.querySelector('.progress-bar-container');
         const siteNav = document.querySelector('.nav');
         const siteContent = document.querySelector('.content');
         const siteProgressBar = document.querySelector('.progress-bar');
+        const contactForm = document.querySelector('.contact-form');
+        const formButton = contactForm?.querySelector('button[type="submit"]');
+
+        // --- Variables globales ---
+        let loadInterval;
+        let hideLoaderTimeout;
+        let intersectionObserver; // Déclarer ici pour portée globale
 
         // --- Gestion Loader & Intro Vidéo ---
         function hideLoader() {
-            loaderContainer.classList.add('hidden');
-            if (!isMobile) {
+            if (loaderContainer) loaderContainer.classList.add('hidden');
+            if (!isMobile && introVideo) {
                 introVideo.style.display = 'block';
-                introVideo.play().catch(e => console.warn("Autoplay vidéo bloqué:", e)); // Gérer erreur autoplay
+                introVideo.play().catch(e => { console.warn("Autoplay vidéo bloqué:", e); showSiteContent(); });
             } else {
-                showSiteContent(); // Afficher direct le site sur mobile
+                showSiteContent();
             }
         }
 
         function showSiteContent() {
-            introVideo.classList.add('fade-out');
-            siteProgressBarContainer.style.display = 'block';
-            siteNav.style.display = 'block'; // Ou 'flex'/'grid' selon votre CSS final
-            siteContent.style.display = 'block';
-            setTimeout(() => {
-                introVideo.style.display = 'none'; // Cacher la vidéo après le fondu
-            }, 1000);
-            // Activer les animations d'entrée après affichage
-            document.querySelectorAll('.section').forEach(section => intersectionObserver.observe(section));
-            animateSkillBarsIfVisible(); // Animer les barres si la section est déjà visible
+            if (introVideo) {
+                introVideo.classList.add('fade-out');
+                introVideo.pause();
+            }
+            if (skipIntroBtn) skipIntroBtn.style.display = 'none';
+            if (siteProgressBarContainer) siteProgressBarContainer.style.display = 'block';
+            if (siteNav) siteNav.style.display = 'block';
+            if (siteContent) siteContent.style.display = 'block';
+
+            if (introVideo) setTimeout(() => { introVideo.style.display = 'none'; }, 1000);
+
+            // Activer l'observation (s'assurer que l'observer est initialisé)
+            if (intersectionObserver) {
+                document.querySelectorAll('.section').forEach(section => intersectionObserver.observe(section));
+            }
         }
 
         // --- Initialisation Loader ---
-        let loadProgress = 0;
-        const loadInterval = setInterval(() => {
-            loadProgress++;
-            progressBarFill.style.width = loadProgress + '%';
-            if (loadProgress >= 100) {
-                clearInterval(loadInterval);
-                // Ajouter un petit délai pour que l'utilisateur voit 100%
-                setTimeout(hideLoader, 300);
+        if (loaderContainer) {
+            let loadProgress = 0;
+            loadInterval = setInterval(() => {
+                loadProgress++;
+                if (progressBarFill) progressBarFill.style.width = loadProgress + '%';
+                if (loadProgress >= 100) {
+                    clearInterval(loadInterval);
+                    hideLoaderTimeout = setTimeout(hideLoader, 300);
+                }
+            }, 15);
+        } else {
+            showSiteContent(); // Afficher direct si pas de loader
+        }
+
+        // --- Bouton Passer Intro ---
+        if (skipIntroBtn) {
+            if (!isMobile) {
+                setTimeout(() => {
+                    if (loaderContainer && !loaderContainer.classList.contains('hidden') || (introVideo && introVideo.style.display !== 'none')) {
+                        skipIntroBtn.style.display = 'block';
+                    }
+                }, 1500);
             }
-        }, 15); // Ajuster la vitesse si besoin
+            skipIntroBtn.addEventListener('click', () => {
+                clearTimeout(hideLoaderTimeout);
+                clearInterval(loadInterval);
+                if (introVideo) { introVideo.pause(); introVideo.style.display = 'none'; }
+                hideLoader();
+                showSiteContent();
+            });
+        }
 
-        // --- Écouteur fin de vidéo ---
-        introVideo.addEventListener('ended', showSiteContent);
-        // Sécurité: si la vidéo ne peut pas jouer, afficher le site après un délai
-        introVideo.addEventListener('error', () => {
-            console.error("Erreur chargement vidéo.");
-            showSiteContent();
-        });
-         introVideo.addEventListener('suspend', () => {
-             // Peut arriver si le chargement s'arrête
-             if (!introVideo.ended && introVideo.readyState < 3) { // readyState < 3 = pas assez de data pour jouer
-                console.warn("Chargement vidéo suspendu.");
-                // Optionnel: afficher le site si la vidéo ne charge pas
-                // showSiteContent();
-             }
-        });
-
+        // --- Écouteurs Vidéo ---
+        if (introVideo) {
+            introVideo.addEventListener('ended', showSiteContent);
+            introVideo.addEventListener('error', () => { console.error("Erreur vidéo."); showSiteContent(); });
+            introVideo.addEventListener('suspend', () => { if (!introVideo.ended && introVideo.readyState < 3) console.warn("Chargement vidéo suspendu."); });
+        }
 
         // --- Three.js Background ---
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limiter pixel ratio
-        document.getElementById('canvas-container').appendChild(renderer.domElement);
+        const canvasContainer = document.getElementById('canvas-container');
 
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = isMobile ? 500 : 1000; // Moins de particules sur mobile
-        const posArray = new Float32Array(particlesCount * 3);
-        for(let i = 0; i < particlesCount * 3; i++) {
-            posArray[i] = (Math.random() - 0.5) * (isMobile ? 4 : 5); // Spread moins large sur mobile
+        if (canvasContainer) {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            canvasContainer.appendChild(renderer.domElement);
+
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = isMobile ? 400 : 800;
+            const posArray = new Float32Array(particlesCount * 3);
+            for(let i = 0; i < particlesCount * 3; i++) posArray[i] = (Math.random() - 0.5) * (isMobile ? 4 : 5);
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const particlesMaterial = new THREE.PointsMaterial({ size: 0.005, color: '#ffffff' });
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+            camera.position.z = 2;
+
+            let mouseX = 0, mouseY = 0;
+            if (!isMobile) {
+                 document.addEventListener('mousemove', (event) => {
+                    mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                    mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+                 });
+            }
+
+            const clock = new THREE.Clock();
+            const animate = () => {
+                const elapsedTime = clock.getElapsedTime();
+                particlesMesh.rotation.y = elapsedTime * 0.08;
+                camera.position.x += (mouseX * 0.2 - camera.position.x) * 0.01;
+                camera.position.y += (mouseY * 0.2 - camera.position.y) * 0.01;
+                camera.lookAt(scene.position);
+                renderer.render(scene, camera);
+                requestAnimationFrame(animate);
+            };
+            animate();
         }
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        const particlesMaterial = new THREE.PointsMaterial({ size: 0.005, color: '#ffffff' });
-        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particlesMesh);
-        camera.position.z = 2;
 
-        let mouseX = 0, mouseY = 0;
-        if (!isMobile) { // Écouteur souris seulement sur desktop
-             document.addEventListener('mousemove', (event) => {
-                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-             });
-        }
-
-        const clock = new THREE.Clock();
-        const animate = () => {
-            const elapsedTime = clock.getElapsedTime();
-            particlesMesh.rotation.y = elapsedTime * 0.1;
-            // Mouvement subtil basé sur la souris (moins prononcé)
-            camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.02;
-            camera.position.y += (mouseY * 0.5 - camera.position.y) * 0.02;
-            camera.lookAt(scene.position);
-
-            renderer.render(scene, camera);
-            requestAnimationFrame(animate);
-        };
-        animate();
-
-        // --- Responsive Three.js & Carousel ---
+        // --- Responsive Three.js ---
         function updateDimensions() {
-            // Camera & Renderer
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-            // Carousel (réinitialiser si la fonction existe)
-             setupCarousels(); // Recalculer la largeur/vue
         }
         window.addEventListener('resize', updateDimensions);
-
 
         // --- Scroll Progress Bar ---
         window.addEventListener('scroll', () => {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrollPercent = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-            siteProgressBar.style.width = scrollPercent + '%';
+            if (siteProgressBar) siteProgressBar.style.width = scrollPercent + '%';
         });
 
         // --- Intersection Observer pour Animations Section ---
-        const animateSkillBars = (section) => {
-             section.querySelectorAll('.skill-progress').forEach(progress => {
-                 const width = progress.dataset.width + '%';
-                 // Reset width before animating if needed (optional)
-                 // progress.style.width = '0';
-                 // Use setTimeout to ensure transition happens after element is visible
-                 setTimeout(() => { progress.style.width = width; }, 100);
-            });
-        };
-
-        const animateSkillBarsIfVisible = () => {
-            const skillsSection = document.getElementById('skills');
-            if (skillsSection && skillsSection.classList.contains('visible')) {
-                animateSkillBars(skillsSection);
-            }
-        };
-
-        const observerOptions = { threshold: 0.15 }; // Un peu plus de visibilité requise
-        const intersectionObserver = new IntersectionObserver((entries) => {
+        // Initialisation après déclaration des fonctions
+         const observerOptions = { threshold: 0.15 };
+         intersectionObserver = new IntersectionObserver((entries) => { // Affectation à la variable globale
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    if (entry.target.id === 'skills') {
-                        animateSkillBars(entry.target);
-                    }
                     // Optionnel: arrêter d'observer une fois visible
                     // intersectionObserver.unobserve(entry.target);
                 }
@@ -509,128 +568,68 @@
                 // else { entry.target.classList.remove('visible'); }
             });
         }, observerOptions);
-        // Observer est démarré dans showSiteContent
-
-        // --- Gestion Carrousels ---
-        const carousels = {}; // Stocker l'état de chaque carrousel
-
-        function setupCarousels() {
-            document.querySelectorAll('.carousel-container').forEach(container => {
-                const id = container.id;
-                const carousel = container.querySelector('.carousel');
-                const items = container.querySelectorAll('.carousel-item');
-                const prevBtn = container.querySelector('.prev-button');
-                const nextBtn = container.querySelector('.next-button');
-
-                if (!items.length || !carousel) return; // Pas d'items ou de carrousel
-
-                let itemsPerView = 3;
-                if (window.innerWidth < 769) itemsPerView = 1;
-                else if (window.innerWidth < 1025) itemsPerView = 2;
-
-                const totalItems = items.length;
-                const itemWidth = carousel.offsetWidth / itemsPerView;
-
-                 // Appliquer la largeur aux items et la marge
-                 items.forEach((item, index) => {
-                    item.style.width = `${itemWidth - (itemsPerView > 1 ? 20 : 0)}px`; // Ajuster pour la marge
-                    item.style.marginRight = (index < totalItems -1 && itemsPerView > 1) ? '20px' : '0';
-                 });
 
 
-                if (!carousels[id]) { // Initialiser si nouveau
-                    carousels[id] = { currentIndex: 0 };
-                }
-                // S'assurer que l'index ne dépasse pas après redimensionnement
-                carousels[id].currentIndex = Math.min(carousels[id].currentIndex, Math.max(0, totalItems - itemsPerView));
-
-                const updateCarousel = () => {
-                    const maxIndex = Math.max(0, totalItems - itemsPerView);
-                    carousels[id].currentIndex = Math.max(0, Math.min(carousels[id].currentIndex, maxIndex));
-                    // Recalculer le décalage total exact incluant la marge
-                    let currentOffset = 0;
-                    for(let i = 0; i < carousels[id].currentIndex; i++){
-                       currentOffset += items[i].offsetWidth + parseInt(items[i].style.marginRight || 0);
-                    }
-                    carousel.style.transform = `translateX(-${currentOffset}px)`;
-
-                    // Activer/Désactiver boutons
-                    if(prevBtn) prevBtn.disabled = carousels[id].currentIndex === 0;
-                    if(nextBtn) nextBtn.disabled = carousels[id].currentIndex >= maxIndex;
-                };
-
-                 // Retirer les anciens écouteurs avant d'ajouter les nouveaux
-                const prevHandler = () => { carousels[id].currentIndex--; updateCarousel(); };
-                const nextHandler = () => { carousels[id].currentIndex++; updateCarousel(); };
-
-                if (prevBtn) {
-                    prevBtn.removeEventListener('click', prevBtn.handler); // Supposer qu'on stocke le handler sur le bouton
-                    prevBtn.addEventListener('click', prevHandler);
-                    prevBtn.handler = prevHandler; // Stocker pour suppression
-                }
-                 if (nextBtn) {
-                    nextBtn.removeEventListener('click', nextBtn.handler);
-                    nextBtn.addEventListener('click', nextHandler);
-                    nextBtn.handler = nextHandler;
-                 }
-
-
-                // --- Gestion Tactile (Simplifiée) ---
-                let touchStartX = 0;
-                const touchThreshold = 50;
-
-                carousel.removeEventListener('touchstart', carousel.touchStartHandler);
-                carousel.removeEventListener('touchend', carousel.touchEndHandler);
-
-                carousel.touchStartHandler = (event) => { touchStartX = event.changedTouches[0].screenX; };
-                carousel.touchEndHandler = (event) => {
-                    const touchEndX = event.changedTouches[0].screenX;
-                    if (touchEndX < touchStartX - touchThreshold) { // Swipe gauche
-                        if(nextBtn && !nextBtn.disabled) nextBtn.click();
-                    } else if (touchEndX > touchStartX + touchThreshold) { // Swipe droite
-                         if(prevBtn && !prevBtn.disabled) prevBtn.click();
-                    }
-                };
-
-                carousel.addEventListener('touchstart', carousel.touchStartHandler, { passive: true }); // passive: true si on n'appelle pas preventDefault
-                carousel.addEventListener('touchend', carousel.touchEndHandler, { passive: true });
-
-
-                updateCarousel(); // Appliquer l'état initial/redimensionné
-            });
-        }
-
-        // --- Gestion Changement de Dossier Projet ---
+        // --- Gestion Changement de Dossier Projet (Version Grille) ---
         document.querySelectorAll('.folder').forEach(folder => {
             folder.addEventListener('click', () => {
                 const targetId = folder.dataset.target;
-                document.querySelectorAll('.carousel-container').forEach(c => {
-                    c.style.display = c.id === targetId ? 'block' : 'none';
+                document.querySelectorAll('.projects-grid-container').forEach(gridContainer => {
+                    gridContainer.style.display = gridContainer.id === targetId ? 'block' : 'none';
                 });
                 document.querySelectorAll('.folder').forEach(f => f.classList.remove('active'));
                 folder.classList.add('active');
-                setupCarousels(); // Re-calculer pour le carrousel nouvellement affiché
             });
         });
 
+        // --- Feedback Formulaire Contact ---
+        if (contactForm && formButton) {
+            let formStatus = document.createElement('p');
+            formStatus.className = 'form-status';
+
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(contactForm);
+                formButton.disabled = true;
+                formButton.innerHTML = 'Envoi... <i class="fas fa-spinner fa-spin"></i>';
+
+                const existingStatus = contactForm.querySelector('.form-status');
+                if (existingStatus) existingStatus.remove();
+
+                try {
+                    const response = await fetch(contactForm.action, {
+                        method: contactForm.method, body: formData, headers: { 'Accept': 'application/json' }
+                    });
+                    if (response.ok) {
+                        formStatus.textContent = "Merci ! Message envoyé.";
+                        formStatus.style.color = 'var(--primary-color)';
+                        contactForm.reset();
+                    } else {
+                        const data = await response.json();
+                        formStatus.textContent = data.errors ? data.errors.map(error => error.message).join(', ') : "Oups! Erreur.";
+                        formStatus.style.color = '#ff6b6b';
+                    }
+                } catch (error) {
+                    console.error("Erreur form fetch:", error);
+                    formStatus.textContent = "Erreur réseau.";
+                    formStatus.style.color = '#ff6b6b';
+                } finally {
+                    contactForm.appendChild(formStatus);
+                    formButton.disabled = false;
+                    formButton.innerHTML = 'Envoyer <i class="fas fa-paper-plane"></i>';
+                }
+            });
+        }
+
         // --- Initialisation au chargement ---
          window.addEventListener('load', () => {
-             // L'initialisation du loader/vidéo se fait déjà hors de l'event 'load'
-             // On setup les carousels après que le contenu soit potentiellement affiché
-             if (!isMobile && introVideo.style.display === 'none' || isMobile) {
-                 setupCarousels();
-                 // Observer les sections si le site est déjà affiché (cas mobile ou vidéo non jouée)
-                  document.querySelectorAll('.section').forEach(section => intersectionObserver.observe(section));
-                  animateSkillBarsIfVisible();
-             } else {
-                // Si la vidéo joue, setupCarousels sera appelé par showSiteContent à la fin
+             // Si contenu déjà affiché (cas mobile ou intro finie/skipée avant 'load')
+             if ((!loaderContainer || loaderContainer.classList.contains('hidden')) && siteContent && siteContent.style.display === 'block') {
+                  if(intersectionObserver){ // Vérifier si l'observer est prêt
+                      document.querySelectorAll('.section:not(.visible)').forEach(section => intersectionObserver.observe(section));
+                  }
              }
          });
-
-         // Lancer le setup initial des carousels (pour le carrousel visible par défaut)
-         // Fait maintenant dans le 'load' pour s'assurer que les dimensions sont correctes
-         // setupCarousels();
-
 
     </script>
 </body>
