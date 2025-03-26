@@ -3,49 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - Altay CEVIK - Alternance Master IA</title> <!-- Titre plus spécifique -->
+
+    <!-- PWA & Mobile Meta -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0a0a"> <!-- Défaut sombre, sera mis à jour par JS -->
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png"> <!-- Icône pour iOS -->
+    <link rel="icon" type="image/png" sizes="192x192"  href="icons/icon-192x192.png"> <!-- Favicon standard -->
+    <!-- Ajoutez d'autres tailles d'icônes si nécessaire -->
+
+    <title>Portfolio - Altay CEVIK - Alternance Master IA</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
+        /* --- Variables CSS --- */
         :root {
-            --primary-color: #64ffda; --bg-color: #0a0a0a; --text-color: #fff;
-            --card-bg: rgba(255, 255, 255, 0.1); --card-bg-darker: rgba(10, 10, 10, 0.5);
-            --border-color: #64ffda; --font-mono: 'Courier New', Courier, monospace;
-            --blur-effect: blur(10px); --transition-speed: 0.3s; --anim-delay-step: 0.2s;
+            /* Couleurs (Mode Sombre par défaut) */
+            --primary-color: #64ffda;
+            --bg-color: #0a0a0a;
+            --text-color: #fff;
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --card-bg-darker: rgba(10, 10, 10, 0.5);
+            --border-color: #64ffda;
+            --nav-bg: rgba(10, 10, 10, 0.8);
+            --particle-color: #ffffff;
+            --button-text-color: var(--bg-color); /* Texte sur boutons primaires */
+            --link-hover-color: var(--text-color); /* Hover liens standard */
+            --form-input-bg: rgba(255, 255, 255, 0.05);
+            --form-input-border: rgba(255, 255, 255, 0.2);
+            --secondary-text-color: #ccc; /* Texte secondaire */
+            --disabled-bg-color: #ccc; /* Fond bouton désactivé */
+            --disabled-text-color: #666; /* Texte bouton désactivé */
+            --error-color: #ff6b6b; /* Couleur message erreur */
+            --success-color: var(--primary-color); /* Couleur message succès */
+            --shadow-color: rgba(100, 255, 218, 0.4); /* Couleur ombre focus */
+
+            /* Autres */
+            --font-mono: 'Courier New', Courier, monospace;
+            --blur-effect: blur(10px);
+            --transition-speed: 0.3s;
+            --anim-delay-step: 0.2s;
         }
+
+        html.light-mode {
+            /* Couleurs (Mode Clair) */
+            --primary-color: #1a7f64;
+            --bg-color: #f8f9fa;
+            --text-color: #212529;
+            --card-bg: rgba(0, 0, 0, 0.03);
+            --card-bg-darker: rgba(0, 0, 0, 0.06);
+            --border-color: #1a7f64;
+            --nav-bg: rgba(248, 249, 250, 0.85);
+            --particle-color: #333333;
+            --button-text-color: #ffffff;
+            --link-hover-color: #0056b3;
+            --form-input-bg: rgba(0, 0, 0, 0.02);
+            --form-input-border: rgba(0, 0, 0, 0.1);
+            --secondary-text-color: #6c757d;
+            --disabled-bg-color: #adb5bd;
+            --disabled-text-color: #495057;
+            --error-color: #dc3545;
+            --success-color: var(--primary-color);
+            --shadow-color: rgba(26, 127, 100, 0.4);
+        }
+
+        /* --- Styles Généraux --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { font-family: var(--font-mono); background: var(--bg-color); color: var(--text-color); overflow-x: hidden; line-height: 1.6; }
+        body {
+            font-family: var(--font-mono);
+            background: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
         a { color: var(--primary-color); text-decoration: none; transition: color var(--transition-speed) ease; }
-        a:hover, a:focus { color: var(--text-color); } /* Ajout focus */
+        a:hover, a:focus { color: var(--link-hover-color); }
 
-        /* Loader */
-        #loader-container { position: fixed; inset: 0; background-color: var(--bg-color); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; transition: opacity 0.5s ease, visibility 0.5s ease; }
+        /* --- Loader --- */
+        #loader-container { position: fixed; inset: 0; background-color: var(--bg-color); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; transition: opacity 0.5s ease, visibility 0.5s ease, background-color var(--transition-speed) ease; }
         #loader-container.hidden { opacity: 0; visibility: hidden; }
-        #loader-message { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 2rem; text-align: center; }
-        .progress-bar-loader { width: clamp(250px, 80%, 300px); height: 8px; background: rgba(255, 255, 255, 0.3); border-radius: 4px; overflow: hidden; }
-        .progress-bar-fill { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.05s linear; }
+        #loader-message { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 2rem; text-align: center; transition: color var(--transition-speed) ease; }
+        .progress-bar-loader { width: clamp(250px, 80%, 300px); height: 8px; background: rgba(128, 128, 128, 0.3); border-radius: 4px; overflow: hidden; } /* Gris neutre */
+        .progress-bar-fill { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.05s linear, background-color var(--transition-speed) ease; }
 
         /* Bouton Passer Intro */
         #skip-intro-btn {
             display: none; position: fixed; bottom: 30px; left: 50%;
             transform: translateX(-50%); padding: 10px 20px; background: var(--primary-color);
-            color: var(--bg-color); border: none; border-radius: 5px; cursor: pointer;
+            color: var(--button-text-color); border: none; border-radius: 5px; cursor: pointer;
             z-index: 1001; font-family: var(--font-mono); font-weight: bold;
-            opacity: 0.9; transition: opacity 0.3s ease; font-size: 0.9rem;
+            opacity: 0.9; transition: opacity 0.3s ease, background-color var(--transition-speed) ease, color var(--transition-speed) ease; font-size: 0.9rem;
         }
         #skip-intro-btn:hover { opacity: 1; }
         #skip-intro-btn i { margin-left: 8px; }
 
-        /* Video & Progress Bar */
+        /* Video & Progress Bar Site */
         #intro-video { width: 100%; height: 100%; object-fit: cover; position: fixed; inset: 0; z-index: 999; opacity: 1; transition: opacity 1s ease-out; }
         #intro-video.fade-out { opacity: 0; }
-        .progress-bar-container { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255, 255, 255, 0.1); z-index: 101; display: none; }
-        .progress-bar { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.1s linear; }
+        .progress-bar-container { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(128, 128, 128, 0.1); z-index: 101; display: none; } /* Gris neutre */
+        .progress-bar { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.1s linear, background-color var(--transition-speed) ease; }
 
         /* Background & Nav */
         #canvas-container { position: fixed; inset: 0; z-index: -1; }
-        .nav { position: fixed; top: 0; left: 0; width: 100%; padding: 1rem clamp(1rem, 5vw, 2rem); background: rgba(10, 10, 10, 0.8); backdrop-filter: var(--blur-effect); z-index: 100; display: none; }
+        .nav { position: fixed; top: 0; left: 0; width: 100%; padding: 1rem clamp(1rem, 5vw, 2rem); background: var(--nav-bg); backdrop-filter: var(--blur-effect); z-index: 100; display: none; transition: background-color var(--transition-speed) ease; }
         .nav ul { display: flex; justify-content: center; gap: 2rem; list-style: none; }
         .nav a { font-weight: 500; position: relative; opacity: 0; animation: fadeInUp 1s ease forwards; }
         .nav li:nth-child(1) a { animation-delay: calc(0.8s + var(--anim-delay-step) * 1); }
@@ -53,95 +114,137 @@
         .nav li:nth-child(3) a { animation-delay: calc(0.8s + var(--anim-delay-step) * 3); }
         .nav li:nth-child(4) a { animation-delay: calc(0.8s + var(--anim-delay-step) * 4); }
         .nav li:nth-child(5) a { animation-delay: calc(0.8s + var(--anim-delay-step) * 5); }
-        .nav a::before { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background-color: var(--primary-color); transition: width var(--transition-speed) ease; }
-        .nav a:hover::before, .nav a:focus::before { width: 100%; } /* Ajout focus */
+        .nav a::before { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background-color: var(--primary-color); transition: width var(--transition-speed) ease, background-color var(--transition-speed) ease; }
+        .nav a:hover::before, .nav a:focus::before { width: 100%; }
 
         /* Content & Header */
         .content { position: relative; padding: 2rem clamp(1rem, 5vw, 2rem); max-width: 1300px; margin: 0 auto; display: none; }
         .header { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding-bottom: 4rem; }
         .title { font-size: clamp(2.8rem, 7vw, 4.2rem); margin-bottom: 1rem; letter-spacing: 0.1rem; opacity: 0; animation: fadeInUp 1s ease 0.2s forwards; }
-        .subtitle { font-size: clamp(1.2rem, 4vw, 1.6rem); margin-bottom: 1rem; letter-spacing: 0.05rem; opacity: 0; max-width: 700px; /* Largeur ajustée */ margin-inline: auto; animation: fadeInUp 1s ease 0.5s forwards, typing 4s steps(50, end) 0.5s forwards, blink-caret .75s step-end infinite; white-space: nowrap; overflow: hidden; border-right: .15em solid var(--primary-color); width: 0; }
-        .intro-pitch { opacity: 0; animation: fadeInUp 1s ease 1.8s forwards; /* Délai ajusté */ max-width: 700px; margin: 1rem auto 0; font-size: clamp(1rem, 3vw, 1.1rem); color: #ccc; }
+        .subtitle {
+            font-size: clamp(1.2rem, 4vw, 1.6rem); margin-bottom: 1rem; letter-spacing: 0.05rem;
+            opacity: 0; max-width: 700px; margin-inline: auto;
+            animation: fadeInUp 1s ease 0.5s forwards, typing 4s steps(50, end) 0.5s forwards, blink-caret .75s step-end infinite;
+            white-space: nowrap; overflow: hidden;
+            border-right: .15em solid var(--primary-color); width: 0;
+            transition: border-color var(--transition-speed) ease;
+        }
+        .intro-pitch { opacity: 0; animation: fadeInUp 1s ease 1.8s forwards; max-width: 700px; margin: 1rem auto 0; font-size: clamp(1rem, 3vw, 1.1rem); color: var(--secondary-text-color); transition: color var(--transition-speed) ease; }
 
         /* Sections */
-        .section { min-height: auto; /* Ajusté */ padding: clamp(3rem, 8vh, 5rem) clamp(1rem, 5vw, 2rem); max-width: 1200px; margin: 0 auto 3rem auto; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; position: relative; border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), 0 0 8px rgba(100, 255, 218, 0.2); background-color: var(--card-bg-darker); overflow: hidden; }
+        .section {
+            min-height: auto; padding: clamp(3rem, 8vh, 5rem) clamp(1rem, 5vw, 2rem);
+            max-width: 1200px; margin: 0 auto 3rem auto; opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out, background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            position: relative; border: 1px solid var(--border-color); border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1), 0 0 8px var(--shadow-color); /* Ajustement ombre */
+            background-color: var(--card-bg-darker); overflow: hidden;
+        }
         .section.visible { opacity: 1; transform: translateY(0); }
-        .section h2 { font-size: clamp(2rem, 6vw, 2.6rem); margin-bottom: 2rem; text-align: center; color: var(--primary-color); letter-spacing: 0.08rem; opacity: 0; transform: translateX(-20px); transition: opacity 0.6s ease-out 0.1s, transform 0.6s ease-out 0.1s; }
+        .section h2 { font-size: clamp(2rem, 6vw, 2.6rem); margin-bottom: 2rem; text-align: center; color: var(--primary-color); letter-spacing: 0.08rem; opacity: 0; transform: translateX(-20px); transition: opacity 0.6s ease-out 0.1s, transform 0.6s ease-out 0.1s, color var(--transition-speed) ease; }
         .section.visible h2 { opacity: 1; transform: translateX(0); }
         .section h2 .emoji { margin-right: 0.5em; display: inline-block; }
 
-        /* Animations éléments enfants section */
+        /* Animations éléments enfants section (Identique) */
         .section > *:not(h2) { opacity: 0; transform: translateX(-20px); transition: opacity 0.5s ease, transform 0.5s ease; }
         .section.visible > *:not(h2) { opacity: 1; transform: translateX(0); }
         .section.visible > *:nth-child(2) { transition-delay: var(--anim-delay-step) * 1; }
         .section.visible > *:nth-child(3) { transition-delay: var(--anim-delay-step) * 2; }
         .section.visible > *:nth-child(4) { transition-delay: var(--anim-delay-step) * 3; }
-        /* ... */
 
         /* Compétences */
         .skills-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; padding: 1rem 0; }
-        .skills-box { background: var(--card-bg); border-radius: 8px; padding: clamp(1.5rem, 4vw, 2rem); border: 1px solid var(--border-color); }
-        .skills-box h3 { font-size: clamp(1.4rem, 5vw, 1.7rem); margin-bottom: 1.5rem; color: var(--primary-color); letter-spacing: 0.05rem; }
+        .skills-box { background: var(--card-bg); border-radius: 8px; padding: clamp(1.5rem, 4vw, 2rem); border: 1px solid var(--border-color); transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; }
+        .skills-box h3 { font-size: clamp(1.4rem, 5vw, 1.7rem); margin-bottom: 1.5rem; color: var(--primary-color); letter-spacing: 0.05rem; transition: color var(--transition-speed) ease; }
         .skill-item { margin-bottom: 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; font-size: 0.9rem;}
         .skill-item span:first-child { flex-basis: 100%; opacity: 0; animation: fadeIn 0.5s ease forwards; }
-        .skill-bar { flex-grow: 1; flex-basis: 100%; height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden; margin-top: 0.3rem; }
-        .skill-progress { height: 100%; background: var(--primary-color); width: 100%; }
-        /* Délais animation items compétences (fadeIn du texte) */
+        .skill-bar { flex-grow: 1; flex-basis: 100%; height: 8px; background: var(--form-input-bg); border-radius: 4px; overflow: hidden; margin-top: 0.3rem; transition: background-color var(--transition-speed) ease; } /* Utilisation variable input */
+        .skill-progress { height: 100%; background: var(--primary-color); width: 100%; transition: background-color var(--transition-speed) ease; }
+        /* Animation delays (Identique) */
         .section.visible .skills-box:nth-of-type(1) .skill-item:nth-child(1) span:first-child { animation-delay: calc(var(--anim-delay-step) * 2); }
         .section.visible .skills-box:nth-of-type(1) .skill-item:nth-child(2) span:first-child { animation-delay: calc(var(--anim-delay-step) * 3); }
-        /* ... */
+        .section.visible .skills-box:nth-of-type(1) .skill-item:nth-child(3) span:first-child { animation-delay: calc(var(--anim-delay-step) * 4); }
+        .section.visible .skills-box:nth-of-type(1) .skill-item:nth-child(4) span:first-child { animation-delay: calc(var(--anim-delay-step) * 5); }
+        .section.visible .skills-box:nth-of-type(1) .skill-item:nth-child(5) span:first-child { animation-delay: calc(var(--anim-delay-step) * 6); }
         .section.visible .skills-box:nth-of-type(2) .skill-item:nth-child(1) span:first-child { animation-delay: calc(var(--anim-delay-step) * 2); }
-         /* Ajuster les délais pour la 2ème colonne si nécessaire */
+        .section.visible .skills-box:nth-of-type(2) .skill-item:nth-child(2) span:first-child { animation-delay: calc(var(--anim-delay-step) * 3); }
+        .section.visible .skills-box:nth-of-type(2) .skill-item:nth-child(3) span:first-child { animation-delay: calc(var(--anim-delay-step) * 4); }
 
         /* Projets - Grille */
         .project-folders { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
-        .folder { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.8rem 1.5rem; cursor: pointer; transition: background var(--transition-speed) ease, transform var(--transition-speed) ease; text-align: center; }
-        .folder.active { background: rgba(100, 255, 218, 0.2); }
-        .folder:hover, .folder:focus { background: rgba(100, 255, 218, 0.2); transform: translateY(-3px); } /* Ajout focus */
-        .folder i { font-size: 1.8rem; margin-bottom: 0.3rem; color: var(--primary-color); display: block; }
+        .folder {
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px;
+            padding: 0.8rem 1.5rem; cursor: pointer;
+            transition: background var(--transition-speed) ease, transform var(--transition-speed) ease, border-color var(--transition-speed) ease;
+            text-align: center;
+        }
+        .folder.active { background: color-mix(in srgb, var(--primary-color) 20%, transparent); } /* Mix pour l'opacité */
+        .folder:hover, .folder:focus { background: color-mix(in srgb, var(--primary-color) 20%, transparent); transform: translateY(-3px); }
+        .folder i { font-size: 1.8rem; margin-bottom: 0.3rem; color: var(--primary-color); display: block; transition: color var(--transition-speed) ease; }
 
         .projects-grid-container { width: 100%; margin: 2rem auto; display: none; }
         #academic-projects-grid { display: block; }
         .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-        .project-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.4s ease; height: 100%; }
-        .project-card:hover, .project-card:focus-within { transform: translateY(-5px); } /* Ajout focus-within */
+        .project-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.4s ease, background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; height: 100%; }
+        .project-card:hover, .project-card:focus-within { transform: translateY(-5px); }
         .project-image { width: 100%; height: 180px; object-fit: cover; display: block; }
         .project-content { padding: 1rem; text-align: center; display: flex; flex-direction: column; flex-grow: 1; }
-        .project-title { font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--primary-color); }
+        .project-title { font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--primary-color); transition: color var(--transition-speed) ease; }
         .project-description { font-size: 0.95rem; margin-bottom: 0.8rem; flex-grow: 1; }
-        .project-tech { font-size: 0.85rem; margin-bottom: 1rem; color: #ccc; }
-        .project-link { display: inline-block; color: var(--primary-color); font-weight: bold; margin-top: auto; padding: 0.3rem 0; position: relative; }
-        .project-link::before { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background-color: var(--primary-color); transition: width var(--transition-speed) ease; }
-        .project-link:hover::before, .project-link:focus::before { width: 80%; } /* Ajout focus */
+        .project-tech { font-size: 0.85rem; margin-bottom: 1rem; color: var(--secondary-text-color); transition: color var(--transition-speed) ease; }
+        .project-link { display: inline-block; color: var(--primary-color); font-weight: bold; margin-top: auto; padding: 0.3rem 0; position: relative; transition: color var(--transition-speed) ease; }
+        .project-link::before { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background-color: var(--primary-color); transition: width var(--transition-speed) ease, background-color var(--transition-speed) ease; }
+        .project-link:hover::before, .project-link:focus::before { width: 80%; }
+        .project-link[style*="color: #aaa"] { color: #aaa !important; } /* Cas lien désactivé */
 
         /* CV (Parcours) */
-        .cv-container { background: var(--card-bg); border-radius: 8px; padding: clamp(1.5rem, 4vw, 2rem); margin-bottom: 2rem; border: 1px solid var(--border-color); }
-        .cv-container h3 { font-size: 1.4rem; display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1rem; color: var(--primary-color); }
+        .cv-container { background: var(--card-bg); border-radius: 8px; padding: clamp(1.5rem, 4vw, 2rem); margin-bottom: 2rem; border: 1px solid var(--border-color); transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; }
+        .cv-container h3 { font-size: 1.4rem; display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1rem; color: var(--primary-color); transition: color var(--transition-speed) ease; }
         .cv-container h3 i { width: 20px; text-align: center; }
         .cv-container ul { list-style: none; margin-bottom: 1.5rem; padding-left: 0; }
-        .cv-container ul ul { padding-left: 1.5rem; margin-top: 0.5rem; list-style: disc; color: #ccc; }
+        .cv-container ul ul { padding-left: 1.5rem; margin-top: 0.5rem; list-style: disc; color: var(--secondary-text-color); transition: color var(--transition-speed) ease; }
         .cv-container li { margin-bottom: 1rem; }
-        .cv-container li strong { font-size: 1.05rem; display: block; margin-bottom: 0.3rem; color: var(--text-color); }
+        .cv-container li strong { font-size: 1.05rem; display: block; margin-bottom: 0.3rem; color: var(--text-color); transition: color var(--transition-speed) ease; }
         .cv-container li p { font-size: 0.95rem; margin-bottom: 0.3rem; }
         .cv-download { text-align: center; margin-top: 2rem; }
-        .cv-download a { background: var(--primary-color); color: var(--bg-color); padding: 0.7rem 1.8rem; border: none; border-radius: 5px; font-weight: 600; transition: transform 0.3s ease, box-shadow 0.3s ease; display: inline-block; opacity: 0; animation: fadeInUp 0.7s ease forwards 1.5s; }
-        .cv-download a:hover, .cv-download a:focus { transform: scale(1.05); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px var(--primary-color); } /* Ajout focus */
+        .cv-download a {
+            background: var(--primary-color); color: var(--button-text-color); padding: 0.7rem 1.8rem; border: none;
+            border-radius: 5px; font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+            display: inline-block;
+        }
+        .cv-download a:hover, .cv-download a:focus {
+            transform: scale(1.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 10px var(--primary-color); /* Ombre plus neutre */
+        }
+        /* Animation gérée par la section parente */
+        .section#cv.visible .cv-download a { transition-delay: calc(var(--anim-delay-step) * 4); }
 
         /* Contact */
-        .contact-form { max-width: 600px; margin: 0 auto; background: var(--card-bg); padding: clamp(1.5rem, 4vw, 2rem); border-radius: 8px; border: 1px solid var(--border-color); }
+        .contact-form { max-width: 600px; margin: 0 auto; background: var(--card-bg); padding: clamp(1.5rem, 4vw, 2rem); border-radius: 8px; border: 1px solid var(--border-color); transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; }
         .form-group { margin-bottom: 1.5rem; }
-        .form-group label { font-size: 0.95rem; display: block; margin-bottom: 0.5rem; opacity: 0; }
-        .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 5px; color: var(--text-color); font-family: var(--font-mono); font-size: 0.95rem; opacity: 0; }
+        .form-group label { font-size: 0.95rem; display: block; margin-bottom: 0.5rem; color: var(--text-color); transition: color var(--transition-speed) ease; }
+        .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; background: var(--form-input-bg); border: 1px solid var(--form-input-border); border-radius: 5px; color: var(--text-color); font-family: var(--font-mono); font-size: 0.95rem; transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, color var(--transition-speed) ease; }
         .form-group textarea { min-height: 120px; resize: vertical; }
-        .contact-form button { background: var(--primary-color); color: var(--bg-color); padding: 0.8rem 2rem; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease; display: block; margin: 1rem auto 0 auto; opacity: 0; animation: fadeInUp 0.7s ease forwards 1.5s; }
-        .contact-form button:hover:not(:disabled), .contact-form button:focus:not(:disabled) { transform: scale(1.05); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px var(--primary-color); } /* Ajout focus */
-        .contact-form button:disabled { background: #ccc; color: #666; cursor: not-allowed; transform: none; box-shadow: none; }
-        .form-status { margin-top: 1rem; text-align: center; font-size: 0.9rem; font-weight: bold; }
-        .contact-socials { text-align: center; margin-top: 2rem; opacity: 0; animation: fadeInUp 1s ease forwards 1.8s; }
-        .contact-socials p { margin-bottom: 0.5rem; font-size: 0.9rem; color: #ccc; }
-        .contact-socials a { font-size: 1.8rem; margin: 0 0.7rem; display: inline-block; }
-        .contact-socials a i { transition: color var(--transition-speed) ease; }
-        .contact-socials a:hover i, .contact-socials a:focus i { color: var(--text-color); } /* Ajout focus */
+        .contact-form button { background: var(--primary-color); color: var(--button-text-color); padding: 0.8rem 2rem; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: transform 0.3s ease, box-shadow 0.3s ease, background-color var(--transition-speed) ease, color var(--transition-speed) ease; display: block; margin: 1rem auto 0 auto; }
+        .contact-form button:hover:not(:disabled), .contact-form button:focus:not(:disabled) { transform: scale(1.05); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 10px var(--primary-color); } /* Ombre plus neutre */
+        .contact-form button:disabled { background: var(--disabled-bg-color); color: var(--disabled-text-color); cursor: not-allowed; transform: none; box-shadow: none; }
+
+        /* Conteneur pour statut formulaire */
+        #form-status-container { text-align: center; min-height: 1.5em; margin-top: 1rem; }
+        .form-status { font-size: 0.9rem; font-weight: bold; opacity: 0; transition: opacity 0.5s ease, color var(--transition-speed) ease; }
+        .form-status.visible { opacity: 1; }
+        /* Couleurs spécifiques pour les messages (sera défini inline par JS mais on peut aider) */
+         .form-status.success { color: var(--success-color); }
+         .form-status.error { color: var(--error-color); }
+
+        .contact-socials { text-align: center; margin-top: 2rem; }
+        .contact-socials p { margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--secondary-text-color); transition: color var(--transition-speed) ease; }
+        .contact-socials a { font-size: 1.8rem; margin: 0 0.7rem; display: inline-block; color: var(--primary-color); transition: color var(--transition-speed) ease; }
+        .contact-socials a i { transition: color var(--transition-speed) ease; } /* Transition sur l'icône aussi */
+        .contact-socials a:hover, .contact-socials a:focus { color: var(--link-hover-color); }
+        .contact-socials a:hover i, .contact-socials a:focus i { color: inherit; } /* Hérite couleur du lien au survol */
 
         /* Focus Visible Styles */
         a:focus-visible,
@@ -149,29 +252,62 @@
         input:focus-visible,
         textarea:focus-visible,
         .folder:focus-visible,
-        .project-card:focus-visible, /* Pour la carte elle-même si focusable */
-        .project-link:focus-visible, /* Pour le lien spécifique dans la carte */
+        .project-card:focus-visible, /* Peut être redondant si focus-within est suffisant */
+        .project-link:focus-visible,
         .cv-download a:focus-visible,
         .contact-socials a:focus-visible {
             outline: 2px solid var(--primary-color);
             outline-offset: 3px;
-            box-shadow: 0 0 0 4px rgba(100, 255, 218, 0.4);
+            box-shadow: 0 0 0 4px var(--shadow-color);
             border-radius: 4px;
+            transition: outline var(--transition-speed) ease, outline-offset var(--transition-speed) ease, box-shadow var(--transition-speed) ease; /* Transition pour le focus */
         }
-        /* Supprimer l'outline par défaut */
-        a, button, input, textarea, .folder, .project-card { outline: none; }
+        a, button, input, textarea, .folder, .project-card { outline: none; } /* Retire outline par défaut */
 
-        /* Animations Keyframes */
+        /* Bouton Thème */
+        #theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--card-bg);
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 1002; /* Au dessus du skip et nav */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, border-color var(--transition-speed) ease, transform 0.2s ease;
+        }
+        #theme-toggle:hover, #theme-toggle:focus {
+            transform: scale(1.1);
+            background-color: var(--card-bg-darker);
+        }
+        /* Focus visible spécifique pour éviter conflit avec règle générale */
+        #theme-toggle:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+            box-shadow: 0 0 0 4px var(--shadow-color);
+        }
+
+        /* Animations Keyframes (Identique, mais @blink-caret peut nécessiter ajustement) */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--primary-color); } }
+        @keyframes blink-caret {
+             from, to { border-color: transparent }
+             50% { border-color: var(--primary-color); }
+         }
         @keyframes typing {
             0% { width: 0; opacity: 0; } 1% { opacity: 1; }
-            99.9% { border-right-color: var(--primary-color); }
+            99.9% { border-right-color: var(--primary-color); } /* Utilise la variable */
             100% { width: 100%; opacity: 1; border-right-color: transparent; }
         }
 
-        /* Responsive */
+        /* Responsive (Identique) */
         @media (max-width: 768px) {
             .nav ul { gap: 1rem; justify-content: space-around; }
             .nav a { font-size: 0.85rem; }
@@ -187,7 +323,22 @@
             .project-title { font-size: 1.2rem; }
             .project-description { font-size: 0.9rem; }
             .contact-socials a { font-size: 1.6rem; margin: 0 0.5rem; }
+            #theme-toggle { bottom: 15px; right: 15px; width: 40px; height: 40px; font-size: 1rem;} /* Ajustement bouton thème sur mobile */
+            #skip-intro-btn { bottom: 65px; } /* Remonte le bouton skip si theme toggle est en bas à droite */
         }
+
+        /* Animation delays spécifique Contact (Identique) */
+        .section#contact.visible > .contact-form { transition-delay: calc(var(--anim-delay-step) * 1); }
+        .section#contact.visible > #form-status-container { transition-delay: calc(var(--anim-delay-step) * 1); }
+        .section#contact.visible > .contact-socials { transition-delay: calc(var(--anim-delay-step) * 2); }
+        .section#contact.visible .form-group:nth-of-type(1) label,
+        .section#contact.visible .form-group:nth-of-type(1) input { transition-delay: calc(var(--anim-delay-step) * 2); }
+        .section#contact.visible .form-group:nth-of-type(2) label,
+        .section#contact.visible .form-group:nth-of-type(2) input { transition-delay: calc(var(--anim-delay-step) * 3); }
+        .section#contact.visible .form-group:nth-of-type(3) label,
+        .section#contact.visible .form-group:nth-of-type(3) textarea { transition-delay: calc(var(--anim-delay-step) * 4); }
+        .section#contact.visible .contact-form button { transition-delay: calc(var(--anim-delay-step) * 5); }
+
     </style>
 </head>
 <body>
@@ -220,7 +371,6 @@
             <li><a href="#about">À propos</a></li>
             <li><a href="#skills">Compétences</a></li>
             <li><a href="#projects">Projets</a></li>
-            <!-- Lien CV mis à jour -->
             <li><a href="https://drive.google.com/file/d/1iYN5GO-OhEW0ut0aBoPFM6CSA6omyRYw/view?usp=sharing" target="_blank" rel="noopener noreferrer">CV</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
@@ -230,9 +380,7 @@
     <main class="content">
         <header class="header" id="about">
             <h1 class="title">Altay CEVIK</h1>
-            <!-- Sous-titre aligné sur objectif CV -->
             <p class="subtitle">Recherche Alternance - Master Intelligence Artificielle</p>
-            <!-- Accroche mise à jour -->
             <p class="intro-pitch">
                 Animé par une forte curiosité pour l'IA et ses applications concrètes, je recherche une alternance stimulante pour mon Master. J'ai hâte d'appliquer mes compétences en Machine Learning & Deep Learning.
             </p>
@@ -263,7 +411,6 @@
                         <span><span class="emoji" aria-hidden="true">🖥️</span> Admin Sys: Linux, Windows</span>
                         <div class="skill-bar"><div class="skill-progress"></div></div>
                     </div>
-                    <!-- Note: Cloud/DevOps a été fusionné dans Frameworks & Outils -->
                 </div>
                 <aside class="skills-box">
                     <h3>Soft Skills</h3>
@@ -326,48 +473,41 @@
                             <h3 class="project-title">IA Trading Crypto (Concept)</h3>
                             <p class="project-description">Exploration IA pour trading auto (achat/vente optimisés) de cryptos.</p>
                             <p class="project-tech">Python, IA/ML APIs</p>
-                            <a href="#" class="project-link" target="_blank" rel="noopener noreferrer" style="color: #aaa; cursor: not-allowed;">Bientôt dispo <i class="fas fa-lock"></i></a>
+                            <a href="#" class="project-link" onclick="return false;" style="color: #aaa; cursor: not-allowed;" aria-disabled="true">Bientôt dispo <i class="fas fa-lock"></i></a>
                         </div>
                     </article>
-                    <!-- Autres projets perso ici -->
                 </div>
             </div>
         </section>
 
-        <section class="section" id="cv"> <!-- Renommé ID en "parcours" pour éviter conflit avec lien CV direct -->
-             <h2 id="parcours"><span class="emoji" aria-hidden="true">📄</span> Mon Parcours</h2> <!-- Ajout ID ici pour ancre -->
+        <section class="section" id="cv">
+             <h2 id="parcours"><span class="emoji" aria-hidden="true">📄</span> Mon Parcours</h2>
             <div class="cv-container">
                 <h3><i class="fas fa-briefcase"></i> Expérience Professionnelle</h3>
                 <ul>
                     <li>
-                        <!-- Date Stage AI mise à jour -->
                         <strong>Stagiaire en Intelligence Artificielle (Fév. 2025 - Août 2025 prévu) - FEMTO-ST, Montbéliard</strong>
                         <p>Développement modèle reconnaissance d'humains (IMX500), intégration GPS/4G, déploiement optimisé sur Raspberry Pi pour drone autonome (ML/DL).</p>
                     </li>
                      <li>
-                        <!-- Date Stage Forvia mise à jour -->
                         <strong>Stagiaire IT (Avril 2024 - Juin 2024) - Forvia, Allenjoie</strong>
                         <p>Développement solution suivi inventaire IT, configuration/optimisation équipements (switches, PC), gestion outil de suivi.</p>
                     </li>
                 </ul>
                 <h3><i class="fas fa-graduation-cap"></i> Formation</h3>
                 <ul>
-                     <!-- Dates BUT mises à jour -->
                     <li><strong>BUT Réseaux & Télécommunications - Spé. IoT (2022 - 2025)</strong>
                         <p>IUT Nord Franche-Comté, Montbéliard (3ème année en cours)</p></li>
-                    <!-- Dates Bac mises à jour -->
                     <li><strong>Baccalauréat Général (Sept. 2019 - Juil. 2022)</strong>
                         <p>Lycée Armand Peugeot, Valentigney (Spécialités Mathématiques & SVT)</p></li>
                 </ul>
                  <h3><i class="fas fa-language"></i> Langues</h3>
                 <ul>
                     <li>Français (Natif)</li>
-                    <!-- Niveaux CECRL ajoutés -->
                     <li>Anglais (B2 - Intermédiaire Avancé)</li>
                     <li>Allemand (A1 - Débutant)</li>
                 </ul>
                 <div class="cv-download">
-                    <!-- Lien CV mis à jour -->
                     <a href="https://drive.google.com/file/d/1iYN5GO-OhEW0ut0aBoPFM6CSA6omyRYw/view?usp=sharing" target="_blank" rel="noopener noreferrer">Télécharger CV <i class="fas fa-download"></i></a>
                 </div>
             </div>
@@ -389,13 +529,17 @@
                     <textarea id="message" name="message" required></textarea>
                 </div>
                 <button type="submit">Envoyer <i class="fas fa-paper-plane"></i></button>
-                 <!-- Le message de statut sera ajouté ici par JS -->
             </form>
 
-            <!-- Liens Sociaux Ajoutés -->
+            <!-- Conteneur pour le message de statut -->
+            <div id="form-status-container">
+                <!-- Le message .form-status sera injecté ici par JS -->
+            </div>
+
+            <!-- Liens Sociaux -->
             <div class="contact-socials">
                  <p>Retrouvez-moi aussi sur :</p>
-                 <a href="https://www.linkedin.com/in/altay-cevik/" target="_blank" rel="noopener noreferrer" aria-label="Profil LinkedIn"> <!-- REMPLACEZ PAR VOTRE URL LINKEDIN -->
+                 <a href="https://www.linkedin.com/in/altay-cevik/" target="_blank" rel="noopener noreferrer" aria-label="Profil LinkedIn">
                      <i class="fab fa-linkedin"></i>
                  </a>
                  <a href="https://github.com/altay1cvk" target="_blank" rel="noopener noreferrer" aria-label="Profil GitHub">
@@ -404,6 +548,11 @@
              </div>
         </section>
     </main>
+
+    <!-- Bouton pour changer de thème -->
+    <button id="theme-toggle" title="Changer de thème" aria-label="Changer de thème">
+        <!-- L'icône sera définie par JS -->
+    </button>
 
     <script defer>
         // --- Détection Mobile ---
@@ -420,18 +569,35 @@
         const siteProgressBar = document.querySelector('.progress-bar');
         const contactForm = document.querySelector('.contact-form');
         const formButton = contactForm?.querySelector('button[type="submit"]');
+        const formStatusContainer = document.getElementById('form-status-container');
+        const themeToggle = document.getElementById('theme-toggle'); // Bouton thème
+        const htmlEl = document.documentElement; // Element HTML pour classe thème
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]'); // Meta pour PWA
 
-        // --- Variables globales ---
+        // --- Three.js Variables (déclarées ici pour accès global) ---
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        const canvasContainer = document.getElementById('canvas-container');
+        let particlesMaterial; // Déclaré ici, initialisé plus tard
+        let particlesMesh;
+        let clock;
+
+        // --- Autres Variables globales ---
         let loadInterval;
         let hideLoaderTimeout;
-        let intersectionObserver; // Déclarer ici pour portée globale
+        let intersectionObserver;
 
         // --- Gestion Loader & Intro Vidéo ---
         function hideLoader() {
             if (loaderContainer) loaderContainer.classList.add('hidden');
-            if (!isMobile && introVideo) {
+            if (!isMobile && introVideo && !introVideo.error) { // Ne pas jouer si erreur vidéo
                 introVideo.style.display = 'block';
-                introVideo.play().catch(e => { console.warn("Autoplay vidéo bloqué:", e); showSiteContent(); });
+                introVideo.play().catch(e => {
+                    console.warn("Autoplay vidéo bloqué:", e);
+                    // Si l'autoplay échoue, montrer le contenu directement
+                    showSiteContent();
+                });
             } else {
                 showSiteContent();
             }
@@ -440,18 +606,24 @@
         function showSiteContent() {
             if (introVideo) {
                 introVideo.classList.add('fade-out');
-                introVideo.pause();
+                introVideo.pause(); // Assure l'arrêt
             }
             if (skipIntroBtn) skipIntroBtn.style.display = 'none';
             if (siteProgressBarContainer) siteProgressBarContainer.style.display = 'block';
             if (siteNav) siteNav.style.display = 'block';
             if (siteContent) siteContent.style.display = 'block';
 
+            // Cache la vidéo après la transition pour libérer ressources
             if (introVideo) setTimeout(() => { introVideo.style.display = 'none'; }, 1000);
 
-            // Activer l'observation (s'assurer que l'observer est initialisé)
+            // Démarrer l'observation des sections une fois le contenu visible
             if (intersectionObserver) {
-                document.querySelectorAll('.section').forEach(section => intersectionObserver.observe(section));
+                document.querySelectorAll('.section:not(.visible)').forEach(section => {
+                    // Petite vérification pour éviter d'observer si déjà visible (au cas où)
+                    if (!section.classList.contains('visible')) {
+                        intersectionObserver.observe(section);
+                    }
+                });
             }
         }
 
@@ -463,44 +635,128 @@
                 if (progressBarFill) progressBarFill.style.width = loadProgress + '%';
                 if (loadProgress >= 100) {
                     clearInterval(loadInterval);
+                    // Donne un petit délai après 100% avant de cacher
                     hideLoaderTimeout = setTimeout(hideLoader, 300);
                 }
-            }, 15);
+            }, 15); // Durée ~1.5s
         } else {
-            showSiteContent(); // Afficher direct si pas de loader
+            // S'il n'y a pas de loader, on affiche directement
+            showSiteContent();
         }
 
         // --- Bouton Passer Intro ---
         if (skipIntroBtn) {
             if (!isMobile) {
+                // Afficher le bouton après un délai si le loader ou la vidéo est encore là
                 setTimeout(() => {
-                    if (loaderContainer && !loaderContainer.classList.contains('hidden') || (introVideo && introVideo.style.display !== 'none')) {
+                    const loaderIsVisible = loaderContainer && !loaderContainer.classList.contains('hidden');
+                    const videoIsPotentiallyVisible = introVideo && introVideo.style.display !== 'none' && !introVideo.classList.contains('fade-out');
+                    if (loaderIsVisible || videoIsPotentiallyVisible) {
                         skipIntroBtn.style.display = 'block';
                     }
-                }, 1500);
+                }, 1500); // Délai avant d'afficher le bouton skip
             }
+
             skipIntroBtn.addEventListener('click', () => {
-                clearTimeout(hideLoaderTimeout);
-                clearInterval(loadInterval);
-                if (introVideo) { introVideo.pause(); introVideo.style.display = 'none'; }
-                hideLoader();
-                showSiteContent();
+                clearTimeout(hideLoaderTimeout); // Annule le timeout du loader
+                clearInterval(loadInterval); // Annule le remplissage du loader
+                if (introVideo) { introVideo.pause(); introVideo.style.display = 'none'; } // Arrête et cache la vidéo immédiatement
+                hideLoader(); // Assure que le loader est caché
+                showSiteContent(); // Affiche le contenu principal
             });
         }
 
         // --- Écouteurs Vidéo ---
         if (introVideo) {
             introVideo.addEventListener('ended', showSiteContent);
-            introVideo.addEventListener('error', () => { console.error("Erreur vidéo."); showSiteContent(); });
-            introVideo.addEventListener('suspend', () => { if (!introVideo.ended && introVideo.readyState < 3) console.warn("Chargement vidéo suspendu."); });
+            // Gérer les erreurs de chargement de la vidéo
+            introVideo.addEventListener('error', (e) => {
+                console.error("Erreur vidéo:", e);
+                introVideo.style.display = 'none'; // Cache la vidéo en cas d'erreur
+                // Si le loader est encore visible, on le cache et on montre le site
+                if (loaderContainer && !loaderContainer.classList.contains('hidden')) {
+                    clearTimeout(hideLoaderTimeout);
+                    clearInterval(loadInterval);
+                    hideLoader(); // Cache le loader
+                }
+                 // S'assure que le contenu est affiché même si l'autoplay a échoué avant
+                showSiteContent();
+            });
+            // Optionnel: Gérer si la vidéo est suspendue (ex: onglet en arrière-plan)
+            introVideo.addEventListener('suspend', () => {
+                if (!introVideo.ended && introVideo.readyState < 3) { // Moins de 3 = pas assez de data
+                     console.warn("Chargement vidéo suspendu.");
+                     // Pourrait être un point pour montrer le contenu si l'attente est trop longue
+                }
+            });
         }
 
-        // --- Three.js Background ---
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        const canvasContainer = document.getElementById('canvas-container');
+        // --- Gestion Thème Clair/Sombre ---
+        function applyTheme(theme) {
+            let particleColorValue;
+            let bgColorValue;
 
+            if (theme === 'light') {
+                htmlEl.classList.add('light-mode');
+                if(themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; // Icône lune
+            } else {
+                htmlEl.classList.remove('light-mode');
+                 if(themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Icône soleil
+            }
+
+            // Obtenir les couleurs *après* avoir changé la classe
+            const computedStyle = getComputedStyle(htmlEl);
+            particleColorValue = computedStyle.getPropertyValue('--particle-color').trim();
+            bgColorValue = computedStyle.getPropertyValue('--bg-color').trim();
+
+            // Mettre à jour la couleur des particules Three.js
+            if (particlesMaterial) {
+                 try {
+                    particlesMaterial.color.set(particleColorValue);
+                 } catch (e) {
+                    console.error("Erreur MAJ couleur particules:", e);
+                 }
+             }
+
+            // Mettre à jour la meta theme-color pour la PWA/navigateur mobile
+            if (themeColorMeta) {
+                themeColorMeta.content = bgColorValue;
+            }
+             // console.log("Theme appliqué:", theme, "Couleur particules:", particleColorValue, "Couleur fond:", bgColorValue);
+        }
+
+        // Logique initiale de détermination du thème
+        let preferredTheme = localStorage.getItem('theme');
+        const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+
+        if (!preferredTheme) {
+            preferredTheme = prefersLight ? 'light' : 'dark';
+        }
+
+        // Appliquer le thème initial AVANT même le rendu Three.js si possible
+        applyTheme(preferredTheme);
+
+        // Écouteur pour le bouton de bascule
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const currentIsLight = htmlEl.classList.contains('light-mode');
+                const newTheme = currentIsLight ? 'dark' : 'light';
+                localStorage.setItem('theme', newTheme);
+                applyTheme(newTheme);
+            });
+        }
+
+        // (Optionnel) Écouteur pour changement de préférence système
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', event => {
+            // Ne change que si l'utilisateur n'a pas forcé un thème via le bouton
+            if (!localStorage.getItem('theme')) {
+                const newSystemTheme = event.matches ? 'light' : 'dark';
+                applyTheme(newSystemTheme);
+            }
+        });
+
+
+        // --- Three.js Background ---
         if (canvasContainer) {
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -509,10 +765,17 @@
             const particlesGeometry = new THREE.BufferGeometry();
             const particlesCount = isMobile ? 400 : 800;
             const posArray = new Float32Array(particlesCount * 3);
-            for(let i = 0; i < particlesCount * 3; i++) posArray[i] = (Math.random() - 0.5) * (isMobile ? 4 : 5);
+            for(let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * (isMobile ? 4 : 5);
+            }
             particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-            const particlesMaterial = new THREE.PointsMaterial({ size: 0.005, color: '#ffffff' });
-            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+
+            // Initialise le matériel SANS couleur fixe ici
+            particlesMaterial = new THREE.PointsMaterial({ size: 0.005 });
+            // Appelle applyTheme ENCORE une fois pour garantir que la couleur est bonne après initialisation
+            applyTheme(localStorage.getItem('theme') || (prefersLight ? 'light' : 'dark'));
+
+            particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
             scene.add(particlesMesh);
             camera.position.z = 2;
 
@@ -524,17 +787,28 @@
                  });
             }
 
-            const clock = new THREE.Clock();
+            clock = new THREE.Clock(); // Initialise l'horloge ici
+
             const animate = () => {
+                requestAnimationFrame(animate); // Mettre en premier pour boucle continue même si erreur
+
                 const elapsedTime = clock.getElapsedTime();
-                particlesMesh.rotation.y = elapsedTime * 0.08;
+
+                // Rotation
+                if (particlesMesh) {
+                    particlesMesh.rotation.y = elapsedTime * 0.08;
+                }
+
+                // Mouvement caméra basé souris (léger)
                 camera.position.x += (mouseX * 0.2 - camera.position.x) * 0.01;
                 camera.position.y += (mouseY * 0.2 - camera.position.y) * 0.01;
-                camera.lookAt(scene.position);
+                camera.lookAt(scene.position); // Assure que la caméra regarde toujours le centre
+
+                // Rendu
                 renderer.render(scene, camera);
-                requestAnimationFrame(animate);
             };
-            animate();
+
+            animate(); // Lance l'animation
         }
 
         // --- Responsive Three.js ---
@@ -555,36 +829,47 @@
         });
 
         // --- Intersection Observer pour Animations Section ---
-        // Initialisation après déclaration des fonctions
-         const observerOptions = { threshold: 0.15 };
-         intersectionObserver = new IntersectionObserver((entries) => { // Affectation à la variable globale
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    // Optionnel: arrêter d'observer une fois visible
-                    // intersectionObserver.unobserve(entry.target);
-                }
-                // Optionnel: enlever 'visible' si ça sort de l'écran
-                // else { entry.target.classList.remove('visible'); }
-            });
-        }, observerOptions);
+        const observerOptions = {
+             threshold: 0.15 // La section est considérée visible quand 15% est à l'écran
+        };
 
+        intersectionObserver = new IntersectionObserver((entries) => {
+           entries.forEach(entry => {
+               if (entry.isIntersecting) {
+                   entry.target.classList.add('visible');
+                   // Optionnel: Arrêter d'observer une fois l'animation jouée
+                   // intersectionObserver.unobserve(entry.target);
+               } else {
+                   // Optionnel: Retirer la classe si on veut rejouer l'animation à chaque fois
+                   // entry.target.classList.remove('visible');
+               }
+           });
+       }, observerOptions);
 
-        // --- Gestion Changement de Dossier Projet (Version Grille) ---
+        // L'observation est démarrée dans showSiteContent() une fois que le contenu est prêt.
+
+        // --- Gestion Changement de Dossier Projet ---
         document.querySelectorAll('.folder').forEach(folder => {
             folder.addEventListener('click', () => {
                 const targetId = folder.dataset.target;
+                // Cacher toutes les grilles
                 document.querySelectorAll('.projects-grid-container').forEach(gridContainer => {
-                    gridContainer.style.display = gridContainer.id === targetId ? 'block' : 'none';
+                    gridContainer.style.display = 'none';
                 });
+                // Afficher la grille cible
+                const targetGrid = document.getElementById(targetId);
+                if (targetGrid) {
+                    targetGrid.style.display = 'block';
+                }
+                // Gérer la classe active sur les dossiers
                 document.querySelectorAll('.folder').forEach(f => f.classList.remove('active'));
                 folder.classList.add('active');
             });
         });
 
         // --- Feedback Formulaire Contact ---
-        if (contactForm && formButton) {
-            let formStatus = document.createElement('p');
+        if (contactForm && formButton && formStatusContainer) {
+            let formStatus = document.createElement('p'); // Crée l'élément une seule fois
             formStatus.className = 'form-status';
 
             contactForm.addEventListener('submit', async (e) => {
@@ -593,8 +878,9 @@
                 formButton.disabled = true;
                 formButton.innerHTML = 'Envoi... <i class="fas fa-spinner fa-spin"></i>';
 
-                const existingStatus = contactForm.querySelector('.form-status');
-                if (existingStatus) existingStatus.remove();
+                // Vider le conteneur et cacher l'ancien message (si présent)
+                formStatusContainer.innerHTML = '';
+                formStatus.classList.remove('visible', 'success', 'error'); // Retire aussi les classes de style
 
                 try {
                     const response = await fetch(contactForm.action, {
@@ -602,32 +888,58 @@
                     });
                     if (response.ok) {
                         formStatus.textContent = "Merci ! Message envoyé.";
-                        formStatus.style.color = 'var(--primary-color)';
+                        formStatus.classList.add('success'); // Classe pour style succès
+                        formStatus.style.color = 'var(--success-color)'; // Définit la couleur via variable
                         contactForm.reset();
                     } else {
                         const data = await response.json();
-                        formStatus.textContent = data.errors ? data.errors.map(error => error.message).join(', ') : "Oups! Erreur.";
-                        formStatus.style.color = '#ff6b6b';
+                        formStatus.textContent = data.errors ? data.errors.map(error => error.message).join(', ') : "Oups! Une erreur est survenue.";
+                        formStatus.classList.add('error'); // Classe pour style erreur
+                        formStatus.style.color = 'var(--error-color)'; // Définit la couleur via variable
                     }
                 } catch (error) {
-                    console.error("Erreur form fetch:", error);
-                    formStatus.textContent = "Erreur réseau.";
-                    formStatus.style.color = '#ff6b6b';
+                    console.error("Erreur lors de l'envoi du formulaire:", error);
+                    formStatus.textContent = "Erreur réseau lors de l'envoi.";
+                    formStatus.classList.add('error');
+                    formStatus.style.color = 'var(--error-color)';
                 } finally {
-                    contactForm.appendChild(formStatus);
+                    // Ajouter le message (mis à jour) au conteneur
+                    formStatusContainer.appendChild(formStatus);
+                    // Forcer un reflow pour que la transition d'opacité fonctionne
+                    void formStatus.offsetWidth;
+                    // Rendre le message visible
+                    formStatus.classList.add('visible');
+
+                    // Réactiver le bouton
                     formButton.disabled = false;
                     formButton.innerHTML = 'Envoyer <i class="fas fa-paper-plane"></i>';
                 }
             });
         }
 
-        // --- Initialisation au chargement ---
+        // --- Enregistrement du Service Worker (PWA) ---
+        // À faire une fois que la page est chargée pour ne pas ralentir le rendu initial
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js') // Assure-toi que le chemin est correct
+              .then(registration => {
+                console.log('Service Worker enregistré avec succès, scope :', registration.scope);
+              })
+              .catch(error => {
+                console.log('Échec enregistrement Service Worker :', error);
+              });
+          });
+        }
+
+        // --- Initialisation au chargement (redondant avec `showSiteContent` mais sécurise si loader absent) ---
          window.addEventListener('load', () => {
-             // Si contenu déjà affiché (cas mobile ou intro finie/skipée avant 'load')
-             if ((!loaderContainer || loaderContainer.classList.contains('hidden')) && siteContent && siteContent.style.display === 'block') {
-                  if(intersectionObserver){ // Vérifier si l'observer est prêt
-                      document.querySelectorAll('.section:not(.visible)').forEach(section => intersectionObserver.observe(section));
-                  }
+             // Si le contenu est déjà affiché (pas de loader/vidéo ou skip)
+             if (siteContent && siteContent.style.display === 'block' && intersectionObserver) {
+                  document.querySelectorAll('.section:not(.visible)').forEach(section => {
+                      if (!section.classList.contains('visible')) { // Double check
+                         intersectionObserver.observe(section);
+                      }
+                  });
              }
          });
 
