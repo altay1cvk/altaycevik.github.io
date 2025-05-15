@@ -2,946 +2,578 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- PWA & Mobile Meta -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0a0a0a"> <!-- Défaut sombre, sera mis à jour par JS -->
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png"> <!-- Icône pour iOS -->
-    <link rel="icon" type="image/png" sizes="192x192"  href="icons/icon-192x192.png"> <!-- Favicon standard -->
-    <!-- Ajoutez d'autres tailles d'icônes si nécessaire -->
-
-    <title>Portfolio - Altay CEVIK - Alternance Master IA</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Portfolio Altay CEVIK - Assistant IA (Style EHOSP)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> <!-- Si vous l'utilisez toujours pour le fond -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="manifest" href="manifest.json"> <!-- Assurez-vous que ce fichier existe -->
+    <meta name="theme-color" content="#f7f9fc"> <!-- Couleur de fond claire par défaut pour correspondre à EHOSP light -->
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="icons/icon-192x192.png">
+
     <style>
-        /* --- Variables CSS --- */
+        /* --- VARIABLES CSS INSPIRÉES D'EHOSP (Mode Clair par défaut) --- */
         :root {
-            /* Couleurs (Mode Sombre par défaut) */
-            --primary-color: #64ffda;
-            --bg-color: #0a0a0a;
-            --text-color: #fff;
-            --card-bg: rgba(255, 255, 255, 0.1);
-            --card-bg-darker: rgba(10, 10, 10, 0.5);
-            --border-color: #64ffda;
-            --nav-bg: rgba(10, 10, 10, 0.8);
-            --particle-color: #ffffff;
-            --button-text-color: var(--bg-color); /* Texte sur boutons primaires */
-            --link-hover-color: var(--text-color); /* Hover liens standard */
-            --form-input-bg: rgba(255, 255, 255, 0.05);
-            --form-input-border: rgba(255, 255, 255, 0.2);
-            --secondary-text-color: #ccc; /* Texte secondaire */
-            --disabled-bg-color: #ccc; /* Fond bouton désactivé */
-            --disabled-text-color: #666; /* Texte bouton désactivé */
-            --error-color: #ff6b6b; /* Couleur message erreur */
-            --success-color: var(--primary-color); /* Couleur message succès */
-            --shadow-color: rgba(100, 255, 218, 0.4); /* Couleur ombre focus */
+            --primary-color: #007AFF; /* Bleu EHOSP */
+            --primary-hover-color: #0056b3;
+            --primary-color-rgb: 0, 122, 255;
 
-            /* Autres */
-            --font-mono: 'Courier New', Courier, monospace;
-            --blur-effect: blur(10px);
-            --transition-speed: 0.3s;
-            --anim-delay-step: 0.2s;
+            --app-bg: #f7f9fc; /* Fond clair EHOSP */
+            --header-chat-bg: rgba(255, 255, 255, 0.90);
+            --chat-input-area-bg: #f0f4f9;
+
+            --chat-bubble-ai-bg: #ffffff;
+            --chat-bubble-ai-text: #1c1c1e;
+            --chat-bubble-user-bg: var(--primary-color); /* Utilisateur (simulé) */
+            --chat-bubble-user-text: #ffffff;
+
+            --text-color: #1c1c1e;
+            --secondary-text-color: #636366;
+            --border-color: #d1d1d6;
+
+            --button-action-bg: #eef0f2; /* Boutons d'options */
+            --button-action-hover-bg: #dfe3e6;
+            --button-action-text: var(--text-color);
+
+            --radius-xl: 18px; --radius-lg: 14px; --radius-md: 10px; --radius-sm: 6px; --radius-pill: 30px;
+            --shadow-soft: 0 1px 3px 0 rgba(0, 0, 0, 0.07);
+            --shadow-medium: 0 3px 8px 0 rgba(0, 0, 0, 0.09);
+            --transition-normal: 0.25s cubic-bezier(.4,0,.2,1);
+
+            /* Variables de votre portfolio original si encore utilisées ailleurs */
+            --altay-primary: #64ffda; 
+            --altay-bg: #0a0a0a;
+            --altay-text: #fff;
+            --altay-card-bg: rgba(255, 255, 255, 0.1);
+            --altay-font-mono: 'Courier New', Courier, monospace;
         }
 
-        html.light-mode {
-            /* Couleurs (Mode Clair) */
-            --primary-color: #1a7f64;
-            --bg-color: #f8f9fa;
-            --text-color: #212529;
-            --card-bg: rgba(0, 0, 0, 0.03);
-            --card-bg-darker: rgba(0, 0, 0, 0.06);
-            --border-color: #1a7f64;
-            --nav-bg: rgba(248, 249, 250, 0.85);
-            --particle-color: #333333;
-            --button-text-color: #ffffff;
-            --link-hover-color: #0056b3;
-            --form-input-bg: rgba(0, 0, 0, 0.02);
-            --form-input-border: rgba(0, 0, 0, 0.1);
-            --secondary-text-color: #6c757d;
-            --disabled-bg-color: #adb5bd;
-            --disabled-text-color: #495057;
-            --error-color: #dc3545;
-            --success-color: var(--primary-color);
-            --shadow-color: rgba(26, 127, 100, 0.4);
+        body.dark-mode {
+            --primary-color: #0A84FF;
+            --primary-hover-color: #3593ff;
+            --primary-color-rgb: 10, 132, 255;
+            --app-bg: #000000;
+            --header-chat-bg: rgba(28, 28, 30, 0.92);
+            --chat-input-area-bg: #161618;
+            --chat-bubble-ai-bg: #2c2c2e;
+            --chat-bubble-ai-text: #f2f2f7;
+            --text-color: #f2f2f7;
+            --secondary-text-color: #8e8e93;
+            --border-color: #38383a;
+            --button-action-bg: #2c2c2e;
+            --button-action-hover-bg: #3a3a3c;
+            --button-action-text: var(--text-color);
         }
 
-        /* --- Styles Généraux --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: var(--font-mono);
-            background: var(--bg-color);
+        /* --- STYLES DE BASE & LOADER --- */
+        html, body {
+            height: 100%; margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--app-bg); /* Fond général inspiré d'EHOSP */
             color: var(--text-color);
-            overflow-x: hidden;
-            line-height: 1.6;
-            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+            overflow-x: hidden; /* Empêche le scroll horizontal global */
+            font-size: 15.5px;
+            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
         }
-        a { color: var(--primary-color); text-decoration: none; transition: color var(--transition-speed) ease; }
-        a:hover, a:focus { color: var(--link-hover-color); }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        a { color: var(--primary-color); text-decoration: none; }
+        a:hover { text-decoration: underline; }
 
-        /* --- Loader --- */
-        #loader-container { position: fixed; inset: 0; background-color: var(--bg-color); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; transition: opacity 0.5s ease, visibility 0.5s ease, background-color var(--transition-speed) ease; }
+        #loader-container { position: fixed; inset: 0; background-color: var(--app-bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; transition: opacity 0.5s ease, visibility 0.5s ease; }
         #loader-container.hidden { opacity: 0; visibility: hidden; }
-        #loader-message { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 2rem; text-align: center; transition: color var(--transition-speed) ease; }
-        .progress-bar-loader { width: clamp(250px, 80%, 300px); height: 8px; background: rgba(128, 128, 128, 0.3); border-radius: 4px; overflow: hidden; } /* Gris neutre */
-        .progress-bar-fill { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.05s linear, background-color var(--transition-speed) ease; }
+        #loader-message { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 2rem; text-align: center; font-weight: 600; }
+        .progress-bar-loader { width: clamp(250px, 80%, 300px); height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.05s linear; }
+        
+        /* Canvas Three.js (si vous le gardez pour le fond DES SECTIONS, pas du chat) */
+        #canvas-container { position: fixed; inset: 0; z-index: -2; /* Derrière tout */ opacity: 0.3; /* Plus subtil */ }
 
-        /* Bouton Passer Intro */
-        #skip-intro-btn {
-            display: none; position: fixed; bottom: 30px; left: 50%;
-            transform: translateX(-50%); padding: 10px 20px; background: var(--primary-color);
-            color: var(--button-text-color); border: none; border-radius: 5px; cursor: pointer;
-            z-index: 1001; font-family: var(--font-mono); font-weight: bold;
-            opacity: 0.9; transition: opacity 0.3s ease, background-color var(--transition-speed) ease, color var(--transition-speed) ease; font-size: 0.9rem;
+        /* --- STRUCTURE EHOSP CHAT --- */
+        .ehosp-chat-app-container { /* Le conteneur principal pour le chat */
+            display: flex; flex-direction: column;
+            height: 100vh; /* Prend toute la hauteur */
+            max-width: 700px; /* Largeur max comme sur ehosp.app */
+            margin: 0 auto; /* Centré */
+            background: var(--app-bg);
+            box-shadow: var(--shadow-strong);
+            position: relative;
+            border-radius: var(--radius-xl); /* Coins arrondis si ce n'est pas en plein écran */
+            overflow: hidden; /* Pour les coins arrondis */
+            /* Sera affiché par JS */
+            opacity: 0; transition: opacity 0.5s ease-in-out;
         }
-        #skip-intro-btn:hover { opacity: 1; }
-        #skip-intro-btn i { margin-left: 8px; }
+        .ehosp-chat-app-container.visible { opacity: 1; }
 
-        /* Video & Progress Bar Site */
-        #intro-video { width: 100%; height: 100%; object-fit: cover; position: fixed; inset: 0; z-index: 999; opacity: 1; transition: opacity 1s ease-out; }
-        #intro-video.fade-out { opacity: 0; }
-        .progress-bar-container { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(128, 128, 128, 0.1); z-index: 101; display: none; } /* Gris neutre */
-        .progress-bar { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.1s linear, background-color var(--transition-speed) ease; }
-
-        /* Background & Nav */
-        #canvas-container { position: fixed; inset: 0; z-index: -1; }
-        .nav { position: fixed; top: 0; left: 0; width: 100%; padding: 1rem clamp(1rem, 5vw, 2rem); background: var(--nav-bg); backdrop-filter: var(--blur-effect); z-index: 100; display: none; transition: background-color var(--transition-speed) ease; }
-        .nav ul { display: flex; justify-content: center; gap: 2rem; list-style: none; }
-        .nav a { font-weight: 500; position: relative; opacity: 0; animation: fadeInUp 1s ease forwards; }
-        .nav li:nth-child(1) a { animation-delay: calc(0.8s + var(--anim-delay-step) * 1); }
-        .nav li:nth-child(2) a { animation-delay: calc(0.8s + var(--anim-delay-step) * 2); }
-        .nav li:nth-child(3) a { animation-delay: calc(0.8s + var(--anim-delay-step) * 3); }
-        .nav li:nth-child(4) a { animation-delay: calc(0.8s + var(--anim-delay-step) * 4); }
-        .nav li:nth-child(5) a { animation-delay: calc(0.8s + var(--anim-delay-step) * 5); }
-        .nav a::before { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background-color: var(--primary-color); transition: width var(--transition-speed) ease, background-color var(--transition-speed) ease; }
-        .nav a:hover::before, .nav a:focus::before { width: 100%; }
-
-        /* Content & Header */
-        .content { position: relative; padding: 2rem clamp(1rem, 5vw, 2rem); max-width: 1300px; margin: 0 auto; display: none; }
-        .header { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding-bottom: 4rem; }
-        .title { font-size: clamp(2.8rem, 7vw, 4.2rem); margin-bottom: 1rem; letter-spacing: 0.1rem; opacity: 0; animation: fadeInUp 1s ease 0.2s forwards; }
-        .subtitle {
-            font-size: clamp(1.2rem, 4vw, 1.6rem); margin-bottom: 1rem; letter-spacing: 0.05rem;
-            opacity: 0; max-width: 700px; margin-inline: auto;
-            animation: fadeInUp 1s ease 0.5s forwards, typing 4s steps(50, end) 0.5s forwards, blink-caret .75s step-end infinite;
-            white-space: nowrap; overflow: hidden;
-            border-right: .15em solid var(--primary-color); width: 0;
-            transition: border-color var(--transition-speed) ease;
+        .ehosp-chat-header {
+            background: var(--header-chat-bg);
+            backdrop-filter: blur(10px);
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0; z-index: 10;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .intro-pitch { opacity: 0; animation: fadeInUp 1s ease 1.8s forwards; max-width: 700px; margin: 1rem auto 0; font-size: clamp(1rem, 3vw, 1.1rem); color: var(--secondary-text-color); transition: color var(--transition-speed) ease; }
-
-        /* Sections */
-        .section {
-            min-height: auto; padding: clamp(3rem, 8vh, 5rem) clamp(1rem, 5vw, 2rem);
-            max-width: 1200px; margin: 0 auto 3rem auto; opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out, background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-            position: relative; border: 1px solid var(--border-color); border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1), 0 0 8px var(--shadow-color); /* Ajustement ombre */
-            background-color: var(--card-bg-darker); overflow: hidden;
-        }
-        .section.visible { opacity: 1; transform: translateY(0); }
-        .section h2 { font-size: clamp(2rem, 6vw, 2.6rem); margin-bottom: 2rem; text-align: center; color: var(--primary-color); letter-spacing: 0.08rem; opacity: 0; transform: translateX(-20px); transition: opacity 0.6s ease-out 0.1s, transform 0.6s ease-out 0.1s, color var(--transition-speed) ease; }
-        .section.visible h2 { opacity: 1; transform: translateX(0); }
-        .section h2 .emoji { margin-right: 0.5em; display: inline-block; }
-
-        /* Animations éléments enfants section (Identique) */
-        .section > *:not(h2) { opacity: 0; transform: translateX(-20px); transition: opacity 0.5s ease, transform 0.5s ease; }
-        .section.visible > *:not(h2) { opacity: 1; transform: translateX(0); }
-        .section.visible > *:nth-child(2) { transition-delay: var(--anim-delay-step) * 1; }
-        .section.visible > *:nth-child(3) { transition-delay: var(--anim-delay-step) * 2; }
-        .section.visible > *:nth-child(4) { transition-delay: var(--anim-delay-step) * 3; }
-
-        /* Compétences */
-        .skills-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; padding: 1rem 0; }
-        .skills-box { background: var(--card-bg); border-radius: 8px; padding: clamp(1.5rem, 4vw, 2rem); border: 1px solid var(--border-color); transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; }
-        .skills-box h3 { font-size: clamp(1.4rem, 5vw, 1.7rem); margin-bottom: 1.5rem; color: var(--primary-color); letter-spacing: 0.05rem; transition: color var(--transition-speed) ease; }
-        .skill-item { margin-bottom: 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; font-size: 0.9rem;}
-        .skill-item span:first-child { flex-basis: 100%; opacity: 0; animation: fadeIn 0.5s ease forwards; }
-        .skill-bar { flex-grow: 1; flex-basis: 100%; height: 8px; background: var(--form-input-bg); border-radius: 4px; overflow: hidden; margin-top: 0.3rem; transition: background-color var(--transition-speed) ease; } /* Utilisation variable input */
-        .skill-progress { height: 100%; background: var(--primary-color); width: 100%; transition: background-color var(--transition-speed) ease; }
-        /* Animation delays (Identique) */
-        .section.visible .skills-box:nth-of-type(1) .skill-item:nth-child(1) span:first-child { animation-delay: calc(var(--anim-delay-step) * 2); }
-        .section.visible .skills-box:nth-of-type(1) .skill-item:nth-child(2) span:first-child { animation-delay: calc(var(--anim-delay-step) * 3); }
-        .section.visible .skills-box:nth-of-type(1) .skill-item:nth-child(3) span:first-child { animation-delay: calc(var(--anim-delay-step) * 4); }
-        .section.visible .skills-box:nth-of-type(1) .skill-item:nth-child(4) span:first-child { animation-delay: calc(var(--anim-delay-step) * 5); }
-        .section.visible .skills-box:nth-of-type(1) .skill-item:nth-child(5) span:first-child { animation-delay: calc(var(--anim-delay-step) * 6); }
-        .section.visible .skills-box:nth-of-type(2) .skill-item:nth-child(1) span:first-child { animation-delay: calc(var(--anim-delay-step) * 2); }
-        .section.visible .skills-box:nth-of-type(2) .skill-item:nth-child(2) span:first-child { animation-delay: calc(var(--anim-delay-step) * 3); }
-        .section.visible .skills-box:nth-of-type(2) .skill-item:nth-child(3) span:first-child { animation-delay: calc(var(--anim-delay-step) * 4); }
-
-        /* Projets - Grille */
-        .project-folders { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
-        .folder {
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px;
-            padding: 0.8rem 1.5rem; cursor: pointer;
-            transition: background var(--transition-speed) ease, transform var(--transition-speed) ease, border-color var(--transition-speed) ease;
-            text-align: center;
-        }
-        .folder.active { background: color-mix(in srgb, var(--primary-color) 20%, transparent); } /* Mix pour l'opacité */
-        .folder:hover, .folder:focus { background: color-mix(in srgb, var(--primary-color) 20%, transparent); transform: translateY(-3px); }
-        .folder i { font-size: 1.8rem; margin-bottom: 0.3rem; color: var(--primary-color); display: block; transition: color var(--transition-speed) ease; }
-
-        .projects-grid-container { width: 100%; margin: 2rem auto; display: none; }
-        #academic-projects-grid { display: block; }
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-        .project-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.4s ease, background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; height: 100%; }
-        .project-card:hover, .project-card:focus-within { transform: translateY(-5px); }
-        .project-image { width: 100%; height: 180px; object-fit: cover; display: block; }
-        .project-content { padding: 1rem; text-align: center; display: flex; flex-direction: column; flex-grow: 1; }
-        .project-title { font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--primary-color); transition: color var(--transition-speed) ease; }
-        .project-description { font-size: 0.95rem; margin-bottom: 0.8rem; flex-grow: 1; }
-        .project-tech { font-size: 0.85rem; margin-bottom: 1rem; color: var(--secondary-text-color); transition: color var(--transition-speed) ease; }
-        .project-link { display: inline-block; color: var(--primary-color); font-weight: bold; margin-top: auto; padding: 0.3rem 0; position: relative; transition: color var(--transition-speed) ease; }
-        .project-link::before { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background-color: var(--primary-color); transition: width var(--transition-speed) ease, background-color var(--transition-speed) ease; }
-        .project-link:hover::before, .project-link:focus::before { width: 80%; }
-        .project-link[style*="color: #aaa"] { color: #aaa !important; } /* Cas lien désactivé */
-
-        /* CV (Parcours) */
-        .cv-container { background: var(--card-bg); border-radius: 8px; padding: clamp(1.5rem, 4vw, 2rem); margin-bottom: 2rem; border: 1px solid var(--border-color); transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; }
-        .cv-container h3 { font-size: 1.4rem; display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1rem; color: var(--primary-color); transition: color var(--transition-speed) ease; }
-        .cv-container h3 i { width: 20px; text-align: center; }
-        .cv-container ul { list-style: none; margin-bottom: 1.5rem; padding-left: 0; }
-        .cv-container ul ul { padding-left: 1.5rem; margin-top: 0.5rem; list-style: disc; color: var(--secondary-text-color); transition: color var(--transition-speed) ease; }
-        .cv-container li { margin-bottom: 1rem; }
-        .cv-container li strong { font-size: 1.05rem; display: block; margin-bottom: 0.3rem; color: var(--text-color); transition: color var(--transition-speed) ease; }
-        .cv-container li p { font-size: 0.95rem; margin-bottom: 0.3rem; }
-        .cv-download { text-align: center; margin-top: 2rem; }
-        .cv-download a {
-            background: var(--primary-color); color: var(--button-text-color); padding: 0.7rem 1.8rem; border: none;
-            border-radius: 5px; font-weight: 600;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-            display: inline-block;
-        }
-        .cv-download a:hover, .cv-download a:focus {
-            transform: scale(1.05);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 10px var(--primary-color); /* Ombre plus neutre */
-        }
-        /* Animation gérée par la section parente */
-        .section#cv.visible .cv-download a { transition-delay: calc(var(--anim-delay-step) * 4); }
-
-        /* Contact */
-        .contact-form { max-width: 600px; margin: 0 auto; background: var(--card-bg); padding: clamp(1.5rem, 4vw, 2rem); border-radius: 8px; border: 1px solid var(--border-color); transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { font-size: 0.95rem; display: block; margin-bottom: 0.5rem; color: var(--text-color); transition: color var(--transition-speed) ease; }
-        .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; background: var(--form-input-bg); border: 1px solid var(--form-input-border); border-radius: 5px; color: var(--text-color); font-family: var(--font-mono); font-size: 0.95rem; transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, color var(--transition-speed) ease; }
-        .form-group textarea { min-height: 120px; resize: vertical; }
-        .contact-form button { background: var(--primary-color); color: var(--button-text-color); padding: 0.8rem 2rem; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: transform 0.3s ease, box-shadow 0.3s ease, background-color var(--transition-speed) ease, color var(--transition-speed) ease; display: block; margin: 1rem auto 0 auto; }
-        .contact-form button:hover:not(:disabled), .contact-form button:focus:not(:disabled) { transform: scale(1.05); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 10px var(--primary-color); } /* Ombre plus neutre */
-        .contact-form button:disabled { background: var(--disabled-bg-color); color: var(--disabled-text-color); cursor: not-allowed; transform: none; box-shadow: none; }
-
-        /* Conteneur pour statut formulaire */
-        #form-status-container { text-align: center; min-height: 1.5em; margin-top: 1rem; }
-        .form-status { font-size: 0.9rem; font-weight: bold; opacity: 0; transition: opacity 0.5s ease, color var(--transition-speed) ease; }
-        .form-status.visible { opacity: 1; }
-        /* Couleurs spécifiques pour les messages (sera défini inline par JS mais on peut aider) */
-         .form-status.success { color: var(--success-color); }
-         .form-status.error { color: var(--error-color); }
-
-        .contact-socials { text-align: center; margin-top: 2rem; }
-        .contact-socials p { margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--secondary-text-color); transition: color var(--transition-speed) ease; }
-        .contact-socials a { font-size: 1.8rem; margin: 0 0.7rem; display: inline-block; color: var(--primary-color); transition: color var(--transition-speed) ease; }
-        .contact-socials a i { transition: color var(--transition-speed) ease; } /* Transition sur l'icône aussi */
-        .contact-socials a:hover, .contact-socials a:focus { color: var(--link-hover-color); }
-        .contact-socials a:hover i, .contact-socials a:focus i { color: inherit; } /* Hérite couleur du lien au survol */
-
-        /* Focus Visible Styles */
-        a:focus-visible,
-        button:focus-visible,
-        input:focus-visible,
-        textarea:focus-visible,
-        .folder:focus-visible,
-        .project-card:focus-visible, /* Peut être redondant si focus-within est suffisant */
-        .project-link:focus-visible,
-        .cv-download a:focus-visible,
-        .contact-socials a:focus-visible {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 3px;
-            box-shadow: 0 0 0 4px var(--shadow-color);
-            border-radius: 4px;
-            transition: outline var(--transition-speed) ease, outline-offset var(--transition-speed) ease, box-shadow var(--transition-speed) ease; /* Transition pour le focus */
-        }
-        a, button, input, textarea, .folder, .project-card { outline: none; } /* Retire outline par défaut */
-
-        /* Bouton Thème */
-        #theme-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--card-bg);
+        .ehosp-chat-header h1 {
+            font-size: 1.7rem; font-weight: 700; margin: 0;
             color: var(--primary-color);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .ehosp-chat-header h1 .fas.fa-robot { font-size: 1.5rem; }
+
+        #ehosp-chat-messages { /* Zone des messages */
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 18px 14px;
+            display: flex; flex-direction: column; gap: 12px;
+            scrollbar-width: thin; scrollbar-color: var(--border-color) transparent;
+        }
+        #ehosp-chat-messages::-webkit-scrollbar { width: 5px; }
+        #ehosp-chat-messages::-webkit-scrollbar-track { background: transparent; }
+        #ehosp-chat-messages::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: var(--radius-pill); }
+
+        .ehosp-chat-message-wrapper {
+            display: flex; margin-bottom: 5px; /* Moins d'espace que gap pour alignement avatar */
+            max-width: 85%; opacity: 0; transform: translateY(10px);
+            animation: ehospMessageAppear 0.4s ease-out forwards;
+        }
+        @keyframes ehospMessageAppear { to { opacity: 1; transform: translateY(0); } }
+
+        .ehosp-chat-avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background-color: var(--primary-color); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; margin-right: 10px; flex-shrink: 0;
+            align-self: flex-end; /* Avatar en bas de la bulle */
+        }
+        .ehosp-chat-bubble {
+            padding: 10px 14px; border-radius: var(--radius-lg);
+            line-height: 1.5; font-size: 0.95rem;
+            word-wrap: break-word;
+        }
+        /* Message de l'IA (robot) */
+        .ehosp-ai-message .ehosp-chat-message-wrapper { align-self: flex-start; }
+        .ehosp-ai-message .ehosp-chat-bubble {
+            background: var(--chat-bubble-ai-bg); color: var(--chat-bubble-ai-text);
+            border-bottom-left-radius: var(--radius-sm);
+            box-shadow: var(--shadow-soft);
             border: 1px solid var(--border-color);
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            font-size: 1.2rem;
+        }
+        /* Message de "l'utilisateur" (bouton cliqué) */
+        .ehosp-user-simulated-message .ehosp-chat-message-wrapper { align-self: flex-end; flex-direction: row-reverse; }
+        .ehosp-user-simulated-message .ehosp-chat-avatar { display: none; /* Pas d'avatar pour les "réponses" user */ }
+        .ehosp-user-simulated-message .ehosp-chat-bubble {
+            background: var(--chat-bubble-user-bg); color: var(--chat-bubble-user-text);
+            border-bottom-right-radius: var(--radius-sm);
+            margin-right: 0; /* Pas d'avatar à droite */
+        }
+
+        #ehosp-chat-options-area { /* Zone des boutons d'action */
+            padding: 12px 14px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--chat-input-area-bg); /* Comme la zone de saisie d'EHOSP */
+            flex-shrink: 0;
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+             opacity: 0; transition: opacity 0.3s ease-in-out 0.2s; /* Apparaît après le message */
+        }
+        #ehosp-chat-options-area.visible { opacity: 1; }
+
+        .ehosp-chat-option-btn {
+            background-color: var(--button-action-bg);
+            color: var(--button-action-text);
+            border: 1px solid var(--border-color);
+            padding: 8px 15px;
+            border-radius: var(--radius-pill);
+            font-family: 'Inter', sans-serif; /* Police EHOSP */
+            font-size: 0.88rem; font-weight: 500;
             cursor: pointer;
-            z-index: 1002; /* Au dessus du skip et nav */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, border-color var(--transition-speed) ease, transform 0.2s ease;
+            transition: background-color var(--transition-normal), transform var(--transition-normal);
         }
-        #theme-toggle:hover, #theme-toggle:focus {
-            transform: scale(1.1);
-            background-color: var(--card-bg-darker);
+        .ehosp-chat-option-btn:hover {
+            background-color: var(--button-action-hover-bg);
+            transform: translateY(-1px);
         }
-        /* Focus visible spécifique pour éviter conflit avec règle générale */
-        #theme-toggle:focus-visible {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-            box-shadow: 0 0 0 4px var(--shadow-color);
-        }
+        .ehosp-chat-option-btn i { margin-right: 6px; }
 
-        /* Animations Keyframes (Identique, mais @blink-caret peut nécessiter ajustement) */
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes blink-caret {
-             from, to { border-color: transparent }
-             50% { border-color: var(--primary-color); }
-         }
-        @keyframes typing {
-            0% { width: 0; opacity: 0; } 1% { opacity: 1; }
-            99.9% { border-right-color: var(--primary-color); } /* Utilise la variable */
-            100% { width: 100%; opacity: 1; border-right-color: transparent; }
+        .ehosp-chat-bubble .highlight { font-weight: 600; color: var(--primary-color); }
+        .ehosp-chat-bubble a.chat-link { color: var(--primary-color); text-decoration: underline; font-weight: 500; }
+
+        .typing-indicator-wrapper .ehosp-chat-avatar { margin-bottom: 0; /* Ajustement pour l'indicateur */ }
+        .typing-indicator-bubble { /* (Votre style .typing-indicator-bubble) */ }
+
+        /* --- VOS SECTIONS DE CONTENU ORIGINAL (skills, projects, etc.) --- */
+        /* Elles seront affichées APRES que l'utilisateur ait interagi ou "quitté" le chat */
+        .portfolio-content-sections {
+            display: none; /* Caché initialement */
+            padding: 3rem clamp(1rem, 5vw, 2rem); /* Votre padding original pour .content */
+            max-width: 1300px; margin: 0 auto; /* Votre max-width original */
+            font-family: var(--altay-font-mono); /* Police de votre portfolio original */
+            background-color: var(--altay-bg); /* Fond de votre portfolio original */
+            color: var(--altay-text);
         }
-
-        /* Responsive (Identique) */
-        @media (max-width: 768px) {
-            .nav ul { gap: 1rem; justify-content: space-around; }
-            .nav a { font-size: 0.85rem; }
-            .section { padding: 3rem 1rem; margin-bottom: 2rem; }
-            .section h2 { font-size: 1.8rem; }
-            .skills-container { grid-template-columns: 1fr; }
-            .skills-box h3 { font-size: 1.5rem; }
-            .projects-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-            .title { font-size: 2.5rem; }
-            .subtitle { font-size: 1.1rem; white-space: normal; border-right: none; width: auto; animation: fadeInUp 1s ease 0.5s forwards; }
-            .intro-pitch { font-size: 0.95rem; }
-            .project-image { height: 150px; }
-            .project-title { font-size: 1.2rem; }
-            .project-description { font-size: 0.9rem; }
-            .contact-socials a { font-size: 1.6rem; margin: 0 0.5rem; }
-            #theme-toggle { bottom: 15px; right: 15px; width: 40px; height: 40px; font-size: 1rem;} /* Ajustement bouton thème sur mobile */
-            #skip-intro-btn { bottom: 65px; } /* Remonte le bouton skip si theme toggle est en bas à droite */
+        /* Styles de vos sections originales (à copier depuis votre CSS) */
+        .portfolio-content-sections .nav { /* ... styles de votre nav originale ... */ }
+        .portfolio-content-sections .section { /* ... */ }
+        .portfolio-content-sections .skills-container { /* ... */ }
+        /* ... etc. ... */
+        
+        /* Styles pour le bouton Thème (si vous le gardez) */
+        #theme-toggle {
+            position: fixed; bottom: 20px; right: 20px;
+            background-color: var(--button-action-bg); color: var(--primary-color);
+            border: 1px solid var(--border-color); border-radius: 50%;
+            width: 40px; height: 40px; font-size: 1.1rem; cursor: pointer; z-index: 1002;
+            display: flex; justify-content: center; align-items: center;
+            transition: all var(--transition-normal);
         }
+        #theme-toggle:hover { transform: scale(1.1); }
 
-        /* Animation delays spécifique Contact (Identique) */
-        .section#contact.visible > .contact-form { transition-delay: calc(var(--anim-delay-step) * 1); }
-        .section#contact.visible > #form-status-container { transition-delay: calc(var(--anim-delay-step) * 1); }
-        .section#contact.visible > .contact-socials { transition-delay: calc(var(--anim-delay-step) * 2); }
-        .section#contact.visible .form-group:nth-of-type(1) label,
-        .section#contact.visible .form-group:nth-of-type(1) input { transition-delay: calc(var(--anim-delay-step) * 2); }
-        .section#contact.visible .form-group:nth-of-type(2) label,
-        .section#contact.visible .form-group:nth-of-type(2) input { transition-delay: calc(var(--anim-delay-step) * 3); }
-        .section#contact.visible .form-group:nth-of-type(3) label,
-        .section#contact.visible .form-group:nth-of-type(3) textarea { transition-delay: calc(var(--anim-delay-step) * 4); }
-        .section#contact.visible .contact-form button { transition-delay: calc(var(--anim-delay-step) * 5); }
-
+        /* Responsive (très basique, à affiner) */
+        @media (max-width: 700px) {
+            .ehosp-chat-app-container { border-radius: 0; margin-top:0; margin-bottom:0; }
+            .ehosp-chat-header h1 { font-size: 1.4rem; }
+            .ehosp-chat-header h1 .fas.fa-robot { font-size: 1.3rem; }
+            .ehosp-chat-bubble { font-size: 0.9rem; }
+            .ehosp-chat-option-btn { font-size: 0.8rem; padding: 7px 12px;}
+             /* Assurer que les sections du portfolio s'affichent bien sur mobile */
+            .portfolio-content-sections { padding: 2rem 1rem; }
+        }
     </style>
 </head>
-<body>
-    <!-- Loader -->
+<body class="light-mode"> <!-- Commence en mode clair comme EHOSP -->
+
     <div id="loader-container">
-        <p id="loader-message">Bienvenue 👋</p>
+        <p id="loader-message">Bonjour ! Mon assistant IA se prépare...</p>
         <div class="progress-bar-loader"><div class="progress-bar-fill"></div></div>
     </div>
 
-    <!-- Bouton Passer Intro -->
-    <button id="skip-intro-btn">
-        Passer l'intro <i class="fas fa-forward"></i>
-    </button>
-
-    <!-- Vidéo (cachée par JS sur mobile) -->
-    <video id="intro-video" muted playsinline preload="auto" style="display: none;" disablePictureInPicture controlsList="nodownload noplaybackrate nofullscreen">
-        <source src="ecole.mp4" type="video/mp4">
-        Votre navigateur ne supporte pas la vidéo.
-    </video>
-
-    <!-- Scroll Progress -->
-    <div class="progress-bar-container"><div class="progress-bar"></div></div>
-
-    <!-- Three.js Canvas -->
+    <!-- Le canvas Three.js peut être un fond subtil pour les sections du portfolio -->
     <div id="canvas-container"></div>
 
-    <!-- Navigation -->
-    <nav class="nav">
-        <ul>
-            <li><a href="#about">À propos</a></li>
-            <li><a href="#skills">Compétences</a></li>
-            <li><a href="#projects">Projets</a></li>
-            <li><a href="https://drive.google.com/file/d/1iYN5GO-OhEW0ut0aBoPFM6CSA6omyRYw/view?usp=sharing" target="_blank" rel="noopener noreferrer">CV</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
+    <!-- Conteneur principal du Chat inspiré d'EHOSP -->
+    <main class="ehosp-chat-app-container" id="ehosp-chat-main">
+        <header class="ehosp-chat-header">
+            <h1><i class="fas fa-robot"></i> Assistant d'Altay</h1>
+            <!-- Bouton Thème peut être ici ou dans le portfolio-content-sections -->
+            <button id="theme-toggle" aria-label="Changer de thème">
+                <!-- Icône gérée par JS -->
+            </button>
+        </header>
+        <div id="ehosp-chat-messages">
+            <!-- Les messages du chatbot seront injectés ici -->
+        </div>
+        <div id="ehosp-chat-options-area">
+            <!-- Les boutons d'options pour guider la conversation seront ici -->
+        </div>
+    </main>
 
-    <!-- Contenu Principal -->
-    <main class="content">
-        <header class="header" id="about">
-            <h1 class="title">Altay CEVIK</h1>
-            <p class="subtitle">Recherche Alternance - Master Intelligence Artificielle</p>
-            <p class="intro-pitch">
-                Animé par une forte curiosité pour l'IA et ses applications concrètes, je recherche une alternance stimulante pour mon Master. J'ai hâte d'appliquer mes compétences en Machine Learning & Deep Learning.
+    <!-- Vos sections de contenu originales, initialement masquées -->
+    <div class="portfolio-content-sections" id="portfolio-sections">
+        <nav class="nav"> <!-- Votre NAV originale -->
+            <ul>
+                <li><a href="#" id="back-to-chat-link">Retour à l'Assistant IA</a></li>
+                <li><a href="#skills-original">Compétences</a></li>
+                <li><a href="#projects-original">Projets</a></li>
+                <li><a href="#cv-original">Parcours</a></li>
+                <li><a href="https://drive.google.com/file/d/1iYN5GO-OhEW0ut0aBoPFM6CSA6omyRYw/view?usp=sharing" target="_blank" rel="noopener noreferrer">CV PDF</a></li>
+                <li><a href="#contact-original">Contact</a></li>
+            </ul>
+        </nav>
+
+        <header class="header" id="about-original" style="min-height: auto; padding: 3rem 0;"> <!-- Votre header original réduit -->
+            <h1 class="title" style="font-family: var(--altay-font-mono); color:var(--altay-primary);">Altay CEVIK</h1>
+            <p style="font-family: var(--altay-font-mono); color:var(--altay-text); max-width:700px; margin:1rem auto;">
+                Développeur IA & IoT passionné, avec une solide base en développement full-stack et une curiosité insatiable pour les nouvelles technologies.
             </p>
         </header>
 
-        <section class="section" id="skills">
-            <h2><span class="emoji" aria-hidden="true">🛠️</span> Compétences</h2>
-            <div class="skills-container">
-                <div class="skills-box">
-                    <h3>Hard Skills</h3>
-                     <div class="skill-item">
-                        <span><span class="emoji" aria-hidden="true">👨‍💻</span> Langages: Python, JS(ES6+), Java, C#, C++, PHP, HTML/CSS</span>
-                        <div class="skill-bar"><div class="skill-progress"></div></div>
-                    </div>
-                     <div class="skill-item">
-                        <span><span class="emoji" aria-hidden="true">💻</span> Frameworks & Outils: React, Node.js, Docker, Git</span>
-                        <div class="skill-bar"><div class="skill-progress"></div></div>
-                    </div>
-                     <div class="skill-item">
-                        <span><span class="emoji" aria-hidden="true">🤖</span> IA/ML: TensorFlow, YOLOv8, PyTorch (Bases)</span>
-                        <div class="skill-bar"><div class="skill-progress"></div></div>
-                    </div>
-                     <div class="skill-item">
-                        <span><span class="emoji" aria-hidden="true">💾</span> BDD: MySQL, PostgreSQL, MongoDB (NoSQL)</span>
-                        <div class="skill-bar"><div class="skill-progress"></div></div>
-                    </div>
-                    <div class="skill-item">
-                        <span><span class="emoji" aria-hidden="true">🖥️</span> Admin Sys: Linux, Windows</span>
-                        <div class="skill-bar"><div class="skill-progress"></div></div>
-                    </div>
-                </div>
-                <aside class="skills-box">
-                    <h3>Soft Skills</h3>
-                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">🎯</span> Résolution de problèmes</span><div class="skill-bar"><div class="skill-progress"></div></div></div>
-                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">💡</span> Autonomie & Curiosité</span><div class="skill-bar"><div class="skill-progress"></div></div></div>
-                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">🤝</span> Travail d'équipe</span><div class="skill-bar"><div class="skill-progress"></div></div></div>
-                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">🗣️</span> Communication</span><div class="skill-bar"><div class="skill-progress"></div></div></div>
-                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">🔄</span> Adaptabilité</span><div class="skill-bar"><div class="skill-progress"></div></div></div>
-                    <div class="skill-item"><span><span class="emoji" aria-hidden="true">📅</span> Gestion de projet (Agile)</span><div class="skill-bar"><div class="skill-progress"></div></div></div>
-                </aside>
-            </div>
+        <section class="section" id="skills-original">
+            <h2 style="font-family: var(--altay-font-mono); color:var(--altay-primary);"><span class="emoji">🛠️</span> Compétences</h2>
+            <!-- ... VOTRE CONTENU HTML ORIGINAL POUR LES COMPÉTENCES ... -->
         </section>
 
-        <section class="section" id="projects">
-             <h2><span class="emoji" aria-hidden="true">📁</span> Mes Projets</h2>
-             <div class="project-folders">
-                <div class="folder active" data-target="academic-projects-grid"><i class="fas fa-graduation-cap"></i> Académique</div>
-                <div class="folder" data-target="personal-projects-grid"><i class="fas fa-user"></i> Personnel</div>
-            </div>
-
-             <!-- Grille Académique -->
-            <div class="projects-grid-container" id="academic-projects-grid">
-                <div class="projects-grid">
-                     <article class="project-card">
-                        <img src="stage.jpg" alt="App Suivi Inventaire" class="project-image" loading="lazy">
-                        <div class="project-content">
-                            <h3 class="project-title">Suivi d'Inventaire IT (Stage)</h3>
-                            <p class="project-description">Développement & implémentation App VBA pour suivi/gestion stocks IT.</p>
-                            <p class="project-tech">VBA, Excel</p>
-                            <a href="https://github.com/altay1cvk/Application-de-suivie-inventaire" class="project-link" target="_blank" rel="noopener noreferrer">GitHub <i class="fab fa-github"></i></a>
-                        </div>
-                    </article>
-                    <article class="project-card">
-                        <img src="p1.jpg" alt="Projet Data Center" class="project-image" loading="lazy">
-                        <div class="project-content">
-                            <h3 class="project-title">Supervision Data Center</h3>
-                            <p class="project-description">Monitoring temps réel de capteurs (TIG Stack) pour prévenir pannes.</p>
-                            <p class="project-tech">IoT, TIG Stack (MQTT, Node-RED, InfluxDB, Grafana)</p>
-                            <a href="https://github.com/altay1cvk/Creation-Data-Center" class="project-link" target="_blank" rel="noopener noreferrer">GitHub <i class="fab fa-github"></i></a>
-                        </div>
-                    </article>
-                     <article class="project-card">
-                        <img src="p2.jpg" alt="Sécurisation Hôpital" class="project-image" loading="lazy">
-                        <div class="project-content">
-                            <h3 class="project-title">Sécurisation SI Hôpital</h3>
-                            <p class="project-description">Conception architecture réseau sécurisée (802.1X, VPN) sur GNS3.</p>
-                            <p class="project-tech">Cisco, 802.1X, VPN, GNS3</p>
-                            <a href="https://github.com/altay1cvk/S-curisation-h-pital" class="project-link" target="_blank" rel="noopener noreferrer">GitHub <i class="fab fa-github"></i></a>
-                        </div>
-                    </article>
-                </div>
-            </div>
-
-            <!-- Grille Personnel -->
-             <div class="projects-grid-container" id="personal-projects-grid" style="display: none;">
-                 <div class="projects-grid">
-                    <article class="project-card">
-                        <img src="p3.jpg" alt="IA Trading Crypto" class="project-image" loading="lazy">
-                        <div class="project-content">
-                            <h3 class="project-title">IA Trading Crypto (Concept)</h3>
-                            <p class="project-description">Exploration IA pour trading auto (achat/vente optimisés) de cryptos.</p>
-                            <p class="project-tech">Python, IA/ML APIs</p>
-                            <a href="#" class="project-link" onclick="return false;" style="color: #aaa; cursor: not-allowed;" aria-disabled="true">Bientôt dispo <i class="fas fa-lock"></i></a>
-                        </div>
-                    </article>
-                </div>
-            </div>
+        <section class="section" id="projects-original">
+             <h2 style="font-family: var(--altay-font-mono); color:var(--altay-primary);"><span class="emoji">📁</span> Mes Projets</h2>
+            <!-- ... VOTRE CONTENU HTML ORIGINAL POUR LES PROJETS (Y COMPRIS EHOSP) ... -->
         </section>
 
-        <section class="section" id="cv">
-             <h2 id="parcours"><span class="emoji" aria-hidden="true">📄</span> Mon Parcours</h2>
-            <div class="cv-container">
-                <h3><i class="fas fa-briefcase"></i> Expérience Professionnelle</h3>
-                <ul>
-                    <li>
-                        <strong>Stagiaire en Intelligence Artificielle (Fév. 2025 - Août 2025 prévu) - FEMTO-ST, Montbéliard</strong>
-                        <p>Développement modèle reconnaissance d'humains (IMX500), intégration GPS/4G, déploiement optimisé sur Raspberry Pi pour drone autonome (ML/DL).</p>
-                    </li>
-                     <li>
-                        <strong>Stagiaire IT (Avril 2024 - Juin 2024) - Forvia, Allenjoie</strong>
-                        <p>Développement solution suivi inventaire IT, configuration/optimisation équipements (switches, PC), gestion outil de suivi.</p>
-                    </li>
-                </ul>
-                <h3><i class="fas fa-graduation-cap"></i> Formation</h3>
-                <ul>
-                    <li><strong>BUT Réseaux & Télécommunications - Spé. IoT (2022 - 2025)</strong>
-                        <p>IUT Nord Franche-Comté, Montbéliard (3ème année en cours)</p></li>
-                    <li><strong>Baccalauréat Général (Sept. 2019 - Juil. 2022)</strong>
-                        <p>Lycée Armand Peugeot, Valentigney (Spécialités Mathématiques & SVT)</p></li>
-                </ul>
-                 <h3><i class="fas fa-language"></i> Langues</h3>
-                <ul>
-                    <li>Français (Natif)</li>
-                    <li>Anglais (B2 - Intermédiaire Avancé)</li>
-                    <li>Allemand (A1 - Débutant)</li>
-                </ul>
-                <div class="cv-download">
-                    <a href="https://drive.google.com/file/d/1iYN5GO-OhEW0ut0aBoPFM6CSA6omyRYw/view?usp=sharing" target="_blank" rel="noopener noreferrer">Télécharger CV <i class="fas fa-download"></i></a>
-                </div>
-            </div>
+        <section class="section" id="cv-original">
+             <h2 style="font-family: var(--altay-font-mono); color:var(--altay-primary);"><span class="emoji">📄</span> Mon Parcours</h2>
+            <!-- ... VOTRE CONTENU HTML ORIGINAL POUR LE PARCOURS/CV ... -->
         </section>
 
-        <section class="section" id="contact">
-            <h2><span class="emoji" aria-hidden="true">✉️</span> Contactez-moi</h2>
-            <form class="contact-form" action="https://formspree.io/f/mkgorlln" method="POST">
-                <div class="form-group">
-                    <label for="name">Nom</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" required></textarea>
-                </div>
-                <button type="submit">Envoyer <i class="fas fa-paper-plane"></i></button>
-            </form>
-
-            <!-- Conteneur pour le message de statut -->
-            <div id="form-status-container">
-                <!-- Le message .form-status sera injecté ici par JS -->
-            </div>
-
-            <!-- Liens Sociaux -->
-            <div class="contact-socials">
-                 <p>Retrouvez-moi aussi sur :</p>
-                 <a href="https://www.linkedin.com/in/altay-cevik/" target="_blank" rel="noopener noreferrer" aria-label="Profil LinkedIn">
-                     <i class="fab fa-linkedin"></i>
-                 </a>
-                 <a href="https://github.com/altay1cvk" target="_blank" rel="noopener noreferrer" aria-label="Profil GitHub">
-                     <i class="fab fa-github"></i>
-                 </a>
-             </div>
+        <section class="section" id="contact-original">
+            <h2 style="font-family: var(--altay-font-mono); color:var(--altay-primary);"><span class="emoji">✉️</span> Contactez-moi</h2>
+            <!-- ... VOTRE FORMULAIRE DE CONTACT ORIGINAL ... -->
         </section>
-    </main>
+    </div>
 
-    <!-- Bouton pour changer de thème -->
-    <button id="theme-toggle" title="Changer de thème" aria-label="Changer de thème">
-        <!-- L'icône sera définie par JS -->
-    </button>
 
     <script defer>
-        // --- Détection Mobile ---
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-        // --- Éléments DOM ---
+        // --- DOM Elements ---
         const loaderContainer = document.getElementById('loader-container');
-        const progressBarFill = document.querySelector('.progress-bar-fill');
-        const introVideo = document.getElementById('intro-video');
-        const skipIntroBtn = document.getElementById('skip-intro-btn');
-        const siteProgressBarContainer = document.querySelector('.progress-bar-container');
-        const siteNav = document.querySelector('.nav');
-        const siteContent = document.querySelector('.content');
-        const siteProgressBar = document.querySelector('.progress-bar');
-        const contactForm = document.querySelector('.contact-form');
-        const formButton = contactForm?.querySelector('button[type="submit"]');
-        const formStatusContainer = document.getElementById('form-status-container');
-        const themeToggle = document.getElementById('theme-toggle'); // Bouton thème
-        const htmlEl = document.documentElement; // Element HTML pour classe thème
-        const themeColorMeta = document.querySelector('meta[name="theme-color"]'); // Meta pour PWA
+        const ehospChatMain = document.getElementById('ehosp-chat-main');
+        const chatMessagesContainer = document.getElementById('ehosp-chat-messages');
+        const chatOptionsArea = document.getElementById('ehosp-chat-options-area');
+        
+        const portfolioSectionsDiv = document.getElementById('portfolio-sections');
+        const backToChatLink = document.getElementById('back-to-chat-link');
 
-        // --- Three.js Variables (déclarées ici pour accès global) ---
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        const canvasContainer = document.getElementById('canvas-container');
-        let particlesMaterial; // Déclaré ici, initialisé plus tard
-        let particlesMesh;
-        let clock;
+        const htmlEl = document.documentElement;
+        const themeToggleBtn = document.getElementById('theme-toggle'); // Renommé pour clarté
 
-        // --- Autres Variables globales ---
-        let loadInterval;
-        let hideLoaderTimeout;
-        let intersectionObserver;
-
-        // --- Gestion Loader & Intro Vidéo ---
-        function hideLoader() {
-            if (loaderContainer) loaderContainer.classList.add('hidden');
-            if (!isMobile && introVideo && !introVideo.error) { // Ne pas jouer si erreur vidéo
-                introVideo.style.display = 'block';
-                introVideo.play().catch(e => {
-                    console.warn("Autoplay vidéo bloqué:", e);
-                    // Si l'autoplay échoue, montrer le contenu directement
-                    showSiteContent();
-                });
-            } else {
-                showSiteContent();
-            }
-        }
-
-        function showSiteContent() {
-            if (introVideo) {
-                introVideo.classList.add('fade-out');
-                introVideo.pause(); // Assure l'arrêt
-            }
-            if (skipIntroBtn) skipIntroBtn.style.display = 'none';
-            if (siteProgressBarContainer) siteProgressBarContainer.style.display = 'block';
-            if (siteNav) siteNav.style.display = 'block';
-            if (siteContent) siteContent.style.display = 'block';
-
-            // Cache la vidéo après la transition pour libérer ressources
-            if (introVideo) setTimeout(() => { introVideo.style.display = 'none'; }, 1000);
-
-            // Démarrer l'observation des sections une fois le contenu visible
-            if (intersectionObserver) {
-                document.querySelectorAll('.section:not(.visible)').forEach(section => {
-                    // Petite vérification pour éviter d'observer si déjà visible (au cas où)
-                    if (!section.classList.contains('visible')) {
-                        intersectionObserver.observe(section);
-                    }
-                });
-            }
-        }
-
-        // --- Initialisation Loader ---
-        if (loaderContainer) {
-            let loadProgress = 0;
-            loadInterval = setInterval(() => {
-                loadProgress++;
-                if (progressBarFill) progressBarFill.style.width = loadProgress + '%';
-                if (loadProgress >= 100) {
-                    clearInterval(loadInterval);
-                    // Donne un petit délai après 100% avant de cacher
-                    hideLoaderTimeout = setTimeout(hideLoader, 300);
-                }
-            }, 15); // Durée ~1.5s
-        } else {
-            // S'il n'y a pas de loader, on affiche directement
-            showSiteContent();
-        }
-
-        // --- Bouton Passer Intro ---
-        if (skipIntroBtn) {
-            if (!isMobile) {
-                // Afficher le bouton après un délai si le loader ou la vidéo est encore là
-                setTimeout(() => {
-                    const loaderIsVisible = loaderContainer && !loaderContainer.classList.contains('hidden');
-                    const videoIsPotentiallyVisible = introVideo && introVideo.style.display !== 'none' && !introVideo.classList.contains('fade-out');
-                    if (loaderIsVisible || videoIsPotentiallyVisible) {
-                        skipIntroBtn.style.display = 'block';
-                    }
-                }, 1500); // Délai avant d'afficher le bouton skip
-            }
-
-            skipIntroBtn.addEventListener('click', () => {
-                clearTimeout(hideLoaderTimeout); // Annule le timeout du loader
-                clearInterval(loadInterval); // Annule le remplissage du loader
-                if (introVideo) { introVideo.pause(); introVideo.style.display = 'none'; } // Arrête et cache la vidéo immédiatement
-                hideLoader(); // Assure que le loader est caché
-                showSiteContent(); // Affiche le contenu principal
-            });
-        }
-
-        // --- Écouteurs Vidéo ---
-        if (introVideo) {
-            introVideo.addEventListener('ended', showSiteContent);
-            // Gérer les erreurs de chargement de la vidéo
-            introVideo.addEventListener('error', (e) => {
-                console.error("Erreur vidéo:", e);
-                introVideo.style.display = 'none'; // Cache la vidéo en cas d'erreur
-                // Si le loader est encore visible, on le cache et on montre le site
-                if (loaderContainer && !loaderContainer.classList.contains('hidden')) {
-                    clearTimeout(hideLoaderTimeout);
-                    clearInterval(loadInterval);
-                    hideLoader(); // Cache le loader
-                }
-                 // S'assure que le contenu est affiché même si l'autoplay a échoué avant
-                showSiteContent();
-            });
-            // Optionnel: Gérer si la vidéo est suspendue (ex: onglet en arrière-plan)
-            introVideo.addEventListener('suspend', () => {
-                if (!introVideo.ended && introVideo.readyState < 3) { // Moins de 3 = pas assez de data
-                     console.warn("Chargement vidéo suspendu.");
-                     // Pourrait être un point pour montrer le contenu si l'attente est trop longue
-                }
-            });
-        }
-
-        // --- Gestion Thème Clair/Sombre ---
-        function applyTheme(theme) {
-            let particleColorValue;
-            let bgColorValue;
-
-            if (theme === 'light') {
-                htmlEl.classList.add('light-mode');
-                if(themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; // Icône lune
-            } else {
-                htmlEl.classList.remove('light-mode');
-                 if(themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Icône soleil
-            }
-
-            // Obtenir les couleurs *après* avoir changé la classe
-            const computedStyle = getComputedStyle(htmlEl);
-            particleColorValue = computedStyle.getPropertyValue('--particle-color').trim();
-            bgColorValue = computedStyle.getPropertyValue('--bg-color').trim();
-
-            // Mettre à jour la couleur des particules Three.js
-            if (particlesMaterial) {
-                 try {
-                    particlesMaterial.color.set(particleColorValue);
-                 } catch (e) {
-                    console.error("Erreur MAJ couleur particules:", e);
-                 }
-             }
-
-            // Mettre à jour la meta theme-color pour la PWA/navigateur mobile
-            if (themeColorMeta) {
-                themeColorMeta.content = bgColorValue;
-            }
-             // console.log("Theme appliqué:", theme, "Couleur particules:", particleColorValue, "Couleur fond:", bgColorValue);
-        }
-
-        // Logique initiale de détermination du thème
-        let preferredTheme = localStorage.getItem('theme');
-        const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-
-        if (!preferredTheme) {
-            preferredTheme = prefersLight ? 'light' : 'dark';
-        }
-
-        // Appliquer le thème initial AVANT même le rendu Three.js si possible
-        applyTheme(preferredTheme);
-
-        // Écouteur pour le bouton de bascule
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                const currentIsLight = htmlEl.classList.contains('light-mode');
-                const newTheme = currentIsLight ? 'dark' : 'light';
-                localStorage.setItem('theme', newTheme);
-                applyTheme(newTheme);
-            });
-        }
-
-        // (Optionnel) Écouteur pour changement de préférence système
-        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', event => {
-            // Ne change que si l'utilisateur n'a pas forcé un thème via le bouton
-            if (!localStorage.getItem('theme')) {
-                const newSystemTheme = event.matches ? 'light' : 'dark';
-                applyTheme(newSystemTheme);
-            }
-        });
-
-
-        // --- Three.js Background ---
-        if (canvasContainer) {
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            canvasContainer.appendChild(renderer.domElement);
-
-            const particlesGeometry = new THREE.BufferGeometry();
-            const particlesCount = isMobile ? 400 : 800;
-            const posArray = new Float32Array(particlesCount * 3);
-            for(let i = 0; i < particlesCount * 3; i++) {
-                posArray[i] = (Math.random() - 0.5) * (isMobile ? 4 : 5);
-            }
-            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-
-            // Initialise le matériel SANS couleur fixe ici
-            particlesMaterial = new THREE.PointsMaterial({ size: 0.005 });
-            // Appelle applyTheme ENCORE une fois pour garantir que la couleur est bonne après initialisation
-            applyTheme(localStorage.getItem('theme') || (prefersLight ? 'light' : 'dark'));
-
-            particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-            scene.add(particlesMesh);
-            camera.position.z = 2;
-
-            let mouseX = 0, mouseY = 0;
-            if (!isMobile) {
-                 document.addEventListener('mousemove', (event) => {
-                    mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-                    mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-                 });
-            }
-
-            clock = new THREE.Clock(); // Initialise l'horloge ici
-
-            const animate = () => {
-                requestAnimationFrame(animate); // Mettre en premier pour boucle continue même si erreur
-
-                const elapsedTime = clock.getElapsedTime();
-
-                // Rotation
-                if (particlesMesh) {
-                    particlesMesh.rotation.y = elapsedTime * 0.08;
-                }
-
-                // Mouvement caméra basé souris (léger)
-                camera.position.x += (mouseX * 0.2 - camera.position.x) * 0.01;
-                camera.position.y += (mouseY * 0.2 - camera.position.y) * 0.01;
-                camera.lookAt(scene.position); // Assure que la caméra regarde toujours le centre
-
-                // Rendu
-                renderer.render(scene, camera);
-            };
-
-            animate(); // Lance l'animation
-        }
-
-        // --- Responsive Three.js ---
-        function updateDimensions() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        }
-        window.addEventListener('resize', updateDimensions);
-
-        // --- Scroll Progress Bar ---
-        window.addEventListener('scroll', () => {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrollPercent = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-            if (siteProgressBar) siteProgressBar.style.width = scrollPercent + '%';
-        });
-
-        // --- Intersection Observer pour Animations Section ---
-        const observerOptions = {
-             threshold: 0.15 // La section est considérée visible quand 15% est à l'écran
+        // --- Vos données de profil (à remplir) ---
+        const userProfileData = {
+            name: "Altay CEVIK",
+            greeting: "Bonjour ! Je suis l'assistant virtuel d'<span class='highlight'>Altay</span>. Prêt à découvrir un développeur IA & IoT passionné ?",
+            about: "Altay est un futur expert en <span class='highlight'>Intelligence Artificielle</span> et <span class='highlight'>Objets Connectés</span>. Actuellement en BUT R&T avec une spécialisation IoT, il se dirige vers un <span class='highlight'>Master IA</span> en alternance à la rentrée 2025. Curieux et proactif, il adore transformer des idées innovantes en solutions concrètes.",
+            skillsIntro: "Altay a un éventail de compétences solide. Voici les principales :",
+            skillsList: [
+                "IA/ML: <span class='highlight'>TensorFlow, YOLOv8, PyTorch</span>",
+                "Développement: <span class='highlight'>Python, JavaScript, Java, C#</span>",
+                "Web & Outils: <span class='highlight'>Node.js, React, Docker, Git</span>",
+                "IoT: <span class='highlight'>Raspberry Pi, MQTT</span>"
+            ],
+            projectsIntro: "Il a mené plusieurs projets significatifs :",
+            projectsList: [
+                { name: "EHOSP - Plateforme Santé", desc: "Contribution à une solution intégrant IA et IoT.", link: "https://www.ehosp.fr/", icon: "fas fa-heartbeat" },
+                { name: "Supervision Data Center", desc: "Monitoring IoT avec TIG Stack.", github: "https://github.com/altay1cvk/Creation-Data-Center", icon: "fas fa-server" },
+                { name: "IA Trading (Concept)", desc: "Exploration Python pour le trading automatisé.", icon: "fas fa-chart-line" }
+            ],
+            parcoursIntro: "Son parcours est axé sur la technologie et l'innovation :",
+            parcoursList: [
+                "Master IA (Prévu Sept. 2025, CNAM Mulhouse)",
+                "BUT R&T - Spé. IoT (2022-2025, IUT Nord Franche-Comté)",
+                "Stage IA - Drone (Prévu Fév. 2025, FEMTO-ST)"
+            ],
+            closing: "Merci de votre intérêt ! Vous pouvez explorer son portfolio complet ou le contacter."
         };
 
-        intersectionObserver = new IntersectionObserver((entries) => {
-           entries.forEach(entry => {
-               if (entry.isIntersecting) {
-                   entry.target.classList.add('visible');
-                   // Optionnel: Arrêter d'observer une fois l'animation jouée
-                   // intersectionObserver.unobserve(entry.target);
-               } else {
-                   // Optionnel: Retirer la classe si on veut rejouer l'animation à chaque fois
-                   // entry.target.classList.remove('visible');
-               }
-           });
-       }, observerOptions);
+        // --- Fonctions du Loader ---
+        function hideLoaderAndStartChat() {
+            if (loaderContainer) loaderContainer.classList.add('hidden');
+            if (ehospChatMain) ehospChatMain.classList.add('visible'); // Affiche le chat
+            startEhospStyleChat();
+        }
+        if (loaderContainer) {
+            let loadProgress = 0;
+            const progressBarFill = document.querySelector('.progress-bar-fill');
+            const loadInterval = setInterval(() => {
+                loadProgress++;
+                if (progressBarFill) progressBarFill.style.width = loadProgress + '%';
+                if (loadProgress >= 100) { clearInterval(loadInterval); setTimeout(hideLoaderAndStartChat, 400); }
+            }, 25);
+        } else {
+            hideLoaderAndStartChat();
+        }
 
-        // L'observation est démarrée dans showSiteContent() une fois que le contenu est prêt.
+        // --- Logique du Chatbot Stylisé EHOSP ---
+        let currentChatState = 'greeting';
+        const typingIndicatorDelay = 700; // Délai avant d'afficher "..."
 
-        // --- Gestion Changement de Dossier Projet ---
-        document.querySelectorAll('.folder').forEach(folder => {
-            folder.addEventListener('click', () => {
-                const targetId = folder.dataset.target;
-                // Cacher toutes les grilles
-                document.querySelectorAll('.projects-grid-container').forEach(gridContainer => {
-                    gridContainer.style.display = 'none';
-                });
-                // Afficher la grille cible
-                const targetGrid = document.getElementById(targetId);
-                if (targetGrid) {
-                    targetGrid.style.display = 'block';
-                }
-                // Gérer la classe active sur les dossiers
-                document.querySelectorAll('.folder').forEach(f => f.classList.remove('active'));
-                folder.classList.add('active');
+        async function addEhospBotMessage(htmlContent, options = []) {
+            return new Promise(async (resolve) => {
+                // 1. Afficher l'indicateur "..."
+                const typingWrapper = document.createElement('div');
+                typingWrapper.className = 'ehosp-chat-message-wrapper ehosp-ai-message typing-indicator-wrapper';
+                typingWrapper.innerHTML = `
+                    <div class="ehosp-chat-avatar"><i class="fas fa-robot"></i></div>
+                    <div class="ehosp-chat-bubble typing-indicator-bubble"><span></span><span></span><span></span></div>
+                `;
+                chatMessagesContainer.appendChild(typingWrapper);
+                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+
+                await new Promise(r => setTimeout(r, typingIndicatorDelay + Math.random() * 500)); // Simule la frappe
+
+                // 2. Enlever l'indicateur et afficher le vrai message
+                typingWrapper.remove();
+                
+                const messageWrapper = document.createElement('div');
+                messageWrapper.className = 'ehosp-chat-message-wrapper ehosp-ai-message';
+                
+                const avatar = document.createElement('div');
+                avatar.className = 'ehosp-chat-avatar';
+                avatar.innerHTML = '<i class="fas fa-robot"></i>';
+                messageWrapper.appendChild(avatar);
+
+                const bubble = document.createElement('div');
+                bubble.className = 'ehosp-chat-bubble';
+                bubble.innerHTML = htmlContent; // Le HTML est directement inséré
+                messageWrapper.appendChild(bubble);
+                
+                chatMessagesContainer.appendChild(messageWrapper);
+                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+                
+                // Animer l'apparition du message (déjà géré par CSS avec @keyframes ehospMessageAppear)
+
+                // 3. Afficher les options après un court délai
+                setTimeout(() => {
+                    displayEhospChatOptions(options);
+                    resolve();
+                }, 300); // Délai avant d'afficher les boutons
             });
-        });
+        }
 
-        // --- Feedback Formulaire Contact ---
-        if (contactForm && formButton && formStatusContainer) {
-            let formStatus = document.createElement('p'); // Crée l'élément une seule fois
-            formStatus.className = 'form-status';
+        function displayEhospChatOptions(optionsArray) {
+            chatOptionsArea.innerHTML = '';
+            if (!optionsArray || optionsArray.length === 0) {
+                chatOptionsArea.classList.remove('visible');
+                return;
+            }
+            optionsArray.forEach(opt => {
+                const button = document.createElement('button');
+                button.className = 'ehosp-chat-option-btn';
+                button.innerHTML = opt.icon ? `<i class="${opt.icon}"></i> ${opt.text}` : opt.text;
+                button.onclick = () => {
+                    chatOptionsArea.classList.remove('visible'); // Cacher les options
+                    // Simuler la "réponse" de l'utilisateur (optionnel, mais rend plus "chat")
+                    // addSimulatedUserResponse(opt.text); 
+                    setTimeout(opt.action, 150); // Action après un petit délai
+                };
+                chatOptionsArea.appendChild(button);
+            });
+            setTimeout(() => chatOptionsArea.classList.add('visible'), 50); // Rendre visible avec transition
+        }
 
-            contactForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const formData = new FormData(contactForm);
-                formButton.disabled = true;
-                formButton.innerHTML = 'Envoi... <i class="fas fa-spinner fa-spin"></i>';
+        // function addSimulatedUserResponse(text) { // Optionnel
+        //     const messageWrapper = document.createElement('div');
+        //     messageWrapper.className = 'ehosp-chat-message-wrapper ehosp-user-simulated-message';
+        //     const bubble = document.createElement('div');
+        //     bubble.className = 'ehosp-chat-bubble';
+        //     bubble.textContent = text;
+        //     messageWrapper.appendChild(bubble);
+        //     chatMessagesContainer.appendChild(messageWrapper);
+        //     chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+        // }
 
-                // Vider le conteneur et cacher l'ancien message (si présent)
-                formStatusContainer.innerHTML = '';
-                formStatus.classList.remove('visible', 'success', 'error'); // Retire aussi les classes de style
-
-                try {
-                    const response = await fetch(contactForm.action, {
-                        method: contactForm.method, body: formData, headers: { 'Accept': 'application/json' }
+        // --- Définition des États et Actions du Chat ---
+        const ehospChatStates = {
+            greeting: {
+                message: () => userProfileData.greeting,
+                options: () => [
+                    { text: "Oui, présente-le !", icon: "fas fa-play-circle", action: () => updateEhospChatState('introduction') },
+                    { text: "Voir le portfolio direct", icon: "fas fa-folder-open", action: showFullPortfolioContent }
+                ]
+            },
+            introduction: {
+                message: () => userProfileData.about,
+                options: () => [
+                    { text: "Ses compétences ?", icon: "fas fa-cogs", action: () => updateEhospChatState('skills') },
+                    { text: "Ses projets ?", icon: "fas fa-project-diagram", action: () => updateEhospChatState('projects') },
+                    { text: "Son parcours ?", icon: "fas fa-graduation-cap", action: () => updateEhospChatState('parcours') },
+                    { text: "Voir tout le portfolio", icon: "fas fa-folder-open", action: showFullPortfolioContent }
+                ]
+            },
+            skills: {
+                message: () => {
+                    let msg = `${userProfileData.skillsIntro}<ul style="list-style:none; padding:10px 0 0 5px; text-align:left;">`;
+                    userProfileData.skillsList.forEach(s => msg += `<li style="margin-bottom:5px;">✅ ${s}</li>`);
+                    msg += `</ul><br>Plus de détails sur <a href="#skills-original" class="chat-link" onclick="showFullPortfolioContentAndScroll('skills-original')">sa page Compétences</a>. Que voir ensuite ?`;
+                    return msg;
+                },
+                options: () => ehospChatStates.introduction.options().filter(o => !o.action.toString().includes("skills"))
+            },
+            projects: {
+                message: () => {
+                    let msg = `${userProfileData.projectsIntro}<ul style="list-style:none; padding:10px 0 0 5px; text-align:left;">`;
+                    userProfileData.projectsList.forEach(p => {
+                        msg += `<li style="margin-bottom:8px;"><i class="${p.icon || 'fas fa-lightbulb'}" style="color:var(--primary-color); margin-right:5px;"></i><span class="highlight">${p.name}:</span> ${p.desc} `;
+                        if (p.link) msg += `<a href="${p.link}" target="_blank" class="chat-link">Visiter <i class="fas fa-external-link-alt fa-xs"></i></a>`;
+                        if (p.github) msg += `<a href="${p.github}" target="_blank" class="chat-link">GitHub <i class="fab fa-github fa-xs"></i></a>`;
+                        msg += `</li>`;
                     });
-                    if (response.ok) {
-                        formStatus.textContent = "Merci ! Message envoyé.";
-                        formStatus.classList.add('success'); // Classe pour style succès
-                        formStatus.style.color = 'var(--success-color)'; // Définit la couleur via variable
-                        contactForm.reset();
-                    } else {
-                        const data = await response.json();
-                        formStatus.textContent = data.errors ? data.errors.map(error => error.message).join(', ') : "Oups! Une erreur est survenue.";
-                        formStatus.classList.add('error'); // Classe pour style erreur
-                        formStatus.style.color = 'var(--error-color)'; // Définit la couleur via variable
-                    }
-                } catch (error) {
-                    console.error("Erreur lors de l'envoi du formulaire:", error);
-                    formStatus.textContent = "Erreur réseau lors de l'envoi.";
-                    formStatus.classList.add('error');
-                    formStatus.style.color = 'var(--error-color)';
-                } finally {
-                    // Ajouter le message (mis à jour) au conteneur
-                    formStatusContainer.appendChild(formStatus);
-                    // Forcer un reflow pour que la transition d'opacité fonctionne
-                    void formStatus.offsetWidth;
-                    // Rendre le message visible
-                    formStatus.classList.add('visible');
+                    msg += `</ul><br>Tous ses projets sont sur <a href="#projects-original" class="chat-link" onclick="showFullPortfolioContentAndScroll('projects-original')">sa page Projets</a>. Et après ?`;
+                    return msg;
+                },
+                options: () => ehospChatStates.introduction.options().filter(o => !o.action.toString().includes("projects"))
+            },
+            parcours: {
+                message: () => {
+                    let msg = `${userProfileData.parcoursIntro}<ul style="list-style:none; padding:10px 0 0 5px; text-align:left;">`;
+                    userProfileData.parcoursList.forEach(p => msg += `<li style="margin-bottom:5px;"><i class="fas fa-map-marker-alt" style="color:var(--primary-color); margin-right:5px;"></i>${p.item}</li>`);
+                    msg += `</ul><br>Son <a href="#cv-original" class="chat-link" onclick="showFullPortfolioContentAndScroll('cv-original')">parcours complet est ici</a>. Une dernière chose ?`;
+                    return msg;
+                },
+                options: () => ehospChatStates.introduction.options().filter(o => !o.action.toString().includes("parcours"))
+            },
+            end: {
+                message: () => userProfileData.closing,
+                options: () => [
+                     { text: "Contacter Altay", icon: "fas fa-envelope", action: () => showFullPortfolioContentAndScroll('contact-original') },
+                     { text: "Revoir la présentation", icon: "fas fa-redo", action: () => { chatMessagesContainer.innerHTML=''; updateEhospChatState('greeting');} },
+                ]
+            }
+        };
 
-                    // Réactiver le bouton
-                    formButton.disabled = false;
-                    formButton.innerHTML = 'Envoyer <i class="fas fa-paper-plane"></i>';
-                }
+        async function updateEhospChatState(newState) {
+            currentChatState = newState;
+            const state = ehospChatStates[currentChatState];
+            if (state) {
+                await addEhospBotMessage(state.message(), state.options());
+            }
+        }
+        
+        function showFullPortfolioContent() {
+            if (ehospChatMain) ehospChatMain.style.display = 'none'; // Cache le chat
+            if (portfolioSectionsDiv) portfolioSectionsDiv.style.display = 'block'; // Affiche le contenu du portfolio
+            if (document.querySelector('.nav')) document.querySelector('.nav').style.display = 'block'; // Afficher la nav principale de votre portfolio
+            // Activer les observers pour les animations de section de votre portfolio original
+            // if (intersectionObserver) { /* ... (votre logique d'observer les sections) ... */ }
+        }
+        
+        window.showFullPortfolioContentAndScroll = function(sectionId) { // Rendre globale pour onclick
+            showFullPortfolioContent();
+            setTimeout(() => { // Délai pour s'assurer que la section est visible
+                 const element = document.getElementById(sectionId);
+                 if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        if (backToChatLink) {
+            backToChatLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (portfolioSectionsDiv) portfolioSectionsDiv.style.display = 'none';
+                if (ehospChatMain) ehospChatMain.style.display = 'flex'; // Réafficher le chat
+                if (document.querySelector('.nav')) document.querySelector('.nav').style.display = 'none'; // Cacher la nav du portfolio
+                updateEhospChatState('greeting'); // Recommencer ou reprendre
             });
         }
 
-        // --- Enregistrement du Service Worker (PWA) ---
-        // À faire une fois que la page est chargée pour ne pas ralentir le rendu initial
-        if ('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js') // Assure-toi que le chemin est correct
-              .then(registration => {
-                console.log('Service Worker enregistré avec succès, scope :', registration.scope);
-              })
-              .catch(error => {
-                console.log('Échec enregistrement Service Worker :', error);
-              });
-          });
+
+        function startEhospStyleChat() {
+            updateEhospChatState('greeting');
         }
 
-        // --- Initialisation au chargement (redondant avec `showSiteContent` mais sécurise si loader absent) ---
-         window.addEventListener('load', () => {
-             // Si le contenu est déjà affiché (pas de loader/vidéo ou skip)
-             if (siteContent && siteContent.style.display === 'block' && intersectionObserver) {
-                  document.querySelectorAll('.section:not(.visible)').forEach(section => {
-                      if (!section.classList.contains('visible')) { // Double check
-                         intersectionObserver.observe(section);
-                      }
-                  });
-             }
-         });
+        // --- GESTION THÈME & THREE.JS (Votre code original adapté) ---
+        let isDarkMode = document.body.classList.contains('dark-mode'); // Ou localStorage
+        function applyTheme(theme) {
+            isDarkMode = (theme === 'dark');
+            htmlEl.classList.toggle('dark-mode', isDarkMode);
+            document.body.classList.toggle('dark-mode', isDarkMode); // Appliquer aussi au body pour le fond global
+             if(themeToggleBtn) themeToggleBtn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            // const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+            // if (themeColorMeta) themeColorMeta.content = getComputedStyle(htmlEl).getPropertyValue('--app-bg').trim();
+            
+            // Mise à jour couleur particules Three.js si particlesMaterial est défini
+            // if (typeof particlesMaterial !== 'undefined' && particlesMaterial) {
+            //     particlesMaterial.color.set(getComputedStyle(htmlEl).getPropertyValue(isDarkMode ? '--altay-particle-dark' : '--altay-particle-light').trim());
+            // }
+        }
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                applyTheme(htmlEl.classList.contains('dark-mode') ? 'light' : 'dark');
+                // localStorage.setItem('theme', htmlEl.classList.contains('dark-mode') ? 'dark' : 'light');
+            });
+        }
+        // Préférence initiale (simplifié, adaptez à votre logique localStorage)
+        // const storedTheme = localStorage.getItem('theme');
+        // applyTheme(storedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+        applyTheme('light'); // Force le mode clair au début comme EHOSP
+
+        // Three.js (votre code, attention aux variables de couleur des particules)
+        // const scene = new THREE.Scene(); /* ... etc. ... */
+
+        // ... (Votre code JS original restant : IntersectionObserver, gestion des dossiers projets, formulaire, SW...)
+        // Assurez-vous qu'il ne rentre pas en conflit et qu'il s'applique bien à #portfolio-sections
 
     </script>
 </body>
