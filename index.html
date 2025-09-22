@@ -6,432 +6,423 @@
     <title>Altay CEVIK - Assistant IA Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <!-- <link rel="manifest" href="manifest.json"> -->
     <meta name="theme-color" content="#f7f9fc">
-    <!-- <link rel="apple-touch-icon" href="icons/icon-192x192.png"> -->
-    <!-- <link rel="icon" type="image/png" sizes="192x192"  href="icons/icon-192x192.png"> -->
+<style>
+    :root {
+        --primary-color: #007AFF;
+        --primary-hover-color: #0056b3;
+        --app-bg: #f7f9fc;
+        --header-chat-bg: rgba(255, 255, 255, 0.90);
+        --chat-input-area-bg: #f0f4f9;
+        --chat-bubble-ai-bg: #ffffff;
+        --chat-bubble-ai-text: #1c1c1e;
+        --chat-bubble-user-bg: var(--primary-color);
+        --chat-bubble-user-text: #ffffff;
+        --text-color: #1c1c1e;
+        --secondary-text-color: #636366;
+        --border-color: #d1d1d6;
+        --button-action-bg: #eef0f2;
+        --button-action-hover-bg: #dfe3e6;
+        --button-action-text: var(--text-color);
+        --timestamp-color: #8a8a8e;
+        --radius-xl: 18px; --radius-lg: 14px; --radius-md: 10px; --radius-sm: 6px; --radius-pill: 30px;
+        --shadow-soft: 0 1px 3px 0 rgba(0, 0, 0, 0.07);
+        --shadow-medium: 0 3px 8px 0 rgba(0, 0, 0, 0.09);
+        --transition-normal: 0.25s cubic-bezier(.4,0,.2,1);
+    }
 
-    <style>
-        :root {
-            --primary-color: #007AFF;
-            --primary-hover-color: #0056b3;
-            --app-bg: #f7f9fc;
-            --header-chat-bg: rgba(255, 255, 255, 0.90);
-            --chat-input-area-bg: #f0f4f9;
-            --chat-bubble-ai-bg: #ffffff;
-            --chat-bubble-ai-text: #1c1c1e;
-            --chat-bubble-user-bg: var(--primary-color);
-            --chat-bubble-user-text: #ffffff;
-            --text-color: #1c1c1e;
-            --secondary-text-color: #636366;
-            --border-color: #d1d1d6;
-            --button-action-bg: #eef0f2;
-            --button-action-hover-bg: #dfe3e6;
-            --button-action-text: var(--text-color);
-            --timestamp-color: #8a8a8e;
-            --radius-xl: 18px; --radius-lg: 14px; --radius-md: 10px; --radius-sm: 6px; --radius-pill: 30px;
-            --shadow-soft: 0 1px 3px 0 rgba(0, 0, 0, 0.07);
-            --shadow-medium: 0 3px 8px 0 rgba(0, 0, 0, 0.09);
-            --transition-normal: 0.25s cubic-bezier(.4,0,.2,1);
-        }
+    body.dark-mode {
+        --primary-color: #0A84FF;
+        --primary-hover-color: #3593ff;
+        --app-bg: #000000;
+        --header-chat-bg: rgba(28, 28, 30, 0.92);
+        --chat-input-area-bg: #161618;
+        --chat-bubble-ai-bg: #2c2c2e;
+        --chat-bubble-ai-text: #f2f2f7;
+        --text-color: #f2f2f7;
+        --secondary-text-color: #8e8e93;
+        --border-color: #38383a;
+        --button-action-bg: #2c2c2e;
+        --button-action-hover-bg: #3a3a3c;
+        --timestamp-color: #6c6c70;
+    }
 
-        body.dark-mode {
-            --primary-color: #0A84FF;
-            --primary-hover-color: #3593ff;
-            --app-bg: #000000;
-            --header-chat-bg: rgba(28, 28, 30, 0.92);
-            --chat-input-area-bg: #161618;
-            --chat-bubble-ai-bg: #2c2c2e;
-            --chat-bubble-ai-text: #f2f2f7;
-            --text-color: #f2f2f7;
-            --secondary-text-color: #8e8e93;
-            --border-color: #38383a;
-            --button-action-bg: #2c2c2e;
-            --button-action-hover-bg: #3a3a3c;
-            --timestamp-color: #6c6c70;
-        }
+    html, body { height: 100%; margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: var(--app-bg); color: var(--text-color); overflow: hidden; font-size: 15.5px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    a { color: var(--primary-color); text-decoration: none; }
+    a:hover { text-decoration: underline; }
 
-        html, body { height: 100%; margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: var(--app-bg); color: var(--text-color); overflow: hidden; font-size: 15.5px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        a { color: var(--primary-color); text-decoration: none; }
-        a:hover { text-decoration: underline; }
+    #loader-container { position: fixed; inset: 0; background-color: var(--app-bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; transition: opacity 0.5s ease, visibility 0.5s ease; }
+    #loader-container.hidden { opacity: 0; visibility: hidden; }
+    #loader-message { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 2rem; text-align: center; font-weight: 600; padding: 0 20px; }
+    .progress-bar-loader { width: clamp(250px, 80%, 300px); height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.05s linear; }
+    
+    .ehosp-chat-app-container { display: flex; flex-direction: column; height: 100vh; max-width: 700px; margin: 0 auto; background: var(--app-bg); box-shadow: 0 0 20px rgba(0,0,0,0.1); position: relative; border-radius: var(--radius-xl); overflow: hidden; opacity: 0; transition: opacity 0.5s ease-in-out; }
+    .ehosp-chat-app-container.visible { opacity: 1; }
 
-        #loader-container { position: fixed; inset: 0; background-color: var(--app-bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; transition: opacity 0.5s ease, visibility 0.5s ease; }
-        #loader-container.hidden { opacity: 0; visibility: hidden; }
-        #loader-message { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 2rem; text-align: center; font-weight: 600; padding: 0 20px; }
-        .progress-bar-loader { width: clamp(250px, 80%, 300px); height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden; }
-        .progress-bar-fill { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.05s linear; }
-        
-        .ehosp-chat-app-container { display: flex; flex-direction: column; height: 100vh; max-width: 700px; margin: 0 auto; background: var(--app-bg); box-shadow: 0 0 20px rgba(0,0,0,0.1); position: relative; border-radius: var(--radius-xl); overflow: hidden; opacity: 0; transition: opacity 0.5s ease-in-out; }
-        .ehosp-chat-app-container.visible { opacity: 1; }
+    .ehosp-chat-header { background: var(--header-chat-bg); backdrop-filter: blur(10px); padding: 14px 18px; border-bottom: 1px solid var(--border-color); flex-shrink: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
+    .ehosp-chat-header h1 { font-size: 1.6rem; font-weight: 700; margin: 0; color: var(--primary-color); display: flex; align-items: center; gap: 8px; }
+    .ehosp-chat-header h1 .fas.fa-robot { font-size: 1.4rem; }
 
-        .ehosp-chat-header { background: var(--header-chat-bg); backdrop-filter: blur(10px); padding: 14px 18px; border-bottom: 1px solid var(--border-color); flex-shrink: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
-        .ehosp-chat-header h1 { font-size: 1.6rem; font-weight: 700; margin: 0; color: var(--primary-color); display: flex; align-items: center; gap: 8px; }
-        .ehosp-chat-header h1 .fas.fa-robot { font-size: 1.4rem; }
+    #ehosp-chat-messages { flex-grow: 1; overflow-y: auto; padding: 18px 14px; display: flex; flex-direction: column; gap: 12px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
+    #ehosp-chat-messages::-webkit-scrollbar { width: 5px; }
+    #ehosp-chat-messages::-webkit-scrollbar-track { background: transparent; }
+    #ehosp-chat-messages::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: var(--radius-pill); }
 
-        #ehosp-chat-messages { flex-grow: 1; overflow-y: auto; padding: 18px 14px; display: flex; flex-direction: column; gap: 12px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
-        #ehosp-chat-messages::-webkit-scrollbar { width: 5px; }
-        #ehosp-chat-messages::-webkit-scrollbar-track { background: transparent; }
-        #ehosp-chat-messages::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: var(--radius-pill); }
+    .ehosp-chat-message-wrapper { display: flex; margin-bottom: 5px; max-width: 85%; opacity: 0; transform: translateY(10px); animation: ehospMessageAppear 0.4s ease-out forwards; }
+    @keyframes ehospMessageAppear { to { opacity: 1; transform: translateY(0); } }
 
-        .ehosp-chat-message-wrapper { display: flex; margin-bottom: 5px; max-width: 85%; opacity: 0; transform: translateY(10px); animation: ehospMessageAppear 0.4s ease-out forwards; }
-        @keyframes ehospMessageAppear { to { opacity: 1; transform: translateY(0); } }
+    .ehosp-chat-avatar { width: 36px; height: 36px; border-radius: 50%; background-color: var(--primary-color); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-right: 10px; flex-shrink: 0; align-self: flex-end; }
+    
+    .ehosp-chat-content-with-timestamp { display: flex; flex-direction: column; }
+    .ehosp-ai-message .ehosp-chat-content-with-timestamp { align-items: flex-start; }
+    .ehosp-user-simulated-message .ehosp-chat-content-with-timestamp { align-items: flex-end; }
 
-        .ehosp-chat-avatar { width: 36px; height: 36px; border-radius: 50%; background-color: var(--primary-color); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-right: 10px; flex-shrink: 0; align-self: flex-end; }
-        
-        .ehosp-chat-content-with-timestamp { display: flex; flex-direction: column; }
-        .ehosp-ai-message .ehosp-chat-content-with-timestamp { align-items: flex-start; }
-        .ehosp-user-simulated-message .ehosp-chat-content-with-timestamp { align-items: flex-end; }
+    .ehosp-chat-bubble { padding: 10px 14px; border-radius: var(--radius-lg); line-height: 1.5; font-size: 0.95rem; word-wrap: break-word; }
+    
+    .ehosp-message-timestamp { font-size: 0.7rem; color: var(--timestamp-color); margin-top: 4px; padding: 0 5px; }
+    .ehosp-ai-message .ehosp-message-timestamp { margin-left: 5px; }
+    .ehosp-user-simulated-message .ehosp-message-timestamp { margin-right: 5px; }
 
-        .ehosp-chat-bubble { padding: 10px 14px; border-radius: var(--radius-lg); line-height: 1.5; font-size: 0.95rem; word-wrap: break-word; }
-        
-        .ehosp-message-timestamp { font-size: 0.7rem; color: var(--timestamp-color); margin-top: 4px; padding: 0 5px; }
-        .ehosp-ai-message .ehosp-message-timestamp { margin-left: 5px; }
-        .ehosp-user-simulated-message .ehosp-message-timestamp { margin-right: 5px; }
+    .ehosp-ai-message .ehosp-chat-message-wrapper { align-self: flex-start; }
+    .ehosp-ai-message .ehosp-chat-bubble { background: var(--chat-bubble-ai-bg); color: var(--chat-bubble-ai-text); border-bottom-left-radius: var(--radius-sm); box-shadow: var(--shadow-soft); border: 1px solid var(--border-color); }
+    
+    .ehosp-user-simulated-message .ehosp-chat-message-wrapper { align-self: flex-end; flex-direction: row-reverse; }
+    .ehosp-user-simulated-message .ehosp-chat-avatar { display: none; }
+    .ehosp-user-simulated-message .ehosp-chat-bubble { background: var(--chat-bubble-user-bg); color: var(--chat-bubble-user-text); border-bottom-right-radius: var(--radius-sm); margin-right: 0; }
 
-        .ehosp-ai-message .ehosp-chat-message-wrapper { align-self: flex-start; }
-        .ehosp-ai-message .ehosp-chat-bubble { background: var(--chat-bubble-ai-bg); color: var(--chat-bubble-ai-text); border-bottom-left-radius: var(--radius-sm); box-shadow: var(--shadow-soft); border: 1px solid var(--border-color); }
-        
-        .ehosp-user-simulated-message .ehosp-chat-message-wrapper { align-self: flex-end; flex-direction: row-reverse; }
-        .ehosp-user-simulated-message .ehosp-chat-avatar { display: none; }
-        .ehosp-user-simulated-message .ehosp-chat-bubble { background: var(--chat-bubble-user-bg); color: var(--chat-bubble-user-text); border-bottom-right-radius: var(--radius-sm); margin-right: 0; }
+    #ehosp-chat-options-area { padding: 12px 14px; border-top: 1px solid var(--border-color); background-color: var(--chat-input-area-bg); flex-shrink: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; opacity: 0; transition: opacity 0.3s ease-in-out 0.2s; }
+    #ehosp-chat-options-area.visible { opacity: 1; }
 
-        #ehosp-chat-options-area { padding: 12px 14px; border-top: 1px solid var(--border-color); background-color: var(--chat-input-area-bg); flex-shrink: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; opacity: 0; transition: opacity 0.3s ease-in-out 0.2s; }
-        #ehosp-chat-options-area.visible { opacity: 1; }
+    .ehosp-chat-option-btn { background-color: var(--button-action-bg); color: var(--button-action-text); border: 1px solid var(--border-color); padding: 8px 15px; border-radius: var(--radius-pill); font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: background-color var(--transition-normal), transform var(--transition-normal); }
+    .ehosp-chat-option-btn:hover { background-color: var(--button-action-hover-bg); transform: translateY(-1px); }
+    .ehosp-chat-option-btn i { margin-right: 6px; }
 
-        .ehosp-chat-option-btn { background-color: var(--button-action-bg); color: var(--button-action-text); border: 1px solid var(--border-color); padding: 8px 15px; border-radius: var(--radius-pill); font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: background-color var(--transition-normal), transform var(--transition-normal); }
-        .ehosp-chat-option-btn:hover { background-color: var(--button-action-hover-bg); transform: translateY(-1px); }
-        .ehosp-chat-option-btn i { margin-right: 6px; }
+    .ehosp-chat-bubble .highlight { font-weight: 700; color: var(--primary-color); }
+    .ehosp-chat-bubble a.chat-link { color: var(--primary-color); text-decoration: underline; font-weight: 500; }
+    .ehosp-chat-bubble ul { list-style: none; padding-left: 15px; margin-top: 8px; margin-bottom: 5px; }
+    .ehosp-chat-bubble ul li { margin-bottom: 6px; position: relative; }
+    .ehosp-chat-bubble ul li::before { content: "▹"; position: absolute; left: -15px; color: var(--primary-color); font-weight: bold;}
+    .ehosp-chat-bubble h4 { font-size: 1rem; font-weight: 600; color: var(--primary-color); margin: 12px 0 5px 0; }
 
-        .ehosp-chat-bubble .highlight { font-weight: 700; color: var(--primary-color); }
-        .ehosp-chat-bubble a.chat-link { color: var(--primary-color); text-decoration: underline; font-weight: 500; }
-        .ehosp-chat-bubble ul { list-style: none; padding-left: 15px; margin-top: 8px; margin-bottom: 5px; }
-        .ehosp-chat-bubble ul li { margin-bottom: 6px; position: relative; }
-        .ehosp-chat-bubble ul li::before { content: "▹"; position: absolute; left: -15px; color: var(--primary-color); font-weight: bold;}
-        .ehosp-chat-bubble h4 { font-size: 1rem; font-weight: 600; color: var(--primary-color); margin: 12px 0 5px 0; }
+    .typing-indicator-wrapper .ehosp-chat-avatar { margin-bottom: 0; }
+    .typing-indicator-bubble { display: flex; align-items: center; background: var(--chat-bubble-ai-bg); color: var(--chat-bubble-ai-text); border: 1px solid var(--border-color); padding: 10px 12px; border-radius: var(--radius-lg); border-bottom-left-radius: var(--radius-sm); box-shadow: var(--shadow-soft); }
+    .typing-indicator-bubble span { height: 8px; width: 8px; margin: 0 2px; background-color: var(--secondary-text-color); border-radius: 50%; display: inline-block; animation: ehospTypingAnimation 1.2s infinite ease-in-out; }
+    .typing-indicator-bubble span:nth-child(1) { animation-delay: -0.30s; }
+    .typing-indicator-bubble span:nth-child(2) { animation-delay: -0.15s; }
+    @keyframes ehospTypingAnimation { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
+    
+    #theme-toggle { position: fixed; bottom: 20px; right: 20px; background-color: var(--button-action-bg); color: var(--primary-color); border: 1px solid var(--border-color); border-radius: 50%; width: 44px; height: 44px; font-size: 1.2rem; cursor: pointer; z-index: 1002; display: flex; justify-content: center; align-items: center; transition: all var(--transition-normal); box-shadow: var(--shadow-medium); }
+    #theme-toggle:hover { transform: scale(1.1) translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
+    
+    .portfolio-content-sections { display: none !important; }
 
-        .typing-indicator-wrapper .ehosp-chat-avatar { margin-bottom: 0; }
-        .typing-indicator-bubble { display: flex; align-items: center; background: var(--chat-bubble-ai-bg); color: var(--chat-bubble-ai-text); border: 1px solid var(--border-color); padding: 10px 12px; border-radius: var(--radius-lg); border-bottom-left-radius: var(--radius-sm); box-shadow: var(--shadow-soft); }
-        .typing-indicator-bubble span { height: 8px; width: 8px; margin: 0 2px; background-color: var(--secondary-text-color); border-radius: 50%; display: inline-block; animation: ehospTypingAnimation 1.2s infinite ease-in-out; }
-        .typing-indicator-bubble span:nth-child(1) { animation-delay: -0.30s; }
-        .typing-indicator-bubble span:nth-child(2) { animation-delay: -0.15s; }
-        @keyframes ehospTypingAnimation { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
-        
-        #theme-toggle { position: fixed; bottom: 20px; right: 20px; background-color: var(--button-action-bg); color: var(--primary-color); border: 1px solid var(--border-color); border-radius: 50%; width: 44px; height: 44px; font-size: 1.2rem; cursor: pointer; z-index: 1002; display: flex; justify-content: center; align-items: center; transition: all var(--transition-normal); box-shadow: var(--shadow-medium); }
-        #theme-toggle:hover { transform: scale(1.1) translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
-
-        /* Cache la section portfolio original, car on ne l'utilise plus */
-        .portfolio-content-sections { display: none !important; }
-
-
-        @media (max-width: 700px) {
-            .ehosp-chat-app-container { border-radius: 0; margin-top:0; margin-bottom:0; height: 100%; max-height: 100vh; }
-            .ehosp-chat-header h1 { font-size: 1.3rem; }
-            .ehosp-chat-header h1 .fas.fa-robot { font-size: 1.2rem; }
-            .ehosp-chat-bubble { font-size: 0.9rem; }
-            .ehosp-chat-option-btn { font-size: 0.82rem; padding: 7px 12px;}
-        }
-    </style>
+    @media (max-width: 700px) {
+        .ehosp-chat-app-container { border-radius: 0; margin-top:0; margin-bottom:0; height: 100%; max-height: 100vh; }
+        .ehosp-chat-header h1 { font-size: 1.3rem; }
+        .ehosp-chat-header h1 .fas.fa-robot { font-size: 1.2rem; }
+        .ehosp-chat-bubble { font-size: 0.9rem; }
+        .ehosp-chat-option-btn { font-size: 0.82rem; padding: 7px 12px;}
+    }
+</style>
 </head>
 <body class="light-mode">
 
-    <div id="loader-container">
-        <p id="loader-message">Bonjour ! Je suis l'assistant IA d'Altay. Je me prépare à vous aider...</p>
-        <div class="progress-bar-loader"><div class="progress-bar-fill"></div></div>
-    </div>
+<div id="loader-container">
+    <p id="loader-message">Bonjour ! Je suis l'assistant IA d'Altay. Je me prépare à vous aider...</p>
+    <div class="progress-bar-loader"><div class="progress-bar-fill"></div></div>
+</div>
 
-    <main class="ehosp-chat-app-container" id="ehosp-chat-main">
-        <header class="ehosp-chat-header">
-            <h1><i class="fas fa-robot"></i> Assistant d'Altay</h1>
-            <button id="theme-toggle" aria-label="Changer de thème">
-                <!-- Icône gérée par JS -->
-            </button>
-        </header>
-        <div id="ehosp-chat-messages"></div>
-        <div id="ehosp-chat-options-area"></div>
-    </main>
+<main class="ehosp-chat-app-container" id="ehosp-chat-main">
+    <header class="ehosp-chat-header">
+        <h1><i class="fas fa-robot"></i> Assistant d'Altay</h1>
+        <button id="theme-toggle" aria-label="Changer de thème">
+            <!-- Icône gérée par JS -->
+        </button>
+    </header>
+    <div id="ehosp-chat-messages"></div>
+    <div id="ehosp-chat-options-area"></div>
+</main>
 
-    <!-- La section portfolio-content-sections est gardée vide mais cachée par CSS -->
-    <div class="portfolio-content-sections" id="portfolio-sections">
-        <!-- CONTENU SUPPRIMÉ -->
-    </div>
+<!-- La section portfolio-content-sections est gardée vide mais cachée par CSS -->
+<div class="portfolio-content-sections" id="portfolio-sections">
+    <!-- CONTENU SUPPRIMÉ -->
+</div>
 
-    <script defer>
-        const loaderContainer = document.getElementById('loader-container');
-        const ehospChatMain = document.getElementById('ehosp-chat-main');
-        const chatMessagesContainer = document.getElementById('ehosp-chat-messages');
-        const chatOptionsArea = document.getElementById('ehosp-chat-options-area');
-        // const portfolioSectionsDiv = document.getElementById('portfolio-sections'); // Plus utilisé activement
-        const htmlEl = document.documentElement;
-        const themeToggleBtn = document.getElementById('theme-toggle');
+<script defer>
+    const loaderContainer = document.getElementById('loader-container');
+    const ehospChatMain = document.getElementById('ehosp-chat-main');
+    const chatMessagesContainer = document.getElementById('ehosp-chat-messages');
+    const chatOptionsArea = document.getElementById('ehosp-chat-options-area');
+    const htmlEl = document.documentElement;
+    const themeToggleBtn = document.getElementById('theme-toggle');
 
-        const userProfileData = {
-            name: "Altay CEVIK",
-            greeting: "Bonjour ! Je suis l'assistant virtuel d'<span class='highlight'>Altay CEVIK</span>. Il est un développeur IA & IoT passionné, <span class='highlight'>actuellement à la recherche d'une alternance pour son Master en IA (rentrée 2025)</span>. Comment puis-je vous aider à le découvrir ?",
-            about: "Altay est un futur expert en <span class='highlight'>Intelligence Artificielle</span> et <span class='highlight'>Objets Connectés</span>. Après un BUT R&T spécialisé IoT, il intègre un <span class='highlight'>Master IA (parcours IA for Connected Industries) au CNAM de Mulhouse en septembre 2025</span>. Proactif et créatif, il excelle à transformer des concepts innovants en solutions technologiques robustes, notamment en <span class='highlight'>vision par ordinateur</span> et <span class='highlight'>traitement embarqué</span>. Il est impatient de mettre ses compétences au service de projets stimulants en <span class='highlight'>alternance</span>.",
-            skillsIntro: "Altay possède un large éventail de compétences techniques et transversales, cruciales pour un développeur IA/IoT performant :",
-            skillsList: [
-                { category: "🤖 IA & Machine Learning", items: ["Bibliothèques : <span class='highlight'>TensorFlow, Keras, Scikit-learn</span>", "Détection d'objets : <span class='highlight'>YOLOv8</span>", "Traitement d'images : OpenCV", "Algorithmes : Classification, Régression, Clustering"] },
-                { category: "💻 Langages de Programmation", items: ["<span class='highlight'>Python</span> (Flask, Django)", "<span class='highlight'>JavaScript</span> (Node.js, React, Vue)", "Java", "C#", "C++", "PHP"] },
-                { category: "📡 IoT & Embarqué", items: ["Plateformes : <span class='highlight'>Raspberry Pi</span>, Arduino", "Protocoles : MQTT, CoAP", "Intégration de capteurs et actionneurs"] },
-                { category: "🛠️ Outils & Administration", items: ["Conteneurisation : <span class='highlight'>Docker</span>", "Versionning : Git, GitHub/GitLab", "Systèmes : Linux, Windows", "Bases de données : MySQL, PostgreSQL, <span class='highlight'>MongoDB</span>, NoSQL"] },
-                { category: "🤝 Compétences Transverses (Soft Skills)", items: ["<span class='highlight'>Résolution de problèmes</span> analytique et créative", "Excellente <span class='highlight'>communication</span> et collaboration en équipe", "Grande <span class='highlight'>adaptabilité</span> face aux nouveaux défis", "<span class='highlight'>Gestion de projet</span> (méthodes Agiles)", "Curiosité, autonomie et veille technologique constante"] }
-            ],
-            projectsIntro: "Altay a mené ou contribué à plusieurs projets concrets, démontrant sa capacité à appliquer ses connaissances :",
-            projectsList: [ // **** IMPORTANT : AJOUTEZ VOS VRAIS LIENS ICI ****
-                { name: "EHOSP - Contribution Plateforme Santé", desc: "Développement de fonctionnalités pour une solution innovante intégrant IA et IoT pour le secteur médical (Node.js, MongoDB, Stripe).", link: "https://www.ehosp.fr/", icon: "fas fa-clinic-medical" },
-                { name: "Projet IA Santé (FullStack Personnel)", desc: "Conception et développement d'une application de santé prédictive (Python, TensorFlow).", github: "https://github.com/altay1cvk/EHOSP_IA", icon: "fas fa-brain" }, // Exemple de lien GitHub
-                { name: "IA Drone & Vision Embarquée (Stage FEMTO-ST)", desc: "Développement de systèmes de reconnaissance (YOLO) et de Machine/Deep Learning pour drones autonomes.", icon: "fas fa-robot" }, // Ajoutez un lien si pertinent
-                { name: "Supervision Data Center (Projet Académique)", desc: "Mise en place d'un monitoring IoT avec la stack TIG (Telegraf, InfluxDB, Grafana).", github: "https://github.com/altay1cvk/Creation-Data-Center", icon: "fas fa-server" },
-            ],
-            parcoursIntro: "Le parcours d'Altay est marqué par une spécialisation progressive et une forte appétence pour l'IA et l'IoT :",
-            parcoursList: [
-                { type: "Formations <i class='fas fa-graduation-cap'></i>", items: [
-                    { title: "Master Européen Réseaux et Objets Connectés (ROC)", specialization: "Parcours Artificial Intelligence for Connected Industries", school: "CNAM Mulhouse", date: "Sept. 2025 - Sept. 2027 (Recherche Alternance)" },
-                    { title: "BUT Réseaux et Télécommunications", specialization: "Spécialité Internet des objets (IoT)", school: "I.U.T Nord Franche-Comté, Montbéliard", date: "2023 - 2025 (En fin de cursus)" },
-                    { title: "Baccalauréat Général", specialization: "Spécialités Mathématiques et S.V.T", school: "Lycée Armand Peugeot, Valentigney", date: "2019 - 2022 (Mention Bien)" }
-                ]},
-                { type: "Expériences Professionnelles <i class='fas fa-briefcase'></i>", items: [
-                    { title: "Développeur IA & IoT (Stage)", company: "FEMTO-ST", location: "Montbéliard", date: "Février 2025 - Présent (Prévu)", details: ["IA drone : ML/DL, RP", "Reconnaissance IA (YOLO)", "Vision IA embarquée"] },
-                    { title: "Développeur Full-Stack & IA (Projets Personnels)", location: "Audincourt", date: "Depuis 2023", details: ["Projet IA santé (FullStack, TensorFlow)", "Contributions EHOSP (IA, Node, Mongo, Stripe)", "Assistant IA personnel"] },
-                    { title: "Technicien IT", company: "Forvia", location: "Montbéliard, Allenjoie", date: "Avril 2024 - Juin 2024", details: ["Support IT et gestion d'inventaire", "Optimisation du parc informatique", "Développement de solutions de suivi IT"] }
-                ]}
-            ],
-            contactIntro: "Altay serait ravi d'échanger avec vous sur une <span class='highlight'>opportunité d'alternance</span> ou tout autre projet passionnant. Voici comment le joindre :",
-            contactDetails: [
-                { type: "Email", value: "altaycevik@gmail.com", link: "mailto:altaycevik@gmail.com", icon: "fas fa-envelope" },
-                { type: "Téléphone", value: "07 83 65 68 37", link: "tel:+33783656837", icon: "fas fa-phone" },
-                { type: "CV PDF", value: "Télécharger son CV", link: "https://drive.google.com/file/d/1Y_dIy37f_oCekHd9rUVBItOIF8YXhtoi/view?usp=sharing", icon: "fas fa-file-pdf" } // Assurez-vous que ce lien est correct
-            ],
-            closing: "Merci de votre intérêt pour le profil d'Altay ! N'hésitez pas à le contacter directement via les informations ci-dessus."
-        };
+    const userProfileData = {
+        name: "Altay CEVIK",
+        greeting: "Bonjour ! Je suis l'assistant virtuel d'<span class='highlight'>Altay CEVIK</span>. <br><br><strong>PLOT TWIST :</strong> L'entreprise qui devait le prendre en alternance s'est évaporée ! 👻 <br>C'est une <span class='highlight'>opportunité en or pour vous</span> de recruter un futur ingénieur IA/IoT passionné et immédiatement disponible. <br><br>Comment puis-je vous aider à le découvrir ?",
+        about: "Étudiant en <span class='highlight'>Master International IoT</span>, Altay recherche activement une <span class='highlight'>alternance en Intelligence Artificielle et systèmes embarqués</span>. Créateur de la plateforme web <span class='highlight'>EHOSP.fr</span>, il a développé une solution intégrant IA et recommandations personnalisées. Il conçoit également des projets sur systèmes embarqués, vision par ordinateur et machine learning sur <span class='highlight'>Raspberry Pi</span>, et souhaite contribuer à des projets concrets au sein d’une équipe innovante.",
+        skillsIntro: "Altay possède un large éventail de compétences techniques, cruciales pour un ingénieur IA/IoT performant :",
+        skillsList: [
+            { category: "🤖 IA & Machine Learning", items: ["Vision par ordinateur : <span class='highlight'>YOLO V8</span>, OpenCV", "Bibliothèques : <span class='highlight'>TensorFlow</span>, Keras, Scikit-learn", "Machine & Deep Learning sur systèmes embarqués"] },
+            { category: "💻 Langages de Programmation", items: ["<span class='highlight'>Python</span>", "<span class='highlight'>JavaScript</span> (Node.js)", "Java", "C#", "C++", "PHP"] },
+            { category: "📡 IoT & Embarqué", items: ["Plateformes : <span class='highlight'>Raspberry Pi</span>, Arduino", "Protocoles : MQTT, CoAP", "Conception de systèmes autonomes"] },
+            { category: "🗃️ Bases de Données & Outils", items: ["Bases de données : MySQL, <span class='highlight'>MongoDB</span>, NoSQL", "Conteneurisation : <span class='highlight'>Docker</span>", "Versionning : Git, GitHub/GitLab", "Systèmes : Linux, Windows"] },
+            { category: "🤝 Compétences Transverses (Soft Skills)", items: ["<span class='highlight'>Résolution de problèmes</span> complexes", "<span class='highlight'>Collaboration</span> et communication efficace", "Grande <span class='highlight'>adaptabilité</span> et curiosité", "<span class='highlight'>Gestion de projet</span> (autonomie et rigueur)"] }
+        ],
+        projectsIntro: "Altay a mené plusieurs projets concrets, démontrant sa capacité à transformer une idée en solution fonctionnelle :",
+        projectsList: [
+            { name: "EHOSP.fr - Plateforme Santé IA", desc: "Créateur de cette plateforme de A à Z. Développement Full-Stack (Node.js, MongoDB, Stripe) et intégration de modules d'IA pour des recommandations personnalisées.", link: "https://www.ehosp.fr/", icon: "fas fa-heartbeat" },
+            { name: "IA Drone & Vision Embarquée (Stage FEMTO-ST)", desc: "Développement d'IA embarquée sur drones autonomes avec reconnaissance d'objets en temps réel (YOLO). Machine learning avancé sur Raspberry Pi.", icon: "fas fa-robot" },
+        ],
+        parcoursIntro: "Le parcours d'Altay est marqué par une spécialisation progressive vers l'IA et les systèmes embarqués :",
+        parcoursList: [
+            { type: "Formations <i class='fas fa-graduation-cap'></i>", items: [
+                { title: "Master International Internet des Objets (IoT)", specialization: "Systèmes de Calcul Embarqués", school: "UFR STGI, Montbéliard", date: "Depuis Sept. 2025 (Recherche Alternance Urgente)" },
+                { title: "BUT Réseaux et Télécommunications", specialization: "Spécialité Internet des objets (IoT)", school: "I.U.T Nord Franche-Comté, Montbéliard", date: "2023 - 2025" },
+                { title: "Baccalauréat Général", specialization: "Spécialités Mathématiques et S.V.T", school: "Lycée Armand Peugeot, Valentigney", date: "2019 - 2022" }
+            ]},
+            { type: "Expériences Professionnelles <i class='fas fa-briefcase'></i>", items: [
+                { title: "Développeur IA & IoT (Stage)", company: "FEMTO-ST", location: "Montbéliard", date: "Depuis Février 2025", details: ["IA embarquée sur drones (ML/DL, Raspberry Pi)", "Reconnaissance d'objets en temps réel (YOLO)", "Conception de systèmes autonomes"] },
+                { title: "Développeur Full-Stack & IA (Projet Personnel)", company: "EHOSP.fr", location: "Audincourt", date: "Depuis 2023", details: ["Créateur de la plateforme santé EHOSP.fr", "Développement Full-Stack (Node.js, MongoDB, Stripe)", "Intégration de modules d'IA"] },
+                { title: "Technicien IT", company: "Forvia", location: "Montbéliard, Allenjoie", date: "Avril 2024 - Juin 2024", details: ["Création d’une application de suivi d’inventaire", "Support IT et gestion du parc informatique"] }
+            ]}
+        ],
+        contactIntro: "Altay serait ravi d'échanger avec vous sur une <span class='highlight'>opportunité d'alternance</span> ou tout autre projet. Voici comment le joindre :",
+        contactDetails: [
+            { type: "Email", value: "altaycevik@gmail.com", link: "mailto:altaycevik@gmail.com", icon: "fas fa-envelope" },
+            { type: "Téléphone", value: "07 83 65 68 37", link: "tel:+33783656837", icon: "fas fa-phone" },
+            { type: "Portfolio & CV", value: "Voir son profil complet (Linktree)", link: "https://linktr.ee/altaycevik", icon: "fas fa-link" }
+        ],
+        closing: "Merci de votre intérêt ! N'hésitez pas à le contacter directement. Il est prêt à relever de nouveaux défis."
+    };
 
-        function hideLoaderAndStartChat() {
-            if (loaderContainer) loaderContainer.classList.add('hidden');
-            if (ehospChatMain) ehospChatMain.classList.add('visible');
-            startEhospStyleChat();
-        }
-        if (loaderContainer) {
-            let loadProgress = 0;
-            const progressBarFill = document.querySelector('.progress-bar-fill');
-            const loadInterval = setInterval(() => {
-                loadProgress++;
-                if (progressBarFill) progressBarFill.style.width = loadProgress + '%';
-                if (loadProgress >= 100) { clearInterval(loadInterval); setTimeout(hideLoaderAndStartChat, 300); }
-            }, 15);
-        } else {
-            hideLoaderAndStartChat();
-        }
+    function hideLoaderAndStartChat() {
+        if (loaderContainer) loaderContainer.classList.add('hidden');
+        if (ehospChatMain) ehospChatMain.classList.add('visible');
+        startEhospStyleChat();
+    }
+    if (loaderContainer) {
+        let loadProgress = 0;
+        const progressBarFill = document.querySelector('.progress-bar-fill');
+        const loadInterval = setInterval(() => {
+            loadProgress++;
+            if (progressBarFill) progressBarFill.style.width = loadProgress + '%';
+            if (loadProgress >= 100) { clearInterval(loadInterval); setTimeout(hideLoaderAndStartChat, 300); }
+        }, 15);
+    } else {
+        hideLoaderAndStartChat();
+    }
 
-        let currentChatState = 'greeting';
-        const typingIndicatorDelay = 500;
+    let currentChatState = 'greeting';
+    const typingIndicatorDelay = 500;
 
-        function getCurrentTime() {
-            const now = new Date();
-            return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        }
+    function getCurrentTime() {
+        const now = new Date();
+        return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
 
-        async function addEhospBotMessage(htmlContent, options = []) {
-            return new Promise(async (resolve) => {
-                const typingWrapper = document.createElement('div');
-                typingWrapper.className = 'ehosp-chat-message-wrapper ehosp-ai-message typing-indicator-wrapper';
-                typingWrapper.innerHTML = `<div class="ehosp-chat-avatar"><i class="fas fa-robot"></i></div><div class="ehosp-chat-bubble typing-indicator-bubble"><span></span><span></span><span></span></div>`;
-                chatMessagesContainer.appendChild(typingWrapper);
-                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+    async function addEhospBotMessage(htmlContent, options = []) {
+        return new Promise(async (resolve) => {
+            const typingWrapper = document.createElement('div');
+            typingWrapper.className = 'ehosp-chat-message-wrapper ehosp-ai-message typing-indicator-wrapper';
+            typingWrapper.innerHTML = `<div class="ehosp-chat-avatar"><i class="fas fa-robot"></i></div><div class="ehosp-chat-bubble typing-indicator-bubble"><span></span><span></span><span></span></div>`;
+            chatMessagesContainer.appendChild(typingWrapper);
+            chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 
-                await new Promise(r => setTimeout(r, typingIndicatorDelay + Math.random() * 300));
-                typingWrapper.remove();
-                
-                const messageWrapper = document.createElement('div');
-                messageWrapper.className = 'ehosp-ai-message';
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'ehosp-chat-message-wrapper';
-                const avatar = document.createElement('div');
-                avatar.className = 'ehosp-chat-avatar';
-                avatar.innerHTML = '<i class="fas fa-robot"></i>';
-                messageDiv.appendChild(avatar);
-
-                const contentWithTimestamp = document.createElement('div');
-                contentWithTimestamp.className = 'ehosp-chat-content-with-timestamp';
-                const bubble = document.createElement('div');
-                bubble.className = 'ehosp-chat-bubble';
-                bubble.innerHTML = htmlContent;
-                contentWithTimestamp.appendChild(bubble);
-                const timestamp = document.createElement('span');
-                timestamp.className = 'ehosp-message-timestamp';
-                timestamp.textContent = getCurrentTime();
-                contentWithTimestamp.appendChild(timestamp);
-                
-                messageDiv.appendChild(contentWithTimestamp);
-                messageWrapper.appendChild(messageDiv);
-                chatMessagesContainer.appendChild(messageWrapper);
-                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
-                
-                setTimeout(() => { displayEhospChatOptions(options); resolve(); }, 250);
-            });
-        }
-
-        function displayEhospChatOptions(optionsArray) {
-            chatOptionsArea.innerHTML = '';
-            if (!optionsArray || optionsArray.length === 0) {
-                chatOptionsArea.classList.remove('visible');
-                return;
-            }
-            optionsArray.forEach(opt => {
-                const button = document.createElement('button');
-                button.className = 'ehosp-chat-option-btn';
-                button.innerHTML = opt.icon ? `<i class="${opt.icon}"></i> ${opt.text}` : opt.text;
-                button.onclick = () => {
-                    chatOptionsArea.classList.remove('visible');
-                    addSimulatedUserResponse(opt.text); 
-                    setTimeout(opt.action, 100);
-                };
-                chatOptionsArea.appendChild(button);
-            });
-            setTimeout(() => chatOptionsArea.classList.add('visible'), 50);
-        }
-
-        function addSimulatedUserResponse(text) {
+            await new Promise(r => setTimeout(r, typingIndicatorDelay + Math.random() * 300));
+            typingWrapper.remove();
+            
             const messageWrapper = document.createElement('div');
-            messageWrapper.className = 'ehosp-user-simulated-message';
+            messageWrapper.className = 'ehosp-ai-message';
             const messageDiv = document.createElement('div');
             messageDiv.className = 'ehosp-chat-message-wrapper';
-            
+            const avatar = document.createElement('div');
+            avatar.className = 'ehosp-chat-avatar';
+            avatar.innerHTML = '<i class="fas fa-robot"></i>';
+            messageDiv.appendChild(avatar);
+
             const contentWithTimestamp = document.createElement('div');
             contentWithTimestamp.className = 'ehosp-chat-content-with-timestamp';
             const bubble = document.createElement('div');
             bubble.className = 'ehosp-chat-bubble';
-            bubble.textContent = text;
+            bubble.innerHTML = htmlContent;
             contentWithTimestamp.appendChild(bubble);
             const timestamp = document.createElement('span');
             timestamp.className = 'ehosp-message-timestamp';
             timestamp.textContent = getCurrentTime();
             contentWithTimestamp.appendChild(timestamp);
-
+            
             messageDiv.appendChild(contentWithTimestamp);
             messageWrapper.appendChild(messageDiv);
             chatMessagesContainer.appendChild(messageWrapper);
             chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
-        }
+            
+            setTimeout(() => { displayEhospChatOptions(options); resolve(); }, 250);
+        });
+    }
 
-        const ehospChatStates = {
-            greeting: {
-                message: () => userProfileData.greeting,
-                options: () => [
-                    { text: "Qui est Altay ?", icon: "fas fa-user-tie", action: () => updateEhospChatState('introduction') },
-                    { text: "Ses compétences clés ?", icon: "fas fa-cogs", action: () => updateEhospChatState('skills') },
-                    { text: "Comment le contacter ?", icon: "fas fa-envelope", action: () => updateEhospChatState('contact') }
-                ]
+    function displayEhospChatOptions(optionsArray) {
+        chatOptionsArea.innerHTML = '';
+        if (!optionsArray || optionsArray.length === 0) {
+            chatOptionsArea.classList.remove('visible');
+            return;
+        }
+        optionsArray.forEach(opt => {
+            const button = document.createElement('button');
+            button.className = 'ehosp-chat-option-btn';
+            button.innerHTML = opt.icon ? `<i class="${opt.icon}"></i> ${opt.text}` : opt.text;
+            button.onclick = () => {
+                chatOptionsArea.classList.remove('visible');
+                addSimulatedUserResponse(opt.text); 
+                setTimeout(opt.action, 100);
+            };
+            chatOptionsArea.appendChild(button);
+        });
+        setTimeout(() => chatOptionsArea.classList.add('visible'), 50);
+    }
+
+    function addSimulatedUserResponse(text) {
+        const messageWrapper = document.createElement('div');
+        messageWrapper.className = 'ehosp-user-simulated-message';
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'ehosp-chat-message-wrapper';
+        
+        const contentWithTimestamp = document.createElement('div');
+        contentWithTimestamp.className = 'ehosp-chat-content-with-timestamp';
+        const bubble = document.createElement('div');
+        bubble.className = 'ehosp-chat-bubble';
+        bubble.textContent = text;
+        contentWithTimestamp.appendChild(bubble);
+        const timestamp = document.createElement('span');
+        timestamp.className = 'ehosp-message-timestamp';
+        timestamp.textContent = getCurrentTime();
+        contentWithTimestamp.appendChild(timestamp);
+
+        messageDiv.appendChild(contentWithTimestamp);
+        messageWrapper.appendChild(messageDiv);
+        chatMessagesContainer.appendChild(messageWrapper);
+        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+    }
+
+    const ehospChatStates = {
+        greeting: {
+            message: () => userProfileData.greeting,
+            options: () => [
+                { text: "Qui est Altay ?", icon: "fas fa-user-tie", action: () => updateEhospChatState('introduction') },
+                { text: "Ses compétences clés ?", icon: "fas fa-cogs", action: () => updateEhospChatState('skills') },
+                { text: "Comment le contacter ?", icon: "fas fa-envelope", action: () => updateEhospChatState('contact') }
+            ]
+        },
+        introduction: {
+            message: () => userProfileData.about,
+            options: () => [
+                { text: "Détaillez ses compétences", icon: "fas fa-cogs", action: () => updateEhospChatState('skills') },
+                { text: "Quels sont ses projets ?", icon: "fas fa-project-diagram", action: () => updateEhospChatState('projects') },
+                { text: "Son parcours académique/pro ?", icon: "fas fa-graduation-cap", action: () => updateEhospChatState('parcours') },
+                { text: "Infos de contact", icon: "fas fa-envelope", action: () => updateEhospChatState('contact') }
+            ]
+        },
+        skills: {
+            message: () => {
+                let msg = `${userProfileData.skillsIntro}`;
+                userProfileData.skillsList.forEach(cat => {
+                    msg += `<h4>${cat.category}</h4><ul>`;
+                    cat.items.forEach(s => msg += `<li>${s}</li>`);
+                    msg += `</ul>`;
+                });
+                msg += `<br>Que souhaitez-vous explorer ensuite ?`;
+                return msg;
             },
-            introduction: {
-                message: () => userProfileData.about,
-                options: () => [
-                    { text: "Détaillez ses compétences", icon: "fas fa-cogs", action: () => updateEhospChatState('skills') },
-                    { text: "Quels sont ses projets ?", icon: "fas fa-project-diagram", action: () => updateEhospChatState('projects') },
-                    { text: "Son parcours académique/pro ?", icon: "fas fa-graduation-cap", action: () => updateEhospChatState('parcours') },
-                    { text: "Infos de contact", icon: "fas fa-envelope", action: () => updateEhospChatState('contact') }
-                ]
+            options: () => ehospChatStates.introduction.options().filter(o => !o.action.toString().includes("skills"))
+        },
+        projects: {
+            message: () => {
+                let msg = `${userProfileData.projectsIntro}<ul>`;
+                userProfileData.projectsList.forEach(p => {
+                    msg += `<li><i class="${p.icon || 'fas fa-lightbulb'}" style="color:var(--primary-color); margin-right:5px;"></i><span class="highlight">${p.name}:</span> ${p.desc} `;
+                    if (p.link) msg += `<a href="${p.link}" target="_blank" rel="noopener noreferrer" class="chat-link">Voir le projet <i class="fas fa-external-link-alt fa-xs"></i></a> `;
+                    if (p.github) msg += `<a href="${p.github}" target="_blank" rel="noopener noreferrer" class="chat-link">Code source <i class="fab fa-github fa-xs"></i></a>`;
+                    msg += `</li>`;
+                });
+                msg += `</ul><br>Une autre question sur Altay ?`;
+                return msg;
             },
-            skills: {
-                message: () => {
-                    let msg = `${userProfileData.skillsIntro}`;
-                    userProfileData.skillsList.forEach(cat => {
-                        msg += `<h4>${cat.category}</h4><ul>`;
-                        cat.items.forEach(s => msg += `<li>${s}</li>`);
-                        msg += `</ul>`;
-                    });
-                    msg += `<br>Que souhaitez-vous explorer ensuite ?`;
-                    return msg;
-                },
-                options: () => ehospChatStates.introduction.options().filter(o => !o.action.toString().includes("skills"))
-            },
-            projects: {
-                message: () => {
-                    let msg = `${userProfileData.projectsIntro}<ul>`;
-                    userProfileData.projectsList.forEach(p => {
-                        msg += `<li><i class="${p.icon || 'fas fa-lightbulb'}" style="color:var(--primary-color); margin-right:5px;"></i><span class="highlight">${p.name}:</span> ${p.desc} `;
-                        if (p.link) msg += `<a href="${p.link}" target="_blank" rel="noopener noreferrer" class="chat-link">Voir le projet <i class="fas fa-external-link-alt fa-xs"></i></a> `;
-                        if (p.github) msg += `<a href="${p.github}" target="_blank" rel="noopener noreferrer" class="chat-link">Code source <i class="fab fa-github fa-xs"></i></a>`;
+            options: () => ehospChatStates.introduction.options().filter(o => !o.action.toString().includes("projects"))
+        },
+        parcours: {
+            message: () => {
+                let msg = `${userProfileData.parcoursIntro}`;
+                userProfileData.parcoursList.forEach(section => {
+                    msg += `<h4>${section.type}</h4><ul>`;
+                    section.items.forEach(p => {
+                        msg += `<li><span class="highlight">${p.title}</span>`;
+                        if (p.specialization) msg += ` - ${p.specialization}`;
+                        if (p.company) msg += ` chez <span class='highlight'>${p.company}</span>`;
+                        if (p.school) msg += ` à ${p.school}`;
+                        if (p.location && !p.company && !p.school) msg += ` (${p.location})`;
+                        msg += ` <span style="font-style:italic; color:var(--secondary-text-color);">(${p.date})</span>`;
+                        if (p.details && p.details.length > 0) {
+                            msg += `<ul style="padding-left:10px; margin-top:3px;">`;
+                            p.details.forEach(d => msg += `<li style="font-size:0.9em;">${d}</li>`);
+                            msg += `</ul>`;
+                        }
                         msg += `</li>`;
                     });
-                    msg += `</ul><br>Une autre question sur Altay ?`;
-                    return msg;
-                },
-                options: () => ehospChatStates.introduction.options().filter(o => !o.action.toString().includes("projects"))
+                    msg += `</ul>`;
+                });
+                msg += `<br>Que puis-je faire d'autre pour vous aider à découvrir Altay ?`;
+                return msg;
             },
-            parcours: {
-                message: () => {
-                    let msg = `${userProfileData.parcoursIntro}`;
-                    userProfileData.parcoursList.forEach(section => {
-                        msg += `<h4>${section.type}</h4><ul>`;
-                        section.items.forEach(p => {
-                            msg += `<li><span class="highlight">${p.title}</span>`;
-                            if (p.specialization) msg += ` - ${p.specialization}`;
-                            if (p.company) msg += ` chez <span class='highlight'>${p.company}</span>`;
-                            if (p.school) msg += ` à ${p.school}`;
-                            if (p.location && !p.company && !p.school) msg += ` (${p.location})`;
-                            msg += ` <span style="font-style:italic; color:var(--secondary-text-color);">(${p.date})</span>`;
-                            if (p.details && p.details.length > 0) {
-                                msg += `<ul style="padding-left:10px; margin-top:3px;">`;
-                                p.details.forEach(d => msg += `<li style="font-size:0.9em;">${d}</li>`);
-                                msg += `</ul>`;
-                            }
-                            msg += `</li>`;
-                        });
-                        msg += `</ul>`;
-                    });
-                    msg += `<br>Que puis-je faire d'autre pour vous aider à découvrir Altay ?`;
-                    return msg;
-                },
-                options: () => ehospChatStates.introduction.options().filter(o => !o.action.toString().includes("parcours"))
+            options: () => ehospChatStates.introduction.options().filter(o => !o.action.toString().includes("parcours"))
+        },
+        contact: {
+            message: () => {
+                let msg = userProfileData.contactIntro + "<ul>";
+                userProfileData.contactDetails.forEach(c => {
+                     msg += `<li><i class="${c.icon}" style="margin-right:8px;color:var(--primary-color);"></i> ${c.type}: <a href="${c.link}" class="chat-link" ${c.link.startsWith('http') || c.link.startsWith('mailto:') || c.link.startsWith('tel:') ? 'target="_blank" rel="noopener noreferrer"' : ''}>${c.value}</a></li>`;
+                });
+                msg += `</ul><br>${userProfileData.closing}`;
+                return msg;
             },
-            contact: {
-                message: () => {
-                    let msg = userProfileData.contactIntro + "<ul>";
-                    userProfileData.contactDetails.forEach(c => {
-                         msg += `<li><i class="${c.icon}" style="margin-right:8px;color:var(--primary-color);"></i> ${c.type}: <a href="${c.link}" class="chat-link" ${c.link.startsWith('http') || c.link.startsWith('mailto:') || c.link.startsWith('tel:') ? 'target="_blank" rel="noopener noreferrer"' : ''}>${c.value}</a></li>`;
-                    });
-                    msg += "</ul><br>Il attend votre message avec impatience ! Que puis-je faire d'autre ?";
-                    return msg;
-                },
-                options: () => [
-                    { text: "Revoir sa présentation", icon: "fas fa-user-tie", action: () => updateEhospChatState('introduction') },
-                    { text: "Revoir ses compétences", icon: "fas fa-cogs", action: () => updateEhospChatState('skills') },
-                    { text: "Redémarrer la conversation", icon: "fas fa-redo", action: () => { chatMessagesContainer.innerHTML=''; updateEhospChatState('greeting');} },
-                ]
-            }
-        };
-
-        async function updateEhospChatState(newState) {
-            currentChatState = newState;
-            const state = ehospChatStates[currentChatState];
-            if (state) {
-                await addEhospBotMessage(state.message(), state.options());
-            }
+            options: () => [
+                { text: "Revoir sa présentation", icon: "fas fa-user-tie", action: () => updateEhospChatState('introduction') },
+                { text: "Revoir ses compétences", icon: "fas fa-cogs", action: () => updateEhospChatState('skills') },
+                { text: "Redémarrer la conversation", icon: "fas fa-redo", action: () => { chatMessagesContainer.innerHTML=''; updateEhospChatState('greeting');} },
+            ]
         }
-        
-        function startEhospStyleChat() {
-            updateEhospChatState('greeting');
-        }
+    };
 
-        function applyTheme(theme) {
-            const newIsDarkMode = (theme === 'dark');
-            document.body.classList.toggle('dark-mode', newIsDarkMode);
-            htmlEl.classList.toggle('dark-mode', newIsDarkMode);
-            localStorage.setItem('theme', newIsDarkMode ? 'dark' : 'light');
-            if(themeToggleBtn) themeToggleBtn.innerHTML = newIsDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    async function updateEhospChatState(newState) {
+        currentChatState = newState;
+        const state = ehospChatStates[currentChatState];
+        if (state) {
+            await addEhospBotMessage(state.message(), state.options());
         }
+    }
+    
+    function startEhospStyleChat() {
+        updateEhospChatState('greeting');
+    }
 
-        if (themeToggleBtn) {
-            themeToggleBtn.addEventListener('click', () => {
-                const currentThemeIsDark = document.body.classList.contains('dark-mode');
-                applyTheme(currentThemeIsDark ? 'light' : 'dark');
-            });
-        }
-        
-        const preferredTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        applyTheme(preferredTheme);
+    function applyTheme(theme) {
+        const newIsDarkMode = (theme === 'dark');
+        document.body.classList.toggle('dark-mode', newIsDarkMode);
+        htmlEl.classList.toggle('dark-mode', newIsDarkMode);
+        localStorage.setItem('theme', newIsDarkMode ? 'dark' : 'light');
+        if(themeToggleBtn) themeToggleBtn.innerHTML = newIsDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    }
 
-    </script>
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const currentThemeIsDark = document.body.classList.contains('dark-mode');
+            applyTheme(currentThemeIsDark ? 'light' : 'dark');
+        });
+    }
+    
+    const preferredTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    applyTheme(preferredTheme);
+
+</script>
 </body>
 </html>
