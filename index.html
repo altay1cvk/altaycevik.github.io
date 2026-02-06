@@ -2,427 +2,1234 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Altay CEVIK - Assistant IA Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <meta name="theme-color" content="#f7f9fc">
-<style>
-    :root {
-        --primary-color: #007AFF;
-        --primary-hover-color: #0056b3;
-        --app-bg: #f7f9fc;
-        --header-chat-bg: rgba(255, 255, 255, 0.90);
-        --chat-input-area-bg: #f0f4f9;
-        --chat-bubble-ai-bg: #ffffff;
-        --chat-bubble-ai-text: #1c1c1e;
-        --chat-bubble-user-bg: var(--primary-color);
-        --chat-bubble-user-text: #ffffff;
-        --text-color: #1c1c1e;
-        --secondary-text-color: #636366;
-        --border-color: #d1d1d6;
-        --button-action-bg: #eef0f2;
-        --button-action-hover-bg: #dfe3e6;
-        --button-action-text: var(--text-color);
-        --timestamp-color: #8a8a8e;
-        --radius-xl: 18px; --radius-lg: 14px; --radius-md: 10px; --radius-sm: 6px; --radius-pill: 30px;
-        --shadow-soft: 0 1px 3px 0 rgba(0, 0, 0, 0.07);
-        --shadow-medium: 0 3px 8px 0 rgba(0, 0, 0, 0.09);
-        --transition-normal: 0.25s cubic-bezier(.4,0,.2,1);
-    }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALTAY CEVIK - Backend Developer Switzerland | CHF 85k-95k</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body.dark-mode {
-        --primary-color: #0A84FF;
-        --primary-hover-color: #3593ff;
-        --app-bg: #000000;
-        --header-chat-bg: rgba(28, 28, 30, 0.92);
-        --chat-input-area-bg: #161618;
-        --chat-bubble-ai-bg: #2c2c2e;
-        --chat-bubble-ai-text: #f2f2f7;
-        --text-color: #f2f2f7;
-        --secondary-text-color: #8e8e93;
-        --border-color: #38383a;
-        --button-action-bg: #2c2c2e;
-        --button-action-hover-bg: #3a3a3c;
-        --timestamp-color: #6c6c70;
-    }
+        :root {
+            --swiss-red: #FF0000;
+            --swiss-blue: #0A84FF;
+            --gold: #FFD700;
+            --cyan: #00FFF0;
+            --purple: #8B5CF6;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-swiss: linear-gradient(135deg, #FF0000 0%, #000000 100%);
+        }
 
-    html, body { height: 100%; margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: var(--app-bg); color: var(--text-color); overflow: hidden; font-size: 15.5px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    a { color: var(--primary-color); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-    #loader-container { position: fixed; inset: 0; background-color: var(--app-bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; transition: opacity 0.5s ease, visibility 0.5s ease; }
-    #loader-container.hidden { opacity: 0; visibility: hidden; }
-    #loader-message { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 2rem; text-align: center; font-weight: 600; padding: 0 20px; }
-    .progress-bar-loader { width: clamp(250px, 80%, 300px); height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden; }
-    .progress-bar-fill { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.05s linear; }
-    
-    .ehosp-chat-app-container { display: flex; flex-direction: column; height: 100vh; max-width: 700px; margin: 0 auto; background: var(--app-bg); box-shadow: 0 0 20px rgba(0,0,0,0.1); position: relative; border-radius: var(--radius-xl); overflow: hidden; opacity: 0; transition: opacity 0.5s ease-in-out; }
-    .ehosp-chat-app-container.visible { opacity: 1; }
+        /* Matrix Background Effect */
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+            pointer-events: none;
+        }
 
-    .ehosp-chat-header { background: var(--header-chat-bg); backdrop-filter: blur(10px); padding: 14px 18px; border-bottom: 1px solid var(--border-color); flex-shrink: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
-    .ehosp-chat-header h1 { font-size: 1.6rem; font-weight: 700; margin: 0; color: var(--primary-color); display: flex; align-items: center; gap: 8px; }
-    .ehosp-chat-header h1 .fas.fa-robot { font-size: 1.4rem; }
+        /* Particles Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
 
-    #ehosp-chat-messages { flex-grow: 1; overflow-y: auto; padding: 18px 14px; display: flex; flex-direction: column; gap: 12px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
-    #ehosp-chat-messages::-webkit-scrollbar { width: 5px; }
-    #ehosp-chat-messages::-webkit-scrollbar-track { background: transparent; }
-    #ehosp-chat-messages::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: var(--radius-pill); }
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0;
+        }
 
-    .ehosp-chat-message-wrapper { display: flex; margin-bottom: 5px; max-width: 85%; opacity: 0; transform: translateY(10px); animation: ehospMessageAppear 0.4s ease-out forwards; }
-    @keyframes ehospMessageAppear { to { opacity: 1; transform: translateY(0); } }
+        /* Hero Section with 3D Effect */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            perspective: 1000px;
+            overflow: hidden;
+        }
 
-    .ehosp-chat-avatar { width: 36px; height: 36px; border-radius: 50%; background-color: var(--primary-color); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-right: 10px; flex-shrink: 0; align-self: flex-end; }
-    
-    .ehosp-chat-content-with-timestamp { display: flex; flex-direction: column; }
-    .ehosp-ai-message .ehosp-chat-content-with-timestamp { align-items: flex-start; }
-    .ehosp-user-simulated-message .ehosp-chat-content-with-timestamp { align-items: flex-end; }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,0,0,0.15), transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
 
-    .ehosp-chat-bubble { padding: 10px 14px; border-radius: var(--radius-lg); line-height: 1.5; font-size: 0.95rem; word-wrap: break-word; }
-    
-    .ehosp-message-timestamp { font-size: 0.7rem; color: var(--timestamp-color); margin-top: 4px; padding: 0 5px; }
-    .ehosp-ai-message .ehosp-message-timestamp { margin-left: 5px; }
-    .ehosp-user-simulated-message .ehosp-message-timestamp { margin-right: 5px; }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.6; }
+        }
 
-    .ehosp-ai-message .ehosp-chat-message-wrapper { align-self: flex-start; }
-    .ehosp-ai-message .ehosp-chat-bubble { background: var(--chat-bubble-ai-bg); color: var(--chat-bubble-ai-text); border-bottom-left-radius: var(--radius-sm); box-shadow: var(--shadow-soft); border: 1px solid var(--border-color); }
-    
-    .ehosp-user-simulated-message .ehosp-chat-message-wrapper { align-self: flex-end; flex-direction: row-reverse; }
-    .ehosp-user-simulated-message .ehosp-chat-avatar { display: none; }
-    .ehosp-user-simulated-message .ehosp-chat-bubble { background: var(--chat-bubble-user-bg); color: var(--chat-bubble-user-text); border-bottom-right-radius: var(--radius-sm); margin-right: 0; }
+        /* Swiss Flag Animation */
+        .swiss-flag {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 80px;
+            height: 80px;
+            background: var(--swiss-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(255,0,0,0.5);
+            animation: float 3s ease-in-out infinite;
+            z-index: 100;
+        }
 
-    #ehosp-chat-options-area { padding: 12px 14px; border-top: 1px solid var(--border-color); background-color: var(--chat-input-area-bg); flex-shrink: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; opacity: 0; transition: opacity 0.3s ease-in-out 0.2s; }
-    #ehosp-chat-options-area.visible { opacity: 1; }
+        .swiss-flag::before {
+            content: '+';
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+        }
 
-    .ehosp-chat-option-btn { background-color: var(--button-action-bg); color: var(--button-action-text); border: 1px solid var(--border-color); padding: 8px 15px; border-radius: var(--radius-pill); font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: background-color var(--transition-normal), transform var(--transition-normal); }
-    .ehosp-chat-option-btn:hover { background-color: var(--button-action-hover-bg); transform: translateY(-1px); }
-    .ehosp-chat-option-btn i { margin-right: 6px; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(360deg); }
+        }
 
-    .ehosp-chat-bubble .highlight { font-weight: 700; color: var(--primary-color); }
-    .ehosp-chat-bubble a.chat-link { color: var(--primary-color); text-decoration: underline; font-weight: 500; }
-    .ehosp-chat-bubble ul { list-style: none; padding-left: 15px; margin-top: 8px; margin-bottom: 5px; }
-    .ehosp-chat-bubble ul li { margin-bottom: 6px; position: relative; }
-    .ehosp-chat-bubble ul li::before { content: "▹"; position: absolute; left: -15px; color: var(--primary-color); font-weight: bold;}
-    .ehosp-chat-bubble h4 { font-size: 1rem; font-weight: 600; color: var(--primary-color); margin: 12px 0 5px 0; }
+        /* Glitch Effect on Name */
+        .hero-name {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 700;
+            text-align: center;
+            background: linear-gradient(45deg, #fff, var(--cyan), #fff, var(--gold));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite, glitch 5s infinite;
+            text-shadow: 
+                0 0 10px rgba(0,255,240,0.5),
+                0 0 20px rgba(0,255,240,0.3),
+                0 0 30px rgba(0,255,240,0.2);
+            position: relative;
+            letter-spacing: -2px;
+            transform-style: preserve-3d;
+        }
 
-    .typing-indicator-wrapper .ehosp-chat-avatar { margin-bottom: 0; }
-    .typing-indicator-bubble { display: flex; align-items: center; background: var(--chat-bubble-ai-bg); color: var(--chat-bubble-ai-text); border: 1px solid var(--border-color); padding: 10px 12px; border-radius: var(--radius-lg); border-bottom-left-radius: var(--radius-sm); box-shadow: var(--shadow-soft); }
-    .typing-indicator-bubble span { height: 8px; width: 8px; margin: 0 2px; background-color: var(--secondary-text-color); border-radius: 50%; display: inline-block; animation: ehospTypingAnimation 1.2s infinite ease-in-out; }
-    .typing-indicator-bubble span:nth-child(1) { animation-delay: -0.30s; }
-    .typing-indicator-bubble span:nth-child(2) { animation-delay: -0.15s; }
-    @keyframes ehospTypingAnimation { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
-    
-    #theme-toggle { position: fixed; bottom: 20px; right: 20px; background-color: var(--button-action-bg); color: var(--primary-color); border: 1px solid var(--border-color); border-radius: 50%; width: 44px; height: 44px; font-size: 1.2rem; cursor: pointer; z-index: 1002; display: flex; justify-content: center; align-items: center; transition: all var(--transition-normal); box-shadow: var(--shadow-medium); }
-    #theme-toggle:hover { transform: scale(1.1) translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
-    
-    .portfolio-content-sections { display: none !important; }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
 
-    @media (max-width: 700px) {
-        .ehosp-chat-app-container { border-radius: 0; margin-top:0; margin-bottom:0; height: 100%; max-height: 100vh; }
-        .ehosp-chat-header h1 { font-size: 1.3rem; }
-        .ehosp-chat-header h1 .fas.fa-robot { font-size: 1.2rem; }
-        .ehosp-chat-bubble { font-size: 0.9rem; }
-        .ehosp-chat-option-btn { font-size: 0.82rem; padding: 7px 12px;}
-    }
-</style>
+        @keyframes glitch {
+            0%, 90%, 100% { transform: translate(0); }
+            91% { transform: translate(-2px, 2px); }
+            92% { transform: translate(2px, -2px); }
+            93% { transform: translate(-2px, -2px); }
+        }
+
+        .hero-title {
+            font-size: clamp(1.2rem, 3vw, 2.5rem);
+            text-align: center;
+            margin: 20px 0;
+            background: var(--gradient-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+            animation: slideUp 1s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Disponibilité Badge avec urgence */
+        .availability-badge {
+            display: inline-block;
+            padding: 15px 40px;
+            background: var(--gradient-swiss);
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin: 30px 0;
+            animation: blink 2s ease-in-out infinite;
+            box-shadow: 
+                0 0 20px rgba(255,0,0,0.5),
+                0 0 40px rgba(255,0,0,0.3),
+                0 5px 15px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .availability-badge::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { box-shadow: 0 0 20px rgba(255,0,0,0.5), 0 0 40px rgba(255,0,0,0.3); }
+            50% { box-shadow: 0 0 40px rgba(255,0,0,0.8), 0 0 80px rgba(255,0,0,0.5); }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        /* Salaire avec effet premium */
+        .salary-box {
+            display: inline-block;
+            padding: 20px 50px;
+            background: linear-gradient(135deg, var(--gold) 0%, #FFA500 100%);
+            color: #000;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 2rem;
+            box-shadow: 
+                0 10px 40px rgba(255,215,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+            margin: 20px 0;
+            transform-style: preserve-3d;
+            transition: transform 0.3s;
+        }
+
+        .salary-box:hover {
+            transform: rotateX(10deg) rotateY(10deg) scale(1.05);
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 10px 40px rgba(255,215,0,0.4), inset 0 1px 0 rgba(255,255,255,0.5); }
+            to { box-shadow: 0 10px 60px rgba(255,215,0,0.7), inset 0 1px 0 rgba(255,255,255,0.8); }
+        }
+
+        /* Contact Links avec effet holographique */
+        .contact-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+
+        .contact-link {
+            padding: 15px 30px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .contact-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .contact-link:hover::before {
+            left: 100%;
+        }
+
+        .contact-link:hover {
+            transform: translateY(-5px) rotateX(10deg);
+            border-color: var(--cyan);
+            box-shadow: 0 15px 40px rgba(0,255,240,0.4);
+        }
+
+        /* Stats Counter avec animation */
+        .stats-section {
+            padding: 100px 40px;
+            position: relative;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            perspective: 1000px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            transition: all 0.5s;
+            transform-style: preserve-3d;
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+        .stat-card:nth-child(5) { animation-delay: 0.5s; }
+        .stat-card:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+            from { transform: translateY(50px); }
+        }
+
+        .stat-card:hover {
+            transform: translateY(-20px) rotateX(10deg) rotateY(5deg) scale(1.05);
+            border-color: var(--cyan);
+            box-shadow: 
+                0 20px 60px rgba(0,255,240,0.3),
+                inset 0 0 30px rgba(0,255,240,0.1);
+        }
+
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 700;
+            background: var(--gradient-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.7);
+            font-weight: 500;
+        }
+
+        /* eHosp.fr Section SPECTACULAIRE */
+        .ehosp-section {
+            padding: 100px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ehosp-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(139,92,246,0.2), transparent 60%),
+                        radial-gradient(circle at 70% 50%, rgba(0,255,240,0.2), transparent 60%);
+            animation: pulse 5s ease-in-out infinite;
+        }
+
+        .ehosp-card {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(30px);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 40px;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: all 0.5s;
+        }
+
+        .ehosp-card:hover {
+            transform: scale(1.02);
+            border-color: var(--purple);
+            box-shadow: 
+                0 30px 90px rgba(139,92,246,0.4),
+                inset 0 0 50px rgba(139,92,246,0.1);
+        }
+
+        .ehosp-logo {
+            font-size: 5rem;
+            font-weight: 800;
+            text-align: center;
+            background: linear-gradient(45deg, var(--purple), var(--cyan), var(--purple));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+            margin-bottom: 30px;
+            letter-spacing: 5px;
+            text-shadow: 0 0 40px rgba(139,92,246,0.5);
+        }
+
+        .ehosp-tagline {
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--cyan);
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+
+        .ehosp-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .ehosp-feature {
+            padding: 30px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .ehosp-feature:hover {
+            transform: translateY(-10px);
+            background: rgba(139,92,246,0.1);
+            border-color: var(--purple);
+        }
+
+        .ehosp-feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .ehosp-feature-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--cyan);
+        }
+
+        .ehosp-cta {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .ehosp-button {
+            display: inline-block;
+            padding: 20px 60px;
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            box-shadow: 0 10px 40px rgba(139,92,246,0.4);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ehosp-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .ehosp-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .ehosp-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(139,92,246,0.6);
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            background: linear-gradient(45deg, #fff, var(--cyan), #fff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        /* Skills avec effet 3D */
+        .skills-section {
+            padding: 100px 40px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .skill-category {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            padding: 40px;
+            transition: all 0.5s;
+            transform-style: preserve-3d;
+        }
+
+        .skill-category:hover {
+            transform: translateZ(30px) rotateX(5deg);
+            border-color: var(--cyan);
+            box-shadow: 0 20px 60px rgba(0,255,240,0.3);
+        }
+
+        .skill-category-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: var(--cyan);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .skill-tag {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .skill-tag:hover {
+            background: var(--gradient-3);
+            color: #000;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,255,240,0.4);
+        }
+
+        /* Experience Timeline 3D */
+        .experience-section {
+            padding: 100px 40px;
+            position: relative;
+        }
+
+        .timeline {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--cyan), var(--purple), var(--cyan));
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px var(--cyan);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 60px 0;
+            perspective: 1000px;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            padding: 35px;
+            position: relative;
+            transition: all 0.5s;
+            transform-style: preserve-3d;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+        }
+
+        .timeline-content:hover {
+            transform: translateZ(40px) scale(1.05);
+            border-color: var(--purple);
+            box-shadow: 0 25px 70px rgba(139,92,246,0.4);
+        }
+
+        .timeline-icon {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 0 30px rgba(139,92,246,0.6);
+            z-index: 10;
+            animation: rotate360 10s linear infinite;
+        }
+
+        @keyframes rotate360 {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to { transform: translateX(-50%) rotate(360deg); }
+        }
+
+        .timeline-date {
+            font-size: 0.9rem;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .timeline-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--cyan);
+        }
+
+        .timeline-company {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 15px;
+        }
+
+        .timeline-description {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+        }
+
+        /* Swiss Cities avec animation */
+        .swiss-cities {
+            padding: 100px 40px;
+            text-align: center;
+        }
+
+        .cities-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+
+        .city-badge {
+            padding: 20px 40px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,0,0,0.3);
+            border-radius: 20px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            transition: all 0.4s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .city-badge::before {
+            content: '🇨🇭';
+            position: absolute;
+            font-size: 5rem;
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .city-badge:hover {
+            transform: translateY(-10px) scale(1.1);
+            border-color: var(--swiss-red);
+            box-shadow: 0 20px 50px rgba(255,0,0,0.5);
+            background: rgba(255,0,0,0.1);
+        }
+
+        /* CTA Final */
+        .final-cta {
+            padding: 150px 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,0,0,0.3), transparent);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .final-cta-title {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 30px;
+            background: var(--gradient-swiss);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .final-cta-buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button {
+            padding: 25px 60px;
+            background: var(--gradient-swiss);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            transition: all 0.4s;
+            box-shadow: 0 15px 50px rgba(255,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 25px 70px rgba(255,0,0,0.7);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-name { font-size: 3rem; }
+            .salary-box { font-size: 1.5rem; padding: 15px 30px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .timeline::before { left: 30px; }
+            .timeline-content { width: calc(100% - 80px); margin-left: 80px !important; }
+            .timeline-icon { left: 30px; }
+            .ehosp-card { padding: 30px; }
+            .ehosp-logo { font-size: 3rem; }
+            .skills-grid { grid-template-columns: 1fr; }
+            .swiss-flag { width: 60px; height: 60px; top: 20px; right: 20px; }
+        }
+
+        /* Scroll Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
-<body class="light-mode">
+<body>
 
-<div id="loader-container">
-    <p id="loader-message">Bonjour ! Je suis l'assistant IA d'Altay. Je me prépare à vous aider...</p>
-    <div class="progress-bar-loader"><div class="progress-bar-fill"></div></div>
-</div>
+<!-- Swiss Flag -->
+<div class="swiss-flag"></div>
 
-<main class="ehosp-chat-app-container" id="ehosp-chat-main">
-    <header class="ehosp-chat-header">
-        <h1><i class="fas fa-robot"></i> Assistant d'Altay</h1>
-        <button id="theme-toggle" aria-label="Changer de thème">
-            <!-- Icône gérée par JS -->
-        </button>
-    </header>
-    <div id="ehosp-chat-messages"></div>
-    <div id="ehosp-chat-options-area"></div>
-</main>
+<!-- Matrix Background -->
+<canvas id="matrix-bg"></canvas>
 
-<!-- La section portfolio-content-sections est gardée vide mais cachée par CSS -->
-<div class="portfolio-content-sections" id="portfolio-sections">
-    <!-- CONTENU SUPPRIMÉ -->
-</div>
+<!-- Particles Background -->
+<div id="particles-js"></div>
 
-<script defer>
-    const loaderContainer = document.getElementById('loader-container');
-    const ehospChatMain = document.getElementById('ehosp-chat-main');
-    const chatMessagesContainer = document.getElementById('ehosp-chat-messages');
-    const chatOptionsArea = document.getElementById('ehosp-chat-options-area');
-    const htmlEl = document.documentElement;
-    const themeToggleBtn = document.getElementById('theme-toggle');
-
-    const userProfileData = {
-        name: "Altay CEVIK",
-        greeting: "Bonjour ! Je suis l'assistant virtuel d'<span class='highlight'>Altay CEVIK</span>. <br><br><strong>PLOT TWIST :</strong> L'entreprise qui devait le prendre en alternance s'est évaporée ! 👻 <br>C'est une <span class='highlight'>opportunité en or pour vous</span> de recruter un futur ingénieur IA/IoT passionné et immédiatement disponible. <br><br>Comment puis-je vous aider à le découvrir ?",
-        about: "Étudiant en <span class='highlight'>Master International IoT</span>, Altay recherche activement une <span class='highlight'>alternance en Intelligence Artificielle et systèmes embarqués</span>. Créateur de la plateforme web <span class='highlight'>EHOSP.fr</span>, il a développé une solution intégrant IA et recommandations personnalisées. Il conçoit également des projets sur systèmes embarqués, vision par ordinateur et machine learning sur <span class='highlight'>Raspberry Pi</span>, et souhaite contribuer à des projets concrets au sein d’une équipe innovante.",
-        skillsIntro: "Altay possède un large éventail de compétences techniques, cruciales pour un ingénieur IA/IoT performant :",
-        skillsList: [
-            { category: "🤖 IA & Machine Learning", items: ["Vision par ordinateur : <span class='highlight'>YOLO V8</span>, OpenCV", "Bibliothèques : <span class='highlight'>TensorFlow</span>, Keras, Scikit-learn", "Machine & Deep Learning sur systèmes embarqués"] },
-            { category: "💻 Langages de Programmation", items: ["<span class='highlight'>Python</span>", "<span class='highlight'>JavaScript</span> (Node.js)", "Java", "C#", "C++", "PHP"] },
-            { category: "📡 IoT & Embarqué", items: ["Plateformes : <span class='highlight'>Raspberry Pi</span>, Arduino", "Protocoles : MQTT, CoAP", "Conception de systèmes autonomes"] },
-            { category: "🗃️ Bases de Données & Outils", items: ["Bases de données : MySQL, <span class='highlight'>MongoDB</span>, NoSQL", "Conteneurisation : <span class='highlight'>Docker</span>", "Versionning : Git, GitHub/GitLab", "Systèmes : Linux, Windows"] },
-            { category: "🤝 Compétences Transverses (Soft Skills)", items: ["<span class='highlight'>Résolution de problèmes</span> complexes", "<span class='highlight'>Collaboration</span> et communication efficace", "Grande <span class='highlight'>adaptabilité</span> et curiosité", "<span class='highlight'>Gestion de projet</span> (autonomie et rigueur)"] }
-        ],
-        projectsIntro: "Altay a mené plusieurs projets concrets, démontrant sa capacité à transformer une idée en solution fonctionnelle :",
-        projectsList: [
-            { name: "EHOSP.fr - Plateforme Santé IA", desc: "Créateur de cette plateforme de A à Z. Développement Full-Stack (Node.js, MongoDB, Stripe) et intégration de modules d'IA pour des recommandations personnalisées.", link: "https://www.ehosp.fr/", icon: "fas fa-heartbeat" },
-            { name: "IA Drone & Vision Embarquée (Stage FEMTO-ST)", desc: "Développement d'IA embarquée sur drones autonomes avec reconnaissance d'objets en temps réel (YOLO). Machine learning avancé sur Raspberry Pi.", icon: "fas fa-robot" },
-        ],
-        parcoursIntro: "Le parcours d'Altay est marqué par une spécialisation progressive vers l'IA et les systèmes embarqués :",
-        parcoursList: [
-            { type: "Formations <i class='fas fa-graduation-cap'></i>", items: [
-                { title: "Master International Internet des Objets (IoT)", specialization: "Systèmes de Calcul Embarqués", school: "UFR STGI, Montbéliard", date: "Depuis Sept. 2025 (Recherche Alternance Urgente)" },
-                { title: "BUT Réseaux et Télécommunications", specialization: "Spécialité Internet des objets (IoT)", school: "I.U.T Nord Franche-Comté, Montbéliard", date: "2023 - 2025" },
-                { title: "Baccalauréat Général", specialization: "Spécialités Mathématiques et S.V.T", school: "Lycée Armand Peugeot, Valentigney", date: "2019 - 2022" }
-            ]},
-            { type: "Expériences Professionnelles <i class='fas fa-briefcase'></i>", items: [
-                { title: "Développeur IA & IoT (Stage)", company: "FEMTO-ST", location: "Montbéliard", date: "Depuis Février 2025", details: ["IA embarquée sur drones (ML/DL, Raspberry Pi)", "Reconnaissance d'objets en temps réel (YOLO)", "Conception de systèmes autonomes"] },
-                { title: "Développeur Full-Stack & IA (Projet Personnel)", company: "EHOSP.fr", location: "Audincourt", date: "Depuis 2023", details: ["Créateur de la plateforme santé EHOSP.fr", "Développement Full-Stack (Node.js, MongoDB, Stripe)", "Intégration de modules d'IA"] },
-                { title: "Technicien IT", company: "Forvia", location: "Montbéliard, Allenjoie", date: "Avril 2024 - Juin 2024", details: ["Création d’une application de suivi d’inventaire", "Support IT et gestion du parc informatique"] }
-            ]}
-        ],
-        contactIntro: "Altay serait ravi d'échanger avec vous sur une <span class='highlight'>opportunité d'alternance</span> ou tout autre projet. Voici comment le joindre :",
-        contactDetails: [
-            { type: "Email", value: "altaycevik@gmail.com", link: "mailto:altaycevik@gmail.com", icon: "fas fa-envelope" },
-            { type: "Téléphone", value: "07 83 65 68 37", link: "tel:+33783656837", icon: "fas fa-phone" },
-            { type: "Portfolio & CV", value: "Voir son profil complet (Linktree)", link: "https://linktr.ee/altaycevik", icon: "fas fa-link" }
-        ],
-        closing: "Merci de votre intérêt ! N'hésitez pas à le contacter directement. Il est prêt à relever de nouveaux défis."
-    };
-
-    function hideLoaderAndStartChat() {
-        if (loaderContainer) loaderContainer.classList.add('hidden');
-        if (ehospChatMain) ehospChatMain.classList.add('visible');
-        startEhospStyleChat();
-    }
-    if (loaderContainer) {
-        let loadProgress = 0;
-        const progressBarFill = document.querySelector('.progress-bar-fill');
-        const loadInterval = setInterval(() => {
-            loadProgress++;
-            if (progressBarFill) progressBarFill.style.width = loadProgress + '%';
-            if (loadProgress >= 100) { clearInterval(loadInterval); setTimeout(hideLoaderAndStartChat, 300); }
-        }, 15);
-    } else {
-        hideLoaderAndStartChat();
-    }
-
-    let currentChatState = 'greeting';
-    const typingIndicatorDelay = 500;
-
-    function getCurrentTime() {
-        const now = new Date();
-        return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-
-    async function addEhospBotMessage(htmlContent, options = []) {
-        return new Promise(async (resolve) => {
-            const typingWrapper = document.createElement('div');
-            typingWrapper.className = 'ehosp-chat-message-wrapper ehosp-ai-message typing-indicator-wrapper';
-            typingWrapper.innerHTML = `<div class="ehosp-chat-avatar"><i class="fas fa-robot"></i></div><div class="ehosp-chat-bubble typing-indicator-bubble"><span></span><span></span><span></span></div>`;
-            chatMessagesContainer.appendChild(typingWrapper);
-            chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
-
-            await new Promise(r => setTimeout(r, typingIndicatorDelay + Math.random() * 300));
-            typingWrapper.remove();
-            
-            const messageWrapper = document.createElement('div');
-            messageWrapper.className = 'ehosp-ai-message';
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'ehosp-chat-message-wrapper';
-            const avatar = document.createElement('div');
-            avatar.className = 'ehosp-chat-avatar';
-            avatar.innerHTML = '<i class="fas fa-robot"></i>';
-            messageDiv.appendChild(avatar);
-
-            const contentWithTimestamp = document.createElement('div');
-            contentWithTimestamp.className = 'ehosp-chat-content-with-timestamp';
-            const bubble = document.createElement('div');
-            bubble.className = 'ehosp-chat-bubble';
-            bubble.innerHTML = htmlContent;
-            contentWithTimestamp.appendChild(bubble);
-            const timestamp = document.createElement('span');
-            timestamp.className = 'ehosp-message-timestamp';
-            timestamp.textContent = getCurrentTime();
-            contentWithTimestamp.appendChild(timestamp);
-            
-            messageDiv.appendChild(contentWithTimestamp);
-            messageWrapper.appendChild(messageDiv);
-            chatMessagesContainer.appendChild(messageWrapper);
-            chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
-            
-            setTimeout(() => { displayEhospChatOptions(options); resolve(); }, 250);
-        });
-    }
-
-    function displayEhospChatOptions(optionsArray) {
-        chatOptionsArea.innerHTML = '';
-        if (!optionsArray || optionsArray.length === 0) {
-            chatOptionsArea.classList.remove('visible');
-            return;
-        }
-        optionsArray.forEach(opt => {
-            const button = document.createElement('button');
-            button.className = 'ehosp-chat-option-btn';
-            button.innerHTML = opt.icon ? `<i class="${opt.icon}"></i> ${opt.text}` : opt.text;
-            button.onclick = () => {
-                chatOptionsArea.classList.remove('visible');
-                addSimulatedUserResponse(opt.text); 
-                setTimeout(opt.action, 100);
-            };
-            chatOptionsArea.appendChild(button);
-        });
-        setTimeout(() => chatOptionsArea.classList.add('visible'), 50);
-    }
-
-    function addSimulatedUserResponse(text) {
-        const messageWrapper = document.createElement('div');
-        messageWrapper.className = 'ehosp-user-simulated-message';
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'ehosp-chat-message-wrapper';
+<div class="container">
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="hero-name">ALTAY CEVIK</h1>
+        <p class="hero-title">Backend Developer Node.js | TypeScript | Real-Time & IA</p>
         
-        const contentWithTimestamp = document.createElement('div');
-        contentWithTimestamp.className = 'ehosp-chat-content-with-timestamp';
-        const bubble = document.createElement('div');
-        bubble.className = 'ehosp-chat-bubble';
-        bubble.textContent = text;
-        contentWithTimestamp.appendChild(bubble);
-        const timestamp = document.createElement('span');
-        timestamp.className = 'ehosp-message-timestamp';
-        timestamp.textContent = getCurrentTime();
-        contentWithTimestamp.appendChild(timestamp);
+        <div class="availability-badge">
+            ⚡ DISPONIBLE IMMÉDIATEMENT ⚡
+        </div>
 
-        messageDiv.appendChild(contentWithTimestamp);
-        messageWrapper.appendChild(messageDiv);
-        chatMessagesContainer.appendChild(messageWrapper);
-        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+        <div class="salary-box">
+            💰 CHF 85k - 95k 💰
+        </div>
+
+        <div class="contact-grid">
+            <a href="tel:+33783656837" class="contact-link">
+                <i class="fas fa-phone"></i> +33 7 83 65 68 37
+            </a>
+            <a href="mailto:altaycevik@gmail.com" class="contact-link">
+                <i class="fas fa-envelope"></i> altaycevik@gmail.com
+            </a>
+            <a href="https://linkedin.com/in/altay-cevik" target="_blank" class="contact-link">
+                <i class="fab fa-linkedin"></i> LinkedIn
+            </a>
+            <a href="https://github.com/altaycevik" target="_blank" class="contact-link">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+        </div>
+
+        <p style="margin-top: 30px; font-size: 1.3rem; color: rgba(255,255,255,0.8);">
+            🇨🇭 <strong>Frontalier Suisse</strong> • Bâle 30 min • Permis B + Véhicule • Permis G possible
+        </p>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section reveal">
+        <h2 class="section-title">RÉSULTATS MESURABLES</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" data-target="1000">0</div>
+                <div class="stat-label">Connexions Simultanées</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number"><span data-target="100">0</span>ms</div>
+                <div class="stat-label">Latence API Moyenne</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-target="40">0</div>
+                <div class="stat-label">Endpoints API REST</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">-<span data-target="60">0</span>%</div>
+                <div class="stat-label">Optimisation Redis</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number"><span data-target="70">0</span>%</div>
+                <div class="stat-label">Code Coverage Jest</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">CHF <span data-target="3">0</span>k</div>
+                <div class="stat-label">Économie/an vs SaaS</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- eHosp.fr Section -->
+    <section class="ehosp-section reveal">
+        <div class="ehosp-card">
+            <div class="ehosp-logo">eHOSP.fr</div>
+            <p class="ehosp-tagline">🚀 Plateforme Télémédecine Full-Stack avec IA Multimodale</p>
+            
+            <p style="text-align: center; font-size: 1.2rem; color: rgba(255,255,255,0.8); margin-bottom: 40px;">
+                Architecture complète conçue <strong>100% en autonomie</strong> • Node.js • TypeScript • Express • MongoDB • Redis • WebSocket • Gemini AI • Docker • AWS
+            </p>
+
+            <div class="ehosp-features">
+                <div class="ehosp-feature">
+                    <div class="ehosp-feature-icon">⚡</div>
+                    <h3 class="ehosp-feature-title">Temps Réel <50ms</h3>
+                    <p>Architecture WebSocket (Socket.io) pour chat médical instantané et streaming données vitales</p>
+                </div>
+                
+                <div class="ehosp-feature">
+                    <div class="ehosp-feature-icon">🤖</div>
+                    <h3 class="ehosp-feature-title">IA Gemini 2.0</h3>
+                    <p>Analyse multimodale (texte + images), triage urgence automatique, recommandations personnalisées</p>
+                </div>
+                
+                <div class="ehosp-feature">
+                    <div class="ehosp-feature-icon">🔒</div>
+                    <h3 class="ehosp-feature-title">RGPD-Compliant</h3>
+                    <p>JWT + Refresh Tokens, bcrypt, Rate Limiting, audit trail complet, sécurité enterprise-grade</p>
+                </div>
+                
+                <div class="ehosp-feature">
+                    <div class="ehosp-feature-icon">📈</div>
+                    <h3 class="ehosp-feature-title">Scalable Production</h3>
+                    <p>1000+ connexions testées, AWS EC2 auto-scaling, Load Balancer, monitoring temps réel</p>
+                </div>
+                
+                <div class="ehosp-feature">
+                    <div class="ehosp-feature-icon">⚙️</div>
+                    <h3 class="ehosp-feature-title">DevOps Complet</h3>
+                    <p>Docker multi-services, CI/CD GitHub Actions, déploiement zero-downtime, 70% Jest coverage</p>
+                </div>
+                
+                <div class="ehosp-feature">
+                    <div class="ehosp-feature-icon">🌍</div>
+                    <h3 class="ehosp-feature-title">Multilingue 60+ Langues</h3>
+                    <p>Traduction automatique contextualisée, support international, interface PWA responsive</p>
+                </div>
+            </div>
+
+            <div class="ehosp-cta">
+                <a href="https://www.ehosp.fr" target="_blank" class="ehosp-button">
+                    <span style="position: relative; z-index: 1;">
+                        🚀 DÉCOUVRIR eHOSP.fr 🚀
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills-section reveal">
+        <h2 class="section-title">STACK TECHNIQUE</h2>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3 class="skill-category-title">
+                    <i class="fas fa-server"></i> Backend & API
+                </h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Node.js</span>
+                    <span class="skill-tag">TypeScript</span>
+                    <span class="skill-tag">Express.js</span>
+                    <span class="skill-tag">REST API</span>
+                    <span class="skill-tag">GraphQL</span>
+                    <span class="skill-tag">WebSocket</span>
+                    <span class="skill-tag">Socket.io</span>
+                    <span class="skill-tag">Microservices</span>
+                    <span class="skill-tag">JWT/OAuth2</span>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="skill-category-title">
+                    <i class="fas fa-database"></i> Data & Real-Time
+                </h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">MongoDB</span>
+                    <span class="skill-tag">Redis</span>
+                    <span class="skill-tag">PostgreSQL</span>
+                    <span class="skill-tag">BullMQ</span>
+                    <span class="skill-tag">Message Queuing</span>
+                    <span class="skill-tag">Mongoose ODM</span>
+                    <span class="skill-tag">Query Optimization</span>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="skill-category-title">
+                    <i class="fas fa-robot"></i> Intelligence Artificielle
+                </h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Gemini AI API</span>
+                    <span class="skill-tag">OpenAI</span>
+                    <span class="skill-tag">NLP</span>
+                    <span class="skill-tag">Computer Vision</span>
+                    <span class="skill-tag">YOLO</span>
+                    <span class="skill-tag">Multimodal Analysis</span>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="skill-category-title">
+                    <i class="fab fa-docker"></i> DevOps & Infrastructure
+                </h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Docker</span>
+                    <span class="skill-tag">Kubernetes</span>
+                    <span class="skill-tag">AWS</span>
+                    <span class="skill-tag">Terraform</span>
+                    <span class="skill-tag">GitHub Actions CI/CD</span>
+                    <span class="skill-tag">Load Balancing</span>
+                    <span class="skill-tag">Monitoring</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Timeline -->
+    <section class="experience-section reveal">
+        <h2 class="section-title">EXPÉRIENCE</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-date">Janvier 2025 - Présent</div>
+                    <h3 class="timeline-title">Développeur Backend (Autonome)</h3>
+                    <div class="timeline-company">eHosp.fr - Plateforme Télémédecine IA</div>
+                    <p class="timeline-description">
+                        Architecture complète : API REST 40+ endpoints • WebSocket temps réel <50ms • Gemini 2.0 AI multimodale • BullMQ + Redis 10k+ req/min • MongoDB RGPD-compliant • Docker multi-services • AWS EC2 auto-scaling • CI/CD GitHub Actions • 70% Jest coverage
+                    </p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-date">Février - Juin 2025</div>
+                    <h3 class="timeline-title">Ingénieur R&D - Computer Vision & IoT</h3>
+                    <div class="timeline-company">Laboratoire FEMTO-ST (CNRS), Montbéliard</div>
+                    <p class="timeline-description">
+                        Pipeline Computer Vision YOLO (15 FPS temps réel) • Acquisition capteurs MQTT/Modbus • Optimisation algorithmes embarqués (-40% latence) • Documentation publications CNRS
+                    </p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-icon">
+                    <i class="fas fa-wrench"></i>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-date">Avril - Juin 2024</div>
+                    <h3 class="timeline-title">Technicien IT - Support Industriel</h3>
+                    <div class="timeline-company">Faurecia Seating (FORVIA), Audincourt</div>
+                    <p class="timeline-description">
+                        Infrastructure IT production Just-In-Time (>99% uptime) • Support ITSM résolution incidents
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Swiss Cities -->
+    <section class="swiss-cities reveal">
+        <h2 class="section-title">MOBILITÉ SUISSE 🇨🇭</h2>
+        <p style="font-size: 1.4rem; color: rgba(255,255,255,0.8); margin-bottom: 40px;">
+            Disponible dans toute la Suisse • Frontalier proche Bâle (30 min) • Permis G possible
+        </p>
+        <div class="cities-grid">
+            <div class="city-badge">🏔️ BÂLE</div>
+            <div class="city-badge">🏔️ ZURICH</div>
+            <div class="city-badge">🏔️ GENÈVE</div>
+            <div class="city-badge">🏔️ LAUSANNE</div>
+            <div class="city-badge">🏔️ NEUCHÂTEL</div>
+            <div class="city-badge">🏔️ BERNE</div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2 class="final-cta-title">PRÊT À DÉMARRER IMMÉDIATEMENT 🚀</h2>
+        <p style="font-size: 1.5rem; color: rgba(255,255,255,0.8); margin-bottom: 30px; position: relative; z-index: 1;">
+            Backend Developer Junior-Confirmé • Stack Moderne • Production Ready • Autonomie Totale
+        </p>
+        <div class="final-cta-buttons">
+            <a href="mailto:altaycevik@gmail.com" class="cta-button">
+                <span style="position: relative; z-index: 1;">
+                    📧 ME CONTACTER
+                </span>
+            </a>
+            <a href="tel:+33783656837" class="cta-button">
+                <span style="position: relative; z-index: 1;">
+                    📞 APPELER MAINTENANT
+                </span>
+            </a>
+        </div>
+        
+        <p style="margin-top: 50px; font-size: 1.1rem; color: rgba(255,255,255,0.6); position: relative; z-index: 1;">
+            <strong>Référence :</strong> Dr. François SPIES, FEMTO-ST (CNRS) • +33 6 21 69 84 43
+        </p>
+    </section>
+</div>
+
+<!-- Particles.js Library -->
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+<script>
+    // Matrix Effect
+    const canvas = document.getElementById('matrix-bg');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const matrix = "01";
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function drawMatrix() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#00FFF0';
+        ctx.font = fontSize + 'px monospace';
+
+        for (let i = 0; i < drops.length; i++) {
+            const text = matrix[Math.floor(Math.random() * matrix.length)];
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+    }
+    setInterval(drawMatrix, 35);
+
+    // Particles.js Config
+    particlesJS('particles-js', {
+        particles: {
+            number: { value: 80, density: { enable: true, value_area: 800 } },
+            color: { value: '#00FFF0' },
+            shape: { type: 'circle' },
+            opacity: { value: 0.5, random: false },
+            size: { value: 3, random: true },
+            line_linked: {
+                enable: true,
+                distance: 150,
+                color: '#00FFF0',
+                opacity: 0.4,
+                width: 1
+            },
+            move: {
+                enable: true,
+                speed: 2,
+                direction: 'none',
+                random: false,
+                straight: false,
+                out_mode: 'out',
+                bounce: false
+            }
+        },
+        interactivity: {
+            detect_on: 'canvas',
+            events: {
+                onhover: { enable: true, mode: 'repulse' },
+                onclick: { enable: true, mode: 'push' },
+                resize: true
+            }
+        },
+        retina_detect: true
+    });
+
+    // Animated Counter
+    function animateCounter(element) {
+        const target = parseInt(element.getAttribute('data-target'));
+        const duration = 2000;
+        const increment = target / (duration / 16);
+        let current = 0;
+
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                element.textContent = target;
+                clearInterval(timer);
+            } else {
+                element.textContent = Math.floor(current);
+            }
+        }, 16);
     }
 
-    const ehospChatStates = {
-        greeting: {
-            message: () => userProfileData.greeting,
-            options: () => [
-                { text: "Qui est Altay ?", icon: "fas fa-user-tie", action: () => updateEhospChatState('introduction') },
-                { text: "Ses compétences clés ?", icon: "fas fa-cogs", action: () => updateEhospChatState('skills') },
-                { text: "Comment le contacter ?", icon: "fas fa-envelope", action: () => updateEhospChatState('contact') }
-            ]
-        },
-        introduction: {
-            message: () => userProfileData.about,
-            options: () => [
-                { text: "Détaillez ses compétences", icon: "fas fa-cogs", action: () => updateEhospChatState('skills') },
-                { text: "Quels sont ses projets ?", icon: "fas fa-project-diagram", action: () => updateEhospChatState('projects') },
-                { text: "Son parcours académique/pro ?", icon: "fas fa-graduation-cap", action: () => updateEhospChatState('parcours') },
-                { text: "Infos de contact", icon: "fas fa-envelope", action: () => updateEhospChatState('contact') }
-            ]
-        },
-        skills: {
-            message: () => {
-                let msg = `${userProfileData.skillsIntro}`;
-                userProfileData.skillsList.forEach(cat => {
-                    msg += `<h4>${cat.category}</h4><ul>`;
-                    cat.items.forEach(s => msg += `<li>${s}</li>`);
-                    msg += `</ul>`;
-                });
-                msg += `<br>Que souhaitez-vous explorer ensuite ?`;
-                return msg;
-            },
-            options: () => ehospChatStates.introduction.options().filter(o => !o.action.toString().includes("skills"))
-        },
-        projects: {
-            message: () => {
-                let msg = `${userProfileData.projectsIntro}<ul>`;
-                userProfileData.projectsList.forEach(p => {
-                    msg += `<li><i class="${p.icon || 'fas fa-lightbulb'}" style="color:var(--primary-color); margin-right:5px;"></i><span class="highlight">${p.name}:</span> ${p.desc} `;
-                    if (p.link) msg += `<a href="${p.link}" target="_blank" rel="noopener noreferrer" class="chat-link">Voir le projet <i class="fas fa-external-link-alt fa-xs"></i></a> `;
-                    if (p.github) msg += `<a href="${p.github}" target="_blank" rel="noopener noreferrer" class="chat-link">Code source <i class="fab fa-github fa-xs"></i></a>`;
-                    msg += `</li>`;
-                });
-                msg += `</ul><br>Une autre question sur Altay ?`;
-                return msg;
-            },
-            options: () => ehospChatStates.introduction.options().filter(o => !o.action.toString().includes("projects"))
-        },
-        parcours: {
-            message: () => {
-                let msg = `${userProfileData.parcoursIntro}`;
-                userProfileData.parcoursList.forEach(section => {
-                    msg += `<h4>${section.type}</h4><ul>`;
-                    section.items.forEach(p => {
-                        msg += `<li><span class="highlight">${p.title}</span>`;
-                        if (p.specialization) msg += ` - ${p.specialization}`;
-                        if (p.company) msg += ` chez <span class='highlight'>${p.company}</span>`;
-                        if (p.school) msg += ` à ${p.school}`;
-                        if (p.location && !p.company && !p.school) msg += ` (${p.location})`;
-                        msg += ` <span style="font-style:italic; color:var(--secondary-text-color);">(${p.date})</span>`;
-                        if (p.details && p.details.length > 0) {
-                            msg += `<ul style="padding-left:10px; margin-top:3px;">`;
-                            p.details.forEach(d => msg += `<li style="font-size:0.9em;">${d}</li>`);
-                            msg += `</ul>`;
-                        }
-                        msg += `</li>`;
-                    });
-                    msg += `</ul>`;
-                });
-                msg += `<br>Que puis-je faire d'autre pour vous aider à découvrir Altay ?`;
-                return msg;
-            },
-            options: () => ehospChatStates.introduction.options().filter(o => !o.action.toString().includes("parcours"))
-        },
-        contact: {
-            message: () => {
-                let msg = userProfileData.contactIntro + "<ul>";
-                userProfileData.contactDetails.forEach(c => {
-                     msg += `<li><i class="${c.icon}" style="margin-right:8px;color:var(--primary-color);"></i> ${c.type}: <a href="${c.link}" class="chat-link" ${c.link.startsWith('http') || c.link.startsWith('mailto:') || c.link.startsWith('tel:') ? 'target="_blank" rel="noopener noreferrer"' : ''}>${c.value}</a></li>`;
-                });
-                msg += `</ul><br>${userProfileData.closing}`;
-                return msg;
-            },
-            options: () => [
-                { text: "Revoir sa présentation", icon: "fas fa-user-tie", action: () => updateEhospChatState('introduction') },
-                { text: "Revoir ses compétences", icon: "fas fa-cogs", action: () => updateEhospChatState('skills') },
-                { text: "Redémarrer la conversation", icon: "fas fa-redo", action: () => { chatMessagesContainer.innerHTML=''; updateEhospChatState('greeting');} },
-            ]
-        }
+    // Scroll Reveal Animation
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealOnScroll = () => {
+        revealElements.forEach(el => {
+            const elementTop = el.getBoundingClientRect().top;
+            const elementVisible = 150;
+            if (elementTop < window.innerHeight - elementVisible) {
+                el.classList.add('active');
+            }
+        });
     };
 
-    async function updateEhospChatState(newState) {
-        currentChatState = newState;
-        const state = ehospChatStates[currentChatState];
-        if (state) {
-            await addEhospBotMessage(state.message(), state.options());
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll();
+
+    // Start counters when in view
+    const statsSection = document.querySelector('.stats-section');
+    let counterStarted = false;
+    const startCounters = () => {
+        if (!counterStarted && statsSection.getBoundingClientRect().top < window.innerHeight) {
+            document.querySelectorAll('.stat-number [data-target]').forEach(animateCounter);
+            counterStarted = true;
         }
-    }
-    
-    function startEhospStyleChat() {
-        updateEhospChatState('greeting');
-    }
+    };
+    window.addEventListener('scroll', startCounters);
 
-    function applyTheme(theme) {
-        const newIsDarkMode = (theme === 'dark');
-        document.body.classList.toggle('dark-mode', newIsDarkMode);
-        htmlEl.classList.toggle('dark-mode', newIsDarkMode);
-        localStorage.setItem('theme', newIsDarkMode ? 'dark' : 'light');
-        if(themeToggleBtn) themeToggleBtn.innerHTML = newIsDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-    }
-
-    if (themeToggleBtn) {
-        themeToggleBtn.addEventListener('click', () => {
-            const currentThemeIsDark = document.body.classList.contains('dark-mode');
-            applyTheme(currentThemeIsDark ? 'light' : 'dark');
+    // Smooth Scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
         });
-    }
-    
-    const preferredTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    applyTheme(preferredTheme);
+    });
 
+    // Resize handler
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
 </script>
+
 </body>
 </html>
